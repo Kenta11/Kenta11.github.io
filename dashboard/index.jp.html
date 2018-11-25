@@ -1,0 +1,227 @@
+---
+layout: dashboard
+nav: dashboard
+permalink: /jp/dashboard/
+lang: jp
+---
+{%- assign translation = site.data.language[page.lang] -%}
+<h1 class="page-header">{{ translation.dashboard }}</h1>
+<div class="well">最終更新：{{ site.time }}</div>
+<div class="well">開発環境：{{ jekyll.environment }}</div>
+<!--Pages list-->
+<h2 class="sub-header">ページリスト</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>相対パス</th>
+		<th>ソースファイルアドレス</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  {%- for sitepage in site.pages | sort -%}
+<tr>
+  <td>{{ forloop.index }}</td>
+  <td>{{ sitepage.url }}</td>
+  <td>{{ sitepage.path }}</td>
+</tr>
+{%- endfor -%}
+    </tbody>
+  </table>
+</div>
+<!--静的ファイルリスト-->
+<h2 class="sub-header">静的ファイルリスト</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>パス</th>
+		<th>サフィックス</th>
+		<th>日付</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for sitestaticfile in site.static_files | sort -%}
+<tr>
+  <td>{{ forloop.index }}</td>
+  <td>{{ sitestaticfile.path }}</td>
+  <td>{{ sitestaticfile.extname }}</td>
+  <td>{{ sitestaticfile.modified_time }}</td>
+</tr>
+{%- endfor -%}
+	</tbody>
+  </table>
+</div>
+<!--collections collection list-->
+<h2 class="sub-header">コレクションリスト</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>コンテンツ</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for sitecollection in site.collections | sort -%}
+<tr>
+  <td>{{ forloop.index }}</td>
+  <td>{{ sitecollection | xml_escape }}</td>
+</tr>
+{%- endfor -%}
+	</tbody>
+  </table>
+</div>
+<!--data data list-->
+<h2 class="sub-header">日付一覧</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>帰属</th>
+		<th>コンテンツ</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for sitedata in site.data | sort -%}
+      {%- assign pd = sitedata | first -%}
+      {%- if pd == "language" -%}
+      {%- continue -%}
+      {%- else -%}
+<tr>
+  <td>{{ forloop.index }}</td>
+  <td>{{ sitedata | first }}</td>
+  <td>{{ sitedata | last | jsonify }}</td>
+</tr>
+{%- endif -%}
+{%- endfor -%}
+	</tbody>
+  </table>
+</div>
+<!--language list-->
+<h2 class="sub-header">言語一覧</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>言語</th>
+		<th>言語コード</th>
+		<th>国/リージョンコード</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for languages in site.data.lang | sort -%}
+	  <tr>
+		<td>{{ forloop.index }}</td>
+		<td>{{ languages[1].language }}</td>
+		<td>{{ languages[1].code }}</td>
+		<td>{{ languages[1].country | join: "," }}</td>
+	  </tr>
+	  {%- endfor -%}
+	</tbody>
+  </table>
+</div>
+<!--Translations list-->
+<h2 class="sub-header">翻訳リスト</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		{%- for lang in site.data.lang -%}
+		<th>{{ lang[1].language }}</th>
+		{%- endfor -%}
+	  </tr>
+	</thead>
+	<tbody>
+{%- for langkey in site.data.language.cn -%}
+<tr>
+{%- unless foeloop.first -%}
+<td>{{ langkey[0] }}</td>
+{%- endunless -%}
+{%- for langs in site.data.lang -%}
+{%- assign lang = langs[1].lang -%}
+{%- assign keys = langkey[0] -%}
+{%- assign key = site.data.language[lang] -%}
+<td>{{ key[keys] }}</td>
+{%- endfor -%}
+</tr>
+{%- endfor -%}
+</tbody>
+  </table>
+</div>
+<!--Articles list-->
+<h2 class="sub-header">記事一覧</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>タイトル</th>
+		<th>日付</th>
+		<th>言語</th>
+		<th>トップ</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for posts in site.posts | sort -%}
+	  <tr>
+		<td>{{ forloop.index }}</td>
+		<td>{{ posts.title }}</td>
+		<td>{{ posts.date }}</td>
+		<td>{{ site.data.lang[posts.lang].language }}</td>
+		<td>{% if posts.stickie %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+	  </tr>
+	  {%- endfor -%}
+	</tbody>
+  </table>
+</div>
+<!--Category list-->
+<h2 class="sub-header">カテゴリ一覧</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>カテゴリ</th>
+		<th>記事の数</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for category in site.categories | sort -%}
+	  <tr>
+		<td>{{ forloop.index }}</td>
+		<td>{{ category | first }}</td>
+		<td>{{ category.last.size }}</td>
+	  </tr>
+	  {%- endfor -%}
+	</tbody>
+  </table>
+</div>
+<!--Tag list-->
+<h2 class="sub-header">タグ一覧</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+	<thead>
+	  <tr>
+		<th>#</th>
+		<th>タグ</th>
+		<th>記事の数</th>
+	  </tr>
+	</thead>
+	<tbody>
+      {%- for tag in site.tags | sort -%}
+	  <tr>
+		<td>{{ forloop.index }}</td>
+		<td>{{ tag | first }}</td>
+		<td>{{ tag.last.size }}</td>
+	  </tr>
+	  {%- endfor -%}
+	</tbody>
+  </table>
+</div>
+

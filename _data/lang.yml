@@ -1,0 +1,14 @@
+jp:
+   language: "日本語"
+   code: "jp"
+   simplecode: "jp"
+   lang: "jp"
+   country:
+                   - "jp"
+en: 
+   language: "English"
+   code: "en"
+   simplecode: "en"
+   lang: "en"
+   country:
+                   - "en"
