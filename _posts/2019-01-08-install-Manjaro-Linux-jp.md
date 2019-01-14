@@ -5,7 +5,7 @@ description: "デュアルブートの手順をメモ"
 date: 2019-01-08 23:00:00 +0900
 lang: jp
 nav: post
-category: 開発
+category: 開発環境
 tags: [Manjaro Linux]
 ---
 
