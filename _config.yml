@@ -1,32 +1,32 @@
 # Resources settings
 source:      .
-destination:      ./_site
-plugins_dir:     ./_plugins
-layouts_dir:     ./_layouts
+destination: ./_site
+plugins_dir: ./_plugins
+layouts_dir: ./_layouts
 timezone:    Asia/Tokyo
 gems:        []
-highlighter:     rouge
+highlighter: rouge
 
 # Site settings
 author: Kenta Arai
 owner_name: Kenta Arai
 
-#Server
+# Server
 # url: 
 github: https://github.com/Kenta11/
 baseurl: ""
-# dnsPrefetch: "on"
-#dnsPrefetch: "off" if don't want use dns-prefetch
+dnsPrefetch: "off"
+# dnsPrefetch: "off" if don't want use dns-prefetch
 # dns:
 #       - "//dns18.hichina.com"
 #       - "//dns17.hichina.com"
       
-#Github announce Settings
+# Github announce Settings
 github_username: Kenta11
 github_repo: Kenta11.github.io
 github_label: announcement
 
-#Page settings
+# Page settings
 future: true
 show_drafts: nil
 lsi: true
@@ -35,12 +35,12 @@ safe: false
 permalink: /:year/:month/:day/:title/
 markdown: kramdown
 
-#Navbar setting
-#If show the 'download' item on the navbar
+# Navbar setting
+# If show the 'download' item on the navbar
 showdownload: true
 
-#Pagination setting
-#Testing, not opening
+# Pagination setting
+# Testing, not opening
 paginatenum: 2
  
 exclude: ['README.md','Manifest.md']
@@ -58,15 +58,3 @@ keywords:
         - "Verilog HDL"
         - "Vim"
         - "Linux"
-
-#Others
-
-# #ChangYan
-# changyan:
-#   appid: "cys9CkC15"
-#   appconf: "prod_6c14cfe1b9706846e412ddac9bcdb068"
-  
-# #Formspree
-# formspree:
-#   email_prefix: "1540294142"
-#   email_suffix: "qq.com"
