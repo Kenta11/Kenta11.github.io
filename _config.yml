@@ -43,7 +43,7 @@ showdownload: true
 # Testing, not opening
 paginatenum: 2
  
-exclude: ['README.md','Manifest.md']
+exclude: ['README.md','Manifest.md','Makefile']
 include: ['robots.txt','404.html','.htaccess']
 
 # Description
