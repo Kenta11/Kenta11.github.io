@@ -34,6 +34,7 @@ published: false
 safe: false
 permalink: /:year/:month/:day/:title/
 markdown: kramdown
+google_analytics: G-VL3DZQ23CP
 
 # Navbar setting
 # If show the 'download' item on the navbar
