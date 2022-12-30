@@ -98,5 +98,14 @@
 </script>
   <!-- import css file -->
   <link href="{{ '/assets/css/import.css' | prepend: site.baseurl }}?v={{ site.time | date:"%Y%m%d" }}" rel="stylesheet"/>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VL3DZQ23CP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-VL3DZQ23CP');
+    </script>
     <title>{% if page.title%}{{ page.title }} - {{ translation.sitename }}{% else %}{{ translation.sitename }} - {{ translation.sitesubname }}{% endif %}</title>
   </head>
