@@ -1,0 +1,2147 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Electron-Shogi &amp; 水匠5 on Manjaro</title><link>https://Kenta11.github.io/posts/2023-01-01-shogi-on-manjaro/</link><pubDate>Sun, 01 Jan 2023 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-01-shogi-on-manjaro/</guid><description>はじめに うちには強いマシンが Manjaro サーバしかないので，将棋の解析をこのサーバでやりたい． ただし，いわゆる将棋ソフトは Windows で使うことを前提としている</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>うちには強いマシンが Manjaro サーバしかないので，将棋の解析をこのサーバでやりたい．
+ただし，いわゆる将棋ソフトは Windows で使うことを前提としているので，Manjaro なんていう変な環境でトライした人はいなさそうだ．
+突貫工事ではあるが，Manjaro のデスクトップ環境で将棋の解析ができる環境を作ったので，その手順を記録しておく．</p>
+<p>年の瀬になにやってんだ．</p>
+<p><img src="shogi-on-manjaro.png" alt="Electron 将棋" title="Electron 将棋 と 水匠5 で解析している様子"></p>
+<h2 id="1-uielectron-将棋をインストール">1. UI（Electron 将棋）をインストール</h2>
+<p>まず Electron 将棋 の公式リポジトリからプロジェクト一式をダウンロードする．npm でビルドし，生成された実行バイナリを <code>~/.local/bin/</code> に配置する．npm 系のコマンドは既にインストールしていたので，環境によっては準備が必要かもしれない．</p>
+<pre tabindex="0"><code>$ gh repo clone https://github.com/sunfish-shogi/electron-shogi
+$ cd electron-shogi
+$ git checkout v1.3.0 # 安定版が v1.3.0 らしい
+$ npm install @vue/cli @vue/cli-service-global
+$ npm run electron:build
+$ find . -name &#39;ElectronShogi*&#39;
+./dist_electron/ElectronShogi-1.3.0.AppImage
+$ cp $(find . -name &#39;ElectronShogi*&#39;) ~/.local/bin/
+</code></pre><h2 id="2-エンジンyaneuraouをインストール">2. エンジン（YaneuraOu）をインストール</h2>
+<p>こちらもまずは YaneuraOu の公式リポジトリからプロジェクト一式をダウンロードする．Makefile の設定を環境に合わせて編集し，コンパイルを実施する．
+Manjaro サーバの CPU は Ryzen 7 3700X なので，TARGET_CPU は ZEN2 とした．</p>
+<pre tabindex="0"><code>$ gh repo clone https://github.com/Kenta11/YaneuraOu
+$ cd YaneuraOu/source
+$ vim Makefile # 今回は TARGET_CPU を AVX2 から ZEN2 に変更
+$ make # 並列オプション -j を使うとコケたぞ
+$ find . -name YaneuraOu-by-gcc
+./YaneuraOu-by-gcc
+</code></pre><h2 id="3-評価関数水匠5をインストール">3. 評価関数（水匠5）をインストール</h2>
+<p>水匠5 の評価関数をダウンロードする．YaneuraOu の実行バイナリがあるディレクトリ下の <code>eval</code> ディレクトリに <code>nn.bin</code> を配置する．</p>
+<pre tabindex="0"><code>$ gh repo clone https://github.com/HiraokaTakuya/get_suisho5_nn
+$ cp get_suisho5_nn/nn.bin /path/to/YaneuraOu/source/eval/
+</code></pre><h2 id="4-ui-からエンジンを選択">4. UI からエンジンを選択</h2>
+<ul>
+<li><code>electron-shogi</code> を実行</li>
+<li>&ldquo;設定&rdquo;&gt;&ldquo;エンジン設定&rdquo; を選択し，エンジン（YaneuraOu）を選択</li>
+<li>&ldquo;検討&rdquo;&gt;&ldquo;検討開始&rdquo; で局面を解析できる</li>
+</ul>
+<h2 id="おわりに">おわりに</h2>
+<p>将棋の局面の解析が自宅マシンでできるようになった．
+以上の方法で構築した環境がベストなのかは分からないが，少なくともプロ棋士が使うような解析環境は必要ないので，これで満足だ．</p>
+]]></content></item><item><title>これまでに観た古典芸能の演目</title><link>https://Kenta11.github.io/posts/2022-12-19-classic-engei/</link><pubDate>Mon, 19 Dec 2022 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-12-19-classic-engei/</guid><description>これまでに何度か古典芸能を観る機会があって，面白いなと思うことが増えてきた． そこで，これまでに観た演目を記録しておく． 実際に劇場等で観たもの</description><content type="html"><![CDATA[<p>これまでに何度か古典芸能を観る機会があって，面白いなと思うことが増えてきた．
+そこで，これまでに観た演目を記録しておく．
+実際に劇場等で観たものは少ないので，テレビ や YouTube で観たものも含めて記載する．</p>
+<ul>
+<li>落語
+<ul>
+<li>一文笛</li>
+<li>蝦蟇の油</li>
+<li>紙入れ</li>
+<li>紺屋高尾</li>
+<li>黄金餅</li>
+<li>三方一両損</li>
+<li>死神</li>
+<li>芝浜</li>
+<li>寿限無</li>
+<li>粗忽長屋</li>
+<li>大工調べ</li>
+<li>幇間腹</li>
+<li>短命</li>
+<li>時そば</li>
+<li>猫の皿</li>
+<li>鼠穴</li>
+<li>引越しの夢</li>
+<li>船徳</li>
+<li>饅頭こわい</li>
+<li>らくだ</li>
+</ul>
+</li>
+<li>講談
+<ul>
+<li>連続物
+<ul>
+<li>赤垣源蔵 徳利の別れ</li>
+<li>赤穂義士銘々伝 大高源吾</li>
+<li>畔倉重四郎</li>
+<li>寛永宮本武蔵伝 吉岡治太夫</li>
+<li>笹野名槍伝 海賊退治</li>
+<li>天保六花撰 玉子の強請</li>
+<li>源平盛衰記 扇の的</li>
+</ul>
+</li>
+<li>端物
+<ul>
+<li>鮫講釈</li>
+<li>鹿政談</li>
+<li>青龍刀権次</li>
+<li>東玉と伯圓</li>
+<li>中村仲蔵</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>これまでたくさん聴いたなあと思っていたけれど，題目を起こしてみると思いの外少ない．
+来年は少しずつ増やしていこう．</p>
+]]></content></item><item><title>情報工学実験II（再履修）</title><link>https://Kenta11.github.io/posts/2022-09-23-micro1/</link><pubDate>Fri, 23 Sep 2022 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-09-23-micro1/</guid><description>はじめに 出身学科も出身専攻も，完全に名称が無くなってしまいましたね． 過ごした時間に思いを馳せながら，マイクロプログラミングをしましょう（急展</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>　出身学科も出身専攻も，完全に名称が無くなってしまいましたね．
+過ごした時間に思いを馳せながら，マイクロプログラミングをしましょう（急展開）．</p>
+<h2 id="アセンブラ">アセンブラ</h2>
+<h3 id="一覧">一覧</h3>
+<ul>
+<li>機械語アセンブラ: <a href="https://github.com/Kenta11/rm1asm">rm1asm</a></li>
+<li>マイクロアセンブラ: <a href="https://github.com/Kenta11/rm1masm">rm1masm</a></li>
+</ul>
+<h3 id="特徴">特徴</h3>
+<ul>
+<li>Unicode対応</li>
+<li>マルチプラットフォームで動作（Windows，Linux，MacOS）</li>
+<li>エラー表示機能付き（期待に添える程のクオリティ<strong>ではない</strong>）</li>
+</ul>
+<h2 id="遊び方">遊び方</h2>
+<p>　まずはアセンブラとシミュレータをインストールして下さい．
+アセンブラは<code>cargo install</code>でもインストールできますが，特にLinuxをお使いの方は<a href="https://github.com/Kenta11/rm1asm/releases/tag/v1.0.0">パッケージ</a>からのインストールが便利です．
+シミュレータはWindowsユーザなら公式（？）に配布されているものを使いましょう．
+それ以外の方は自前でビルドして下さい．</p>
+<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/micro1
+$ cd micro1
+$ gcc m1sim.c -o m1sim
+</code></pre><p>　MICRO-1のマイクロプログラムをアセンブルします．</p>
+<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
+$ rm1masm MICROONE -o MICROONE.o
+</code></pre><p>　続いて機械語プログラムをアセンブルします．</p>
+<pre tabindex="0"><code>$ cat sqrt
+; This program is distributed under MIT LICENSE.
+; Copyright (c) 2022 Kenta Arai
+; 平方根を求めるプログラム
+; アルゴリズムは&#34;バビロニア人の方法&#34;である
+
+TITLE SQRT
+         L   1, X0
+         L   3, ERROR
+; X(n+1)を計算
+HEAD:    LEA 2, (1)
+         LC  0, 0
+         L   1, S
+         BSR CALCXN1
+; |X(n+1) - X(n)| &lt; ERROR の場合は計算を終了する
+         SUB 2, (1)   ; X(n) - X(n+1)
+         BSR ABS      ; |X(n+1) - X(n)|
+         SUB 2, (3)   ; |X(n+1) - X(n)| - ERROR
+         BNM HEAD
+; 解を保存し，プログラムを終了
+         ST  1, XN
+         HLT
+
+S:       DC  487      ; 入力
+X0:      DC  20       ; 初期値X(0)
+ERROR:   DC  5        ; エラー
+XN:      DS  1        ; 解X(n)
+
+; X(n+1)を計算する関数
+; 入力: {r0: 0, r1: S, r2: X(n)}
+; 出力: {r1: X(n+1), r2: X(n)}
+CALCXN1: DIV 0, (2)   ; S/X(n)
+         ADD 1, (2)   ; S/X(n) + X(n)
+         SA  1, -1    ; (S/X(n) + X(n)) / 2 = X(n+1)
+         RET
+
+; 絶対値を計算する関数
+; 入力: {r2: 整数}
+; 出力: {r2: 絶対値}
+ABS:     CMP 2, 0
+         BNM ABS0
+         XOR 2, X&#34;FFFF
+         ADD 2, 1
+ABS0:    RET 
+END
+$ rm1asm sqrt -o sqrt.b
+</code></pre><p>　プログラムを実行してみましょう．</p>
+<pre tabindex="0"><code>$ ./m1sim
+
+   *** MICRO-1 SIMULATOR (C-Ver. 1.0d) [Sep 23 2022] ***
+
+&gt;&gt; load
+LOAD
+  FILE NAME=?MICROONE.o
+  LOADING &#39;MICROONE.o&#39;
+ LOADED TO CM
+&gt;&gt; load       
+LOAD
+  FILE NAME=?sqrt.b
+  LOADING &#39;sqrt.b&#39;
+ LOADED TO MM
+&gt;&gt; trace
+TRACE
+  T?device
+   TD?set
+   DEVICE ?pc
+   DEVICE ?ir
+   DEVICE ?flag
+   DEVICE ?r0
+   DEVICE ?r1
+   DEVICE ?r2
+   DEVICE ?r3
+   DEVICE ?lbus
+   DEVICE ?rbus
+   DEVICE ?abus
+   DEVICE ?sbus
+   DEVICE ?.
+   TD?.
+
+  T?go
+ CMAR=?101
+ MAX STEP=?300
+CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
+102  0000 0000 000010 0000 0000 0000 0000 0000 0040 0040 0040 
+～中略～
+CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
+0FD  000C EF00 000010 0007 0016 FFFD 0005 0000 0000 0000 0000 
+ CPU HALTED !
+  259 STEPS USED
+  T?.
+&gt;&gt; dump
+DUMP
+  D?mm
+    START ADRS ?000C
+    END   ADRS ?000F
+000C:01E7
+000D:0014
+000E:0005
+000F:0016
+  D?.
+&gt;&gt; end
+&gt;&gt;   MICRO-1 TERMINATED
+</code></pre><p>　XN(アドレスが0x000Fの行)に487の大体の平方根22(0x0016)が格納されていますね．
+大大大成功です．</p>
+<h2 id="おわりに">おわりに</h2>
+<p>　Rust製の言語処理系ライブラリ（logosとchumsky）で遊んでいたら，いつの間にかアセンブラを書いていた．
+何を言っているのか わからねーと思うが（以下略）</p>
+<p>　MICRO-1が書かれた書籍は絶版だし，このまま授業も無くなってしまったら悲しいですね．
+アセンブラはGitHubに置いておけばしばらくは残ると思うので，歴史的なアレコレとして誰か活用して下さい．</p>
+<p>　P.S. サンプルプログラムのライセンスが不明なので，本家からダウンロードできなくなったらどうしよう&hellip;</p>
+<p>おしまい</p>
+]]></content></item><item><title>Manjaroで静的IPアドレスを設定</title><link>https://Kenta11.github.io/posts/2022-08-19-set-static-ip-jp/</link><pubDate>Fri, 19 Aug 2022 23:45:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-08-19-set-static-ip-jp/</guid><description>はじめに 静的IPアドレスを設定するだけでも記事が色々あり，どれを信用したらいいか全く分からなかった． netplanであったり，systemd</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>静的IPアドレスを設定するだけでも記事が色々あり，どれを信用したらいいか全く分からなかった．
+netplanであったり，systemd-networkdであったり，NetworkManagerであったり，どれを使えば良いんじゃい，という具合である．
+備忘録として，実施した手順を記録しておく．</p>
+<h2 id="上手くいかなかったケースsystemd-networkdを使う方法">上手くいかなかったケース：systemd-networkdを使う方法</h2>
+<p><a href="https://wiki.archlinux.jp/index.php/Systemd-networkd#.E6.9C.89.E7.B7.9A.E3.82.A2.E3.83.80.E3.83.97.E3.82.BF.E3.81.A7.E5.9B.BA.E5.AE.9A_IP_.E3.82.92.E4.BD.BF.E7.94.A8">ArchWiki</a>にもあるように，<code>/etc/systemd/network</code>下に設定ファイルを記述し，<code>systemd-networkd</code>を再起動する．
+これで静的IPアドレスを設定できるのだが，なんとDHCPクライアントが動きっぱなしであるため，IPアドレスを2つ持ってしまう．
+2つ持つなんてホントにできるのか分かっていないのだが，<code>ip</code>コマンドで2つのIPアドレス（静的に設定したものとDHCPサーバから取得したもの）を確認できる．</p>
+<h2 id="上手くいくケースnmcliを使う方法">上手くいくケース：nmcliを使う方法</h2>
+<p>NetworkManagerもネットワーク設定のためのツールであるが，こちらではDHCPクライアントを停止させる方法があった．
+nmcliを使って簡単に設定をすることができる．</p>
+<p>以下の例では，インターフェースensに静的IPアドレスを設定する例を示す．</p>
+<pre tabindex="0"><code>$ sudo nmcli c down ens # インターフェースを無効化
+$ sudo nmcli c modify ens ipv4.addresses XXX.XXX.XXX.XXX/XX # IPアドレスXXX.XXX.XXX.XXX，サブネットマスクXXを設定
+$ sudo nmcli c modify ens ipv4.gateway XXX.XXX.XXX.XXX # デフォルトゲートウェイのIPアドレスを設定
+$ sudo nmcli c modify ens ipv4.method manual # IPアドレスを静的に設定（これでDHCPサーバからIPアドレスを取得しなくなる）
+$ sudo nmcli c up ens # インターフェースを有効化
+$ 
+$ sudo systemctl restart NetworkManager # NetworkManagerを再起動
+</code></pre><p>以上の手順で，静的に設定したIPアドレスのみを使用するようになる．</p>
+]]></content></item><item><title>Pythonでlibclangを使って関数呼び出しを探す</title><link>https://Kenta11.github.io/posts/2021-01-04-search-with-clang/</link><pubDate>Fri, 22 Jan 2021 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2021-01-04-search-with-clang/</guid><description>はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 まして</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。
+しかし巨大なプロジェクト相手には骨が折れる。
+ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。</p>
+<p>そこでプリプロセス済みのソースコードを一旦ASTにし、関数呼び出しをしている箇所を取り出せばいいと気付いた。
+調べてみると、LLVMのASTをイジったり中身を見る方法があるようだ。</p>
+<p>本稿ではPythonを使ってCソースコードの関数呼び出しを見つける。
+LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そうなので、PythonのClangインターフェースを使うことにする。</p>
+<h2 id="開発環境">開発環境</h2>
+<ul>
+<li>CPU: x64</li>
+<li>OS: Manjaro XFCE</li>
+</ul>
+<h2 id="pythonを使って関数呼び出しを探す">Pythonを使って関数呼び出しを探す</h2>
+<h3 id="準備">準備</h3>
+<p>Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。</p>
+<pre tabindex="0"><code># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する
+$ sudo pacman -S clang llvm # clangだけでは今回のPythonプログラムが動かなかった...
+</code></pre><p>clangモジュールが<code>/usr/lib/python3.9/site-packages/clang/</code>にあれば、準備完了だ。</p>
+<h3 id="関数呼び出しの箇所を探す">関数呼び出しの箇所を探す</h3>
+<p><code>parse()</code>を呼び出すと、よしなにASTにしてくれる。
+どうやらプリプロセスまでしてくれるようだ。</p>
+<pre tabindex="0"><code># -*- coding: utf-8 -*-
+
+import sys
+import clang.cindex
+
+def visitNode(node, search_function_name, declared_function_name=None):
+    if node.kind.name == &#39;FUNCTION_DECL&#39;:
+        declared_function_name = node.spelling
+    elif node.kind.name == &#39;CALL_EXPR&#39;:
+        print(search_function_name, declared_function_name, node.location.line)
+
+    for c in node.get_children():
+        visitNode(c, search_function_name, declared_function_name)
+
+if __name__ == &#39;__main__&#39;:
+    if len(sys.argv) != 3:
+        print(f&#34;Usage: {sys.argv[0]} FUNCTION_NAME FILE&#34;, file=sys.stderr)
+        exit(1)
+
+    index = clang.cindex.Index.create()
+    tree = index.parse(sys.argv[2])
+    visitNode(tree.cursor, sys.argv[1])
+</code></pre><p>もしも特定の名前の型や変数名を検索したい場合は、<code>visitNode()</code>を改造すればできる。
+なおASTのノードの種類については、clangモジュールに書かれていたコメントを参考に記述した。
+（FUNCTION_DECLは関数宣言な気もするが、どうも関数定義も含んでいるようだ。）</p>
+<h3 id="vim_snprintfを探す">vim_snprintf()を探す</h3>
+<p>作成したPythonプログラムを使用して、関数呼び出しを探してみる。
+今回はvimのソースコードをターゲットに、<code>vim_snprintf</code>を探す。</p>
+<pre tabindex="0"><code>$ git clone https://github.com/vim/vim
+$ python3 sample.py vim_snprintf vim/src/main.c
+vim_snprintf main 106
+vim_snprintf main 119
+vim_snprintf main 153
+vim_snprintf main 164
+vim_snprintf main 185
+vim_snprintf main 191
+vim_snprintf main 230
+# 長いので割愛
+</code></pre><p>1列目に検索した関数名（もちろん<code>vim_snprintf</code>）、2列目に<code>vim_snprintf</code>を呼び出している関数名、3列目に行番号が標準出力されている。
+無事に<code>vim_snprintf</code>を呼び出している場所を見つけられた。</p>
+<h2 id="読者プレゼント">読者プレゼント</h2>
+<p>お使いの環境で作業を試せる<code>Dockerfile</code>を置いておきます。
+リンクは<a href="Dockerfile">こちら</a>。</p>
+<pre tabindex="0"><code>FROM ubuntu:20.04
+LABEL maintainer &#34;Kenta Arai &lt;&gt;&#34;
+
+COPY sample.py /sample.py
+
+RUN apt update -y; apt dist-upgrade -y; apt autoremove -y &amp;&amp; \
+    apt install git python3 python-clang -y &amp;&amp; \
+    git clone https://github.com/vim/vim &amp;&amp; \
+    python3 sample.py vim_snprintf vim/src/main.c
+</code></pre><h2 id="参考文献">参考文献</h2>
+<ul>
+<li><a href="https://blog.fenrir-inc.com/jp/2011/07/clang_syntax_analysis_interface_with_python.html">Clang の構文解析インターフェースを Python から叩いてみようという話</a></li>
+<li><a href="http://asdm.hatenablog.com/entry/2015/01/08/170707">Clangのpython bindingsを使う</a></li>
+<li><a href="https://github.com/llvm-mirror/clang/blob/master/bindings/python/clang/cindex.py">llvm-mirror/clang clang/bindings/python/clang/cindex.py</a></li>
+</ul>
+]]></content></item><item><title>UNIXという考え方 を読んだ</title><link>https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/</link><pubDate>Thu, 30 Jul 2020 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/</guid><description>書籍情報 著者: Mike Gancarz 訳者: 芳尾 桂 書籍名: UNIXという考え方 出版社: オーム社 はじめに UNIX哲学を解説した、歴史的に最も有名な書籍であるところ</description><content type="html"><![CDATA[<h2 id="書籍情報">書籍情報</h2>
+<ul>
+<li>著者: Mike Gancarz</li>
+<li>訳者: 芳尾 桂</li>
+<li>書籍名: UNIXという考え方</li>
+<li>出版社: オーム社</li>
+</ul>
+<h2 id="はじめに">はじめに</h2>
+<p>　UNIX哲学を解説した、歴史的に最も有名な書籍であるところの<strong>UNIXという考え方</strong>だが、恥ずかしながら一度も読んだことが無かった。
+Amazonで別の書籍を注文するついでに購入した。
+長らくLinux環境で開発をしていたのでUNIX的な考え方を理解したつもりであったが、先人達の言葉でこの思想を再認識したかった。</p>
+<p>　<strong>UNIXという考え方</strong>は、UNIXと関連するプログラムの設計思想、そして使いこなし方を説いてくれた。
+UNIXの誕生から50余年を経ても、哲学のピースの多くは色褪せていない。</p>
+<p>　特に共感できたピースである定理2, 3, 8をご紹介したい。</p>
+<h2 id="定理2-一つのプログラムには一つのことをうまくやらせる">定理2: 一つのプログラムには一つのことをうまくやらせる</h2>
+<p>　独自のプログラムを作っているときに、つい幾つものユーティリティを内蔵させる体験は多くの人が経験しているはずだ。
+一つより多くのことをプログラムにさせようとすれば、そのプログラムは保守しづらく、ごく少数のユーザにしか支持されなくなってしまう。</p>
+<p>　UNIX哲学では、小さなプログラムこそが美であると説いている。
+もし手の込んだコトをしたければ、標準入出力とパイプを活用して複数のプログラムを連携させればいい。</p>
+<hr>
+<p>　私は定理2に従わなかったプロダクトによって日常生活で苦しめられている。
+数年前に母が買ってきたDVDレコーダのリモコンだ。</p>
+<p>　リモコンはそれだけでテレビ番組の録画、DVDの再生、チャンネルの変更、番組表の切り替え、入力の切り替え、その他諸々ができる。
+母は器用に操作して数百時間分の番組を録画し、視聴している。</p>
+<p>　しかしただでさえテレビを見ない私は、たまにNHKを視ようとすると、数分はリモコンと格闘する羽目になる。
+一つのリモコンに、DVDレコーダが扱う機能の全てが操作できるように設計されていたからだ。
+しかもこのリモコンは少し変わっていて、あるボタンを押すと全てのボタンの機能が一時的に切り替わる恐ろしい代物だ。
+(Vimmerの私は、この変わったキーをEscapeキーと呼んでいる)</p>
+<h2 id="定理3-できるだけ早く試作する">定理3: できるだけ早く試作する</h2>
+<p>　プログラマが犯しがちな事の一つに、目的を忘れてつい大風呂敷を広げて&quot;至れり尽せりな&quot;プログラムを開発することがある。
+「あれができたら、これができたら」と設計の段階で余計な機能まで入れてしまうと、最後は誰も保守せず使わずなジャンクが生まれてしまう。
+定理2でも触れられていたように、あくまで&quot;一つのことをうまくやる&quot;プログラムを作ったほうがUNIX的には生産的だ。
+月を探索するために戦艦ヤマトやデス・スターを建造する必要は無い。</p>
+<p>　シンプルなプログラムを開発することが生産的なのは、ユーザからのフィードバックを反映させるチャンスが多いことも要因だ。
+シンプルさはプログラムのリリースを早め、ユーザにプログラムへの理解を促し、開発者にプログラムを修正しやすくさせる。
+もし問題のある機能を搭載してしまったとしても、シンプルなプログラムなら修正してすぐにリリースすることができる。</p>
+<p>　この考えは現代的なソフトウェア開発プロセスによく似ている。
+プロトタイプを作り、ユーザからのフィードバックを反映させ、開発と修正を反復し続けるのはアジャイル開発にも通じている。
+いきなり完璧なソフトウェアを目指すのではなく、ソフトウェアを成長させていく考え方は<a href="https://kenta11.github.io/2020/07/27/software-first-jp/">先日読んだソフトウェア・ファースト</a>でも言及されていた。
+近頃広く受け入れられた思想が、数十年以上前に萌芽していたことは驚きである。</p>
+<h2 id="定理8-過度の対話的インタフェースを避ける">定理8: 過度の対話的インタフェースを避ける</h2>
+<p>　対話的インタフェースは、プログラムの操作を逐一ユーザに尋ねるインタフェースだ。
+GUIはまさに対話的インタフェースの具体例である。
+Amazonで欲しい商品があれば、ユーザは「カートに入れる」ボタンでカートに入れる。
+購入を決めると、Amazonは適宜カード番号や住所を訪ねてくる。
+これはまさにプログラムとユーザの対話だ。</p>
+<p>　対話的インタフェースは多くの人々にフレンドリーなものの、コンピュータに対しては非フレンドリーである。
+対話的インタフェースは必要なデータや次に実行する処理を逐一訪ねてくる。
+この性質は他のプログラムとの連携を著しく困難にする。</p>
+<p>　またこれは私の考えだが、対話的インタフェースはプログラムの性能をユーザに律速させてしまう。
+UNIXは複数のプログラムをパイプで連携して、高度な処理を効率的に実現する。
+しかし対話的インタフェースは車のハンドルのようなもので、常にプログラムの面倒をみてやらなければならなくなる。
+対話的インタフェースはUNIXの強みを封じてしまうわけだ。</p>
+<h2 id="おわりに">おわりに</h2>
+<p>　<strong>UNIXという考え方</strong>に登場する思想は現代でもその多くが色褪せておらず、非常に有益だった。
+今なお生き続けるUNIX、そして子孫的存在のLinuxに根付く&quot;UNIX哲学&quot;は、現代のプログラム開発にも大いに参考にできる。
+効率を重んじ、コンピュータの力を最大限に活用する哲学を身に着けて実践していきたい。</p>
+]]></content></item><item><title>ソフトウェア・ファーストを読んだ</title><link>https://Kenta11.github.io/posts/2020-07-26-software-first-jp/</link><pubDate>Mon, 27 Jul 2020 22:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-07-26-software-first-jp/</guid><description>書籍情報 著者: 及川 卓也 書籍名: ソフトウェア・ファースト あらゆるビジネスを一変させる最強戦略 出版社: 日経BP 日経BPブックナビリンク: https://www.nikkeibp.co.jp/atclpubmkt/book/19/P89910/ Ama</description><content type="html"><![CDATA[<h2 id="書籍情報">書籍情報</h2>
+<ul>
+<li>
+<p>著者: 及川 卓也</p>
+</li>
+<li>
+<p>書籍名: ソフトウェア・ファースト あらゆるビジネスを一変させる最強戦略</p>
+</li>
+<li>
+<p>出版社: 日経BP</p>
+</li>
+<li>
+<p>日経BPブックナビリンク: <a href="https://www.nikkeibp.co.jp/atclpubmkt/book/19/P89910/">https://www.nikkeibp.co.jp/atclpubmkt/book/19/P89910/</a></p>
+</li>
+<li>
+<p>Amazonリンク: <a href="https://www.amazon.co.jp/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E3%83%BB%E3%83%95%E3%82%A1%E3%83%BC%E3%82%B9%E3%83%88-%E3%81%82%E3%82%89%E3%82%86%E3%82%8B%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E3%82%92%E4%B8%80%E5%A4%89%E3%81%95%E3%81%9B%E3%82%8B%E6%9C%80%E5%BC%B7%E6%88%A6%E7%95%A5-%E5%8F%8A%E5%B7%9D-%E5%8D%93%E4%B9%9F/dp/4822289915">https://www.amazon.co.jp/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E3%83%BB%E3%83%95%E3%82%A1%E3%83%BC%E3%82%B9%E3%83%88-%E3%81%82%E3%82%89%E3%82%86%E3%82%8B%E3%83%93%E3%82%B8%E3%83%8D%E3%82%B9%E3%82%92%E4%B8%80%E5%A4%89%E3%81%95%E3%81%9B%E3%82%8B%E6%9C%80%E5%BC%B7%E6%88%A6%E7%95%A5-%E5%8F%8A%E5%B7%9D-%E5%8D%93%E4%B9%9F/dp/4822289915</a></p>
+</li>
+</ul>
+<h2 id="はじめに">はじめに</h2>
+<p>　あの及川さんの書籍ということで発売後すぐに購入したのだが，しばらく積読してしまっていた．
+ソフトウェア開発に携わる者としてとても有意義な書籍で，しかも何年も繰り返し読みたい内容だった．</p>
+<p>　4月に就職してから組織でソフトウェアを開発することになり，改めて読んでみたくなった．
+企業でソフトウェアを開発する意義と組織作りの指針について，その道のエキスパートの考えを知りたくなったからだ．
+なぜソフトウェアなのか，ソフトウェアで何がしたいのか，そしてどのようにソフトウェアを創り上げるのか．
+「ソフトウェア・ファースト」ではその名の通り，ソフトウェアを核としたビジネスの考え方を知ることができる．</p>
+<p>　一人のソフトウェア開発者として，そして組織で開発する者として，ソフトウェア開発の考え方を身に着けたい．</p>
+<h2 id="読んだ感想">読んだ感想</h2>
+<p>なるほど，と感じた点について列挙する．</p>
+<h3 id="ソフトウェアファースト">ソフトウェア・ファースト</h3>
+<ul>
+<li>pp.34</li>
+<li>IT活用を核としてビジネスを進めていく考え方</li>
+<li>ソフトウェアは破壊力のある手段，しかし決して全てを解決するわけではない</li>
+<li>ソフトウェア・ファーストで最も大事なことは，変化しないことへの理解
+<ul>
+<li>価値観，社会問題，世界観，etc&hellip;</li>
+<li>本著では，直近の時代で起きた，ディジタル化による新しい価値の創出についても触れている</li>
+</ul>
+</li>
+</ul>
+<h3 id="dxの本質はit活用を手の内化すること">DXの本質はIT活用を「手の内化」すること</h3>
+<ul>
+<li>pp. 107</li>
+<li>トヨタ社で使われている言葉「手の内化」を，筆者はソフトウェア・ビジネスにも適用している
+<ul>
+<li>筆者曰く&quot;自社プロダクトの開発に重要な技術&quot;を自分たちが主導権を握って企画・開発し，武器にする，ということ</li>
+</ul>
+</li>
+<li>コアな技術の専門家やノウハウを社内に蓄積することで，事業の武器を磨いていくということか</li>
+</ul>
+<h3 id="組織改革を並行して進める">組織改革を並行して進める</h3>
+<ul>
+<li>pp. 186</li>
+<li><code>使われ続けるプロダクトを生み出すために，企画の立て方・育て方と同じくらい大事なのが，それを実行する人と組織です．</code></li>
+<li>ソフトウェア技術を活かしていくために，<em>ミッション</em>を依代として人を集め育て，組織化することが大事</li>
+<li>ミッションはプロダクトにとっての巨視的な方向性
+<ul>
+<li>その組織が社会をどうしたいのか？ということ</li>
+<li>長い目で見て変わりにくい，抽象的なもので構わない</li>
+</ul>
+</li>
+<li>ミッションを定める -&gt; 人をミッションの方向に集める・育てる -&gt; 組織文化を作り上げていく -&gt; ミッションを達成するプロダクトを作る
+<ul>
+<li>ということだろうか？</li>
+</ul>
+</li>
+</ul>
+<h2 id="おわりに">おわりに</h2>
+<p>　「ソフトウェア・ファースト」は，ソフトウェア作りを生業とする人にとっての羅針盤となる書籍だと思う．
+ソフトウェアで社会を変えるための考え方，ソフトウェアの破壊力の活かし方，ソフトウェアを作る組織文化の育て方，それらを知るための足掛かりになるはずだ．
+これはソフトウェア開発に携わり始めた新人にとって心強いバイブルにもなるし，長くソフトウェア開発をしている人々にとっては方向転換を考える大きなきっかけにもなるだろう．</p>
+<p>　しかし同時に「ソフトウェア・ファースト」は立場によって見え方が大きく変わるとも思える．
+それは本書がビジネスを考える立場，ソフトウェアそのものを考える立場，組織のあり方を考える立場のそれぞれが考えるべき事柄を述べているためである．
+これらの立場は及川さんが今までに歩んできた道だ．</p>
+<p>　ソフトウェア・ファーストは，IT活用を核としてビジネスを進めていく考え方だ．
+立場によっては優先したい考えが他の立場と競合することもあるだろう．
+それでも様々な立場の人々が同じミッションを掲げてソフトウェアを中心としてビジネスを推し進めていく．
+この姿がソフトウェア・ファーストのコミュニティなのではないか．</p>
+<p>　私はしばらくソフトウェア開発に携わり続けるつもりだ．
+年月が経って立場を変えるようなことがあっても，「ソフトウェア・ファースト」を読み返してコミュニティを考え続けていきたい．</p>
+]]></content></item><item><title>研究室でもくもく会をした</title><link>https://Kenta11.github.io/posts/2020-04-25-mokumoku-jp/</link><pubDate>Sat, 25 Apr 2020 09:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-04-25-mokumoku-jp/</guid><description>はじめに 先月の話ですが，大学を卒業する直前に研究室の新入生向けのもくもく会をしました． もくもく会をした理由はいくつかあるのですが，特に (1) 研究</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>先月の話ですが，大学を卒業する直前に研究室の新入生向けのもくもく会をしました．
+もくもく会をした理由はいくつかあるのですが，特に (1) 研究室の開発環境に慣れること，(2) 計算機アーキテクチャの楽しさを感じられること，を目的に開催しました．</p>
+<p>(1)の理由はもちろん研究室生活において大事なことだからです．
+もくもく会を通して一日も早く開発環境に慣れてもらえれば，今後，研究に直接関係ない部分で時間を浪費しなくてよくなるでしょう．</p>
+<p>ただし慣れるといっても無理にやるのは精神的に負担でしょうから，楽しみながら自然と身につけられるようにしたい．
+そこで(2)の目的もセットにしてもくもく会の内容を考えたわけです．
+研究室に配属された学生はしばしば，講義と研究のレベルの違いにつまづいて凹んでしまいます<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>．
+そこでこの会では，講義内容と研究テーマの橋渡しになるような題材を選んでみました．
+私が感じた計算機アーキテクチャの面白さ，奥深さを少しでも共有したいと考えていました．</p>
+<h2 id="もくもく会の内容">もくもく会の内容</h2>
+<p>もくもく会の題材にはコンパイラとFPGAを選択しました<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>．
+コンパイラはC言語コンパイラの作成を，FPGAはマンデルブロ集合表示器の開発をテーマとしました．
+どちらも以前，私が取り組んだことがあり，学部生にとって程よい難易度だと感じたことが理由です．</p>
+<h3 id="タイムテーブル">タイムテーブル</h3>
+<ul>
+<li>13:00-13:10 オープニング
+<ul>
+<li>もくもく会についての説明とテーマの概説</li>
+</ul>
+</li>
+<li>13:10-13:20 参加者のテーマ選択
+<ul>
+<li>コンパイラとFPGAのどちらを選択するか決めてもらう</li>
+<li>持ち込み企画もOKとしましたが，みなさんがコンパイラかFPGAを選択</li>
+</ul>
+</li>
+<li>13:20-17:00 もくもくタイム
+<ul>
+<li>手を動かす時間</li>
+<li>いつでも質問OK
+<ul>
+<li>口頭とSlackの両方で対応</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>17:00-18:00 成果報告会
+<ul>
+<li>数分のスライドで取り組んだ内容について報告</li>
+<li>今後，研究室内外で発表があるはずなので，その予行練習がてらやってみました</li>
+</ul>
+</li>
+</ul>
+<h3 id="用意したテーマ">用意したテーマ</h3>
+<h4 id="c言語コンパイラ作成コース">C言語コンパイラ作成コース</h4>
+<p>『低レイヤを知りたい人のためのCコンパイラ作成入門』を読みながら，C言語コンパイラを開発するコースです．
+ほとんどの学部生は講義でC言語とコンパイラについて学んでおり，また研究室環境にしっかり触れられる内容であるため，会にぴったりの内容です．
+始めは電卓程度の機能しかないプログラムを作るのですが，ページを読み進めるうちにC言語の文法を<strong>だんだんと</strong>コンパイルできるようになります．
+この体験は感動ものです．
+今回の会は非常に短期間でかつ参加者にとって不慣れな環境なためどこまで進めるか不安でしたが，みなさん中々のスピードで取り組んでくれました<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>．</p>
+<h4 id="fpgaで作るマンデルブロ集合表示器コース">FPGAで作るマンデルブロ集合表示器コース</h4>
+<p>Basys3ボードを使ってマンデルブロ集合を表示するための回路を開発するコースです．
+FPGAマガジン No.15より，『高位合成ツールVivado HLSを使ってC言語でFPGAを開発しよう！』の内容を参考にしました．
+といっても画像データをモニタに表示する回路は私が開発したので（これも含めたら絶対に時間内に終わらない），テーマ選択者はVivado HLSでひたすら計算結果をバッファに書き込む回路を開発することとしました．
+C言語で開発できるので取り組みやすそうですし，何よりディジタル回路で画像を描画するのは貴重な体験になるはずです．</p>
+<h2 id="やってみて">やってみて</h2>
+<p>はじめてもくもく会を開催してみて，計画の杜撰さがいくつか出ました．
+とりわけて杜撰だったのは，参加者のサポートと難度の設定です．</p>
+<p>会を計画した当時(2020年2月末)，既にCOVID-19が流行の兆しを見せていたため，3月の予定を取りやめてもくもく会を研究室内でひっそりやろうと考えました．
+ところが同期は就職のために引っ越していたのと急な計画だったため，会の運営は私だけとなりました．
+研究室環境に慣れない参加者は当然，困り事や質問が出てくるわけです．
+会を始める前は私も何か取り組もうと考えていましたが，サポートに全力を注ぐこととなりました．
+参加者にとって十分なサポートが出来なかったと反省しています．</p>
+<p>FPGAのコースはちょっと難易度が高かったです．
+というのも学部生は講義でそれほどFPGAに触れません．
+さらにFPGAを使う講義は会の一年前に履修していたので，HDLの文法やVivadoの使い方を忘れていても無理もありません．
+そこで当初の予定を変更し，前段階としてHDLで論理回路と順序回路を復習し，次にVivado HLSで簡単な電卓を作ることとしました．
+ですがブロック図の説明やテストベンチの作り方をレクチャーしたり，回路の合成を待っている内に時間切れとなりました．
+予定していたものを全く作れなかったというのは，参加者にとってがっかりだったのではないでしょうか．</p>
+<p>唯一良かったことは，参加してくれた学生が積極的に<strong>もくもくと</strong>テーマに挑んでいたことです．
+コンパイラ班はものの数時間で研究室環境にも慣れ，コンパイラの核となる考え方を実践的に学べたようです．
+FPGA班は講義でディジタル回路の復習ができ，さらに講義で触れない高位合成にチャレンジできました．
+学生にとって一歩進んだ挑戦，成長，学びができたのではと思います．
+これは非常に小さい一歩かもしれませんが，ここで感じた楽しさや感動が少しでも将来の研究室生活に寄与できたのなら，会の目的は十分に達成できたものと思います．</p>
+<p>今後このような会を催すときは，まず仲間を集めようと思います．
+人が少ないととにかく忙しいですし，参加者にとってよりよい催しにするには私一人の考えだけでは非力過ぎます．
+（仲間の大切さを知る会でもありました&hellip;）</p>
+<p>もくもく会をすることそのものは良いことだと感じたので，この記事を読んで会を開催したり参加しようと思う方が増えたら嬉しいです．</p>
+<h2 id="リンク">リンク</h2>
+<ol>
+<li>Rui Ueyama, &ldquo;低レイヤを知りたい人のためのCコンパイラ作成入門&rdquo;, <a href="https://www.sigbus.info/compilerbook">https://www.sigbus.info/compilerbook</a> .</li>
+<li>横溝 憲治, &ldquo;【これからはCでFPGA開発！】もっとも簡単な加算回路からマンデルブロ集合の演算回路まで 高位合成ツールVivado HLSを使ってC言語でFPGAを開発しよう！&rdquo;, FPGAマガジン, No.15, <a href="http://www.kumikomi.net/fpga/contents/0015.php">http://www.kumikomi.net/fpga/contents/0015.php</a> .</li>
+</ol>
+<h2 id="注釈">注釈</h2>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>数年程度の経験ですが，これはどんな研究室でもいるように思います．&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>本当はもういくつかあったのですが，運営スタッフが私だけだったので，なんとか学生をサポート出来るように二つに絞りました&hellip;&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>みんな大体Step4くらいまで行ったような&hellip;私としてはみなさん上出来だと思ったのですが，楽しかったのかは怖くて聞けませんでした&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+]]></content></item><item><title>Gitチュートリアル</title><link>https://Kenta11.github.io/posts/2020-04-04-git-introduction-jp/</link><pubDate>Sat, 04 Apr 2020 12:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-04-04-git-introduction-jp/</guid><description>Gitの教材を作りました 学生時代に，研究室に新しく入ってきた学部生向けにGitの解説をする機会がありました． 作成したドキュメントは簡単なC言</description><content type="html"><![CDATA[<h2 id="gitの教材を作りました">Gitの教材を作りました</h2>
+<p>学生時代に，研究室に新しく入ってきた学部生向けにGitの解説をする機会がありました．
+作成したドキュメントは簡単なC言語プログラムのバージョン管理を題材としており，Gitにおける必要最低限のサブコマンドが使えるようになることを目指しています．
+またGithubの使い方についてもレクチャーしています．
+この教材を加筆・修正したものを公開することにします．</p>
+<h2 id="git教材一覧">Git教材一覧</h2>
+<h3 id="教材の使用規約">教材の使用規約</h3>
+<p>教材をダウンロードした時点で，以下の規約に同意したものとみなします．</p>
+<ul>
+<li>教材の著作権はKenta Araiに帰属します</li>
+<li>教材の再配布，変更，商用利用の全てを許可します
+<ul>
+<li>ただしドキュメントには<code>Copyright (c) 2020 Kenta Arai</code>を残しておいて下さい</li>
+</ul>
+</li>
+<li>教材の利用によって生じた損害の一切に関して，著作者はなんら責任を負いません</li>
+</ul>
+<h3 id="リンク">リンク</h3>
+<p><a href="Git-Introduction.pptx">PPTX版</a> <a href="Git-Introduction.pdf">PDF版</a></p>
+<p><a href="source_code.tar.gz">C言語プログラムのプロジェクト</a></p>
+]]></content></item><item><title>技術書展7に行ってきました</title><link>https://Kenta11.github.io/posts/2019-09-22-techbookfest-jp/</link><pubDate>Sun, 22 Sep 2019 19:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-09-22-techbookfest-jp/</guid><description>技術書展に行ってきた 技術書展7に行ってきました． 技術書展は簡単に言えば技術者の同人誌即売会です． 技術者，と一言に言ってもバラエティに富んでい</description><content type="html"><![CDATA[<h2 id="技術書展に行ってきた">技術書展に行ってきた</h2>
+<p><a href="https://techbookfest.org/event/tbf07">技術書展7</a>に行ってきました．
+技術書展は簡単に言えば技術者の同人誌即売会です．
+技術者，と一言に言ってもバラエティに富んでいて，FPGAやRISC-Vといった今どきなディジタルデバイスに関するものから，チーム開発，果てはVTuberと何でもござれです．
+実際にモノを作ったり，あるいは経験した方々から書籍を受け取れるのは，言い表せない感動があります．
+またデモを展示している方も多く，見るだけでも十分楽しい催しでした．</p>
+<h2 id="技術書展に行くときの注意">技術書展に行くときの注意</h2>
+<p>今回初めて技術書展に行き，準備しておいて良かったこと・準備しておけば良かったことがあったので，今後のために書いておきます．</p>
+<h3 id="一般入場整理券を買っておこう">一般入場整理券を買っておこう</h3>
+<p>今回の技術書展では，開始時間からの入場に整理券が必要でした．
+整理券を持っている人は11:00から入場できますが，持っていない場合は13:00以降の無料の時間帯に入場することになります．
+整理券の購入はWebと会場の二箇所で出来ますが，Webでの購入の場合は1000円，会場での購入は2000円になります(会場での購入だと整理券に技術季報付き)．
+<a href="https://twitter.com/techbookfest/status/1175226943484002304">入場券は数に限りがあったようなので</a>，早めに買っておくのが吉だと思います．</p>
+<p>整理券を前売りで買うべきかについてですが，<em>購入したい書籍がある場合や人混みをなるべく避けたい方は購入をオススメします．</em>
+私は開場時から現地にいたのですが，30分前には既に入り口に長蛇の列が出来ていました．
+整理券を購入済みでしたので，すぐに入場し，欲しかった書籍を入手できました．
+会場内もそこまで混んでいなかったので，ゆっくりサークルを見て回ることも出来ました．
+12:00を過ぎた頃から会場が人でごった返していたので，整理券を購入したのは正解だったと思います．</p>
+<h3 id="電子決済の用意をしておこう">電子決済の用意をしておこう</h3>
+<p>技術書展では<a href="https://blog.techbookfest.org/2019/09/21/tbf07/">QRコードを読み込んで書籍の料金を支払うシステム</a>があります．
+またサークルによっては（？）この方法で購入した書籍の電子版もダウンロード出来るそうです．
+私は知らずに会場へ行ったので現金支払いでしたが，明らかに電子決済のほうが簡単です．
+今度はこれを使いたいです．</p>
+<h2 id="購入した書籍">購入した書籍</h2>
+<p>あんまり言及すると散財したことがバレて恥ずかしいので購入した書籍のリストを見せるようなことはしませんが，主にFPGAやRISC-V，ベアメタルプログラミング関連の書籍を購入しました．
+特に以前から気になっていた<a href="https://techbookfest.org/event/tbf07/circle/5121363488538624">岩手県立大学-低レイヤ同好会のRaspberry Pi GPGPU【入門】</a>を入手できたのは嬉しかったです．
+デモも見せてもらいましたが，思ったよりもGPUを使ったプログラムの性能が良かった(ARMとの比較)のには驚きました．
+早くやってみたいと思います．</p>
+]]></content></item><item><title>Using Vivado HLS with vivado_hls_create_project</title><link>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project-en/</link><pubDate>Sun, 23 Jun 2019 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project-en/</guid><description>Introduction vivado_hls_create_project is a tool for using Vivado HLS on command line. Specifically, it generates Makefile and tcl scripts for using Vivado HLS only with make command. Let&amp;rsquo;s use it to create a simple IP!
+Generating Makefile and tcl scripts Let&amp;rsquo;s create an adder module for Zybo Z7-20. Command list shows FPGAs to which vivado_hls_create_project deals with.
+$ vivado_hls_create_project list Board Part -------------------------------------------------- Alpha-Data xc7vx690tffg1157-2 KU_Alphadata xcku060-ffva1156-2-e Xilinx_ZedBoard xc7z020clg484-1 Xilinx_AC701 xc7a200tfbg676-2 Xilinx_KC705 xc7k325tffg900-2 Xilinx_KCU105 xcku040-ffva1156-2-e Xilinx_KCU116 xcku5p-ffvb676-2-e Xilinx_KCU1500 xcku115-flvb2104-2-e Xilinx_VC707 xc7vx485tffg1761-2 Xilinx_VC709 xc7vx690tffg1761-2 Xilinx_VCU108 xcvu095-ffva2104-2-e Xilinx_VCU110 xcvu190-flgc2104-2-e Xilinx_VCU118 xcvu9p-flga2104-2L-e Xilinx_VCU1525 xcvu9p-fsgd2104-2L-e Xilinx_ZC702 xc7z020clg484-1 Xilinx_ZC706 xc7z045ffg900-2 Xilinx_ZCU102 xczu9eg-ffvb1156-2-i Xilinx_ZCU106 xczu7ev-ffvc1156-2-i-es2 Xilinx_A-U200 xcu200-fsgd2104-2-e Xilinx_A-U250 xcu250-figd2104-2L-e Basys3 xc7a35t1cpg236-1 Genesys2 xc7k325t2ffg900c-1 Zybo xc7z010clg400-1 Zybo_Z7_10 xc7z010clg400-1 Zybo_Z7_20 xc7z020clg400-1 If you can&amp;rsquo;t find FPGAs you want to use, add a board name and etc.</description><content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>vivado_hls_create_project is a tool for using Vivado HLS on command line.
+Specifically, it generates Makefile and tcl scripts for using Vivado HLS only with make command.
+Let&rsquo;s use it to create a simple IP!</p>
+<h2 id="generating-makefile-and-tcl-scripts">Generating Makefile and tcl scripts</h2>
+<p>Let&rsquo;s create an adder module for Zybo Z7-20.
+Command <code>list</code> shows FPGAs to which vivado_hls_create_project deals with.</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project list
+Board               Part
+--------------------------------------------------
+Alpha-Data          xc7vx690tffg1157-2
+KU_Alphadata        xcku060-ffva1156-2-e
+Xilinx_ZedBoard     xc7z020clg484-1
+Xilinx_AC701        xc7a200tfbg676-2
+Xilinx_KC705        xc7k325tffg900-2
+Xilinx_KCU105       xcku040-ffva1156-2-e
+Xilinx_KCU116       xcku5p-ffvb676-2-e
+Xilinx_KCU1500      xcku115-flvb2104-2-e
+Xilinx_VC707        xc7vx485tffg1761-2
+Xilinx_VC709        xc7vx690tffg1761-2
+Xilinx_VCU108       xcvu095-ffva2104-2-e
+Xilinx_VCU110       xcvu190-flgc2104-2-e
+Xilinx_VCU118       xcvu9p-flga2104-2L-e
+Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
+Xilinx_ZC702        xc7z020clg484-1
+Xilinx_ZC706        xc7z045ffg900-2
+Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
+Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
+Xilinx_A-U200       xcu200-fsgd2104-2-e
+Xilinx_A-U250       xcu250-figd2104-2L-e
+Basys3              xc7a35t1cpg236-1
+Genesys2            xc7k325t2ffg900c-1
+Zybo                xc7z010clg400-1
+Zybo_Z7_10          xc7z010clg400-1
+Zybo_Z7_20          xc7z020clg400-1
+</code></pre><p>If you can&rsquo;t find FPGAs you want to use, add a board name and etc. to <code>/path/to/Vivado/201x.x/common/config/VivadoHls_boards.xml</code>.</p>
+<p>Command <code>create</code> creates Makefile and tcl scripts.
+Option <code>-b</code> specifies board name, and last string <code>adder</code> specifies project name.</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project create -b Zybo_Z7_20 adder
+[I 190623 20:21:41 generator:45] generate adder
+[I 190623 20:21:41 generator:45] generate adder/include
+[I 190623 20:21:41 generator:45] generate adder/src
+[I 190623 20:21:41 generator:45] generate adder/test/include
+[I 190623 20:21:41 generator:45] generate adder/test/src
+[I 190623 20:21:41 generator:45] generate adder/script
+[I 190623 20:21:41 generator:49] generate Makefile
+[I 190623 20:21:41 generator:64] generate tcl scripts
+[I 190623 20:21:41 deviceinfo:35] Part of Zybo_Z7_20 found -&gt; xc7z020clg400-1
+[I 190623 20:21:41 generator:111] generate directives.tcl
+[I 190623 20:21:41 generator:116] generate .gitignore
+$ tree adder
+adder
+├── Makefile
+├── directives.tcl
+├── include
+├── script
+│   ├── cosim.tcl
+│   ├── csim.tcl
+│   ├── csynth.tcl
+│   ├── export.tcl
+│   └── init.tcl
+├── src
+└── test
+    ├── include
+    └── src
+
+6 directories, 7 files
+</code></pre><p>include/ is a directory for header and src/ is for C++ files.
+test/ is for test codes.</p>
+<h2 id="c-simulation">C simulation</h2>
+<p>Write source code of adder module.</p>
+<ul>
+<li>include/adder.hpp</li>
+</ul>
+<pre tabindex="0"><code>#ifndef _ADDER_HPP_
+#define _ADDER_HPP_
+
+void adder(int a, int b, int *sum);
+
+#endif // _ADDER_HPP_
+</code></pre><ul>
+<li>src/adder.cpp</li>
+</ul>
+<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+
+void adder(int a, int b, int *sum) {
+    *sum = a + b;
+}
+</code></pre><p>Also write test bench .</p>
+<ul>
+<li>test/src/test_adder.cpp</li>
+</ul>
+<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+
+#include &lt;cassert&gt;
+
+int main(int argc, const char **argv) {
+    int a, b, sum;
+    a = 10;
+    b = 24;
+
+    adder(a, b, &amp;sum);
+    assert(sum == (a + b));
+    
+    return 0;
+}
+</code></pre><p>C simulation is executed by using <code>make csim</code>.</p>
+<h2 id="building-ip">Building IP</h2>
+<p>If test is passed, build adder.
+IP is exported by using <code>make export</code>.
+Check the IP on Vivado!</p>
+<p><img src="ip.png" alt="Adder IP" title="Adder IP"></p>
+<h2 id="version-management-using-git">Version management using git</h2>
+<p>There is a .gitignore in the project.
+It ignores a product.
+So you can manage source codes, Makefile and tcl scripts with git.</p>
+<pre tabindex="0"><code>$ git init
+Initialized empty Git repository in /xxx/xxx/adder/.git/
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+
+        .gitignore
+        Makefile
+        directives.tcl
+        include/
+        script/
+        src/
+        test/
+
+nothing added to commit but untracked files present (use &#34;git add&#34; to track)
+</code></pre><h2 id="conclusion">Conclusion</h2>
+<p>If you find out bugs or problems, send me a message to <a href="https://twitter.com/isKenta14">my twitter</a>.</p>
+]]></content></item><item><title>vivado_hls_create_projectでVivado HLSを使う</title><link>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project-jp/</link><pubDate>Sun, 23 Jun 2019 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project-jp/</guid><description>はじめに vivado_hls_create_projectはコマンドラインでVivado HLSを使うためのツールです． 具体的には，makeコ</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>vivado_hls_create_projectはコマンドラインでVivado HLSを使うためのツールです．
+具体的には，makeコマンドだけでVivado HLSを使うためのMakefileとtclスクリプトを生成します．
+これを使って簡単なIPを作ってみましょう．</p>
+<h2 id="makefileとtclスクリプトを生成">Makefileとtclスクリプトを生成</h2>
+<p>Zybo Z7-20向けに加算モジュールを作ってみましょう．
+vivado_hls_create_projectが扱えるFPGAは<code>list</code>コマンドで確認できます．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project list
+Board               Part
+--------------------------------------------------
+Alpha-Data          xc7vx690tffg1157-2
+KU_Alphadata        xcku060-ffva1156-2-e
+Xilinx_ZedBoard     xc7z020clg484-1
+Xilinx_AC701        xc7a200tfbg676-2
+Xilinx_KC705        xc7k325tffg900-2
+Xilinx_KCU105       xcku040-ffva1156-2-e
+Xilinx_KCU116       xcku5p-ffvb676-2-e
+Xilinx_KCU1500      xcku115-flvb2104-2-e
+Xilinx_VC707        xc7vx485tffg1761-2
+Xilinx_VC709        xc7vx690tffg1761-2
+Xilinx_VCU108       xcvu095-ffva2104-2-e
+Xilinx_VCU110       xcvu190-flgc2104-2-e
+Xilinx_VCU118       xcvu9p-flga2104-2L-e
+Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
+Xilinx_ZC702        xc7z020clg484-1
+Xilinx_ZC706        xc7z045ffg900-2
+Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
+Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
+Xilinx_A-U200       xcu200-fsgd2104-2-e
+Xilinx_A-U250       xcu250-figd2104-2L-e
+Basys3              xc7a35t1cpg236-1
+Genesys2            xc7k325t2ffg900c-1
+Zybo                xc7z010clg400-1
+Zybo_Z7_10          xc7z010clg400-1
+Zybo_Z7_20          xc7z020clg400-1
+</code></pre><p>ここに使いたいFPGAが無い場合は，<code>/path/to/Vivado/201x.x/common/config/VivadoHls_boards.xml</code>にボード名等を追加して下さい．</p>
+<p><code>create</code>コマンドでMakefileとtclスクリプトを生成できます．
+<code>-b</code>オプションはボード名を，最後の<code>adder</code>はプロジェクト名を指定します．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project create -b Zybo_Z7_20 adder
+[I 190623 20:21:41 generator:45] generate adder
+[I 190623 20:21:41 generator:45] generate adder/include
+[I 190623 20:21:41 generator:45] generate adder/src
+[I 190623 20:21:41 generator:45] generate adder/test/include
+[I 190623 20:21:41 generator:45] generate adder/test/src
+[I 190623 20:21:41 generator:45] generate adder/script
+[I 190623 20:21:41 generator:49] generate Makefile
+[I 190623 20:21:41 generator:64] generate tcl scripts
+[I 190623 20:21:41 deviceinfo:35] Part of Zybo_Z7_20 found -&gt; xc7z020clg400-1
+[I 190623 20:21:41 generator:111] generate directives.tcl
+[I 190623 20:21:41 generator:116] generate .gitignore
+$ tree adder
+adder
+├── Makefile
+├── directives.tcl
+├── include
+├── script
+│   ├── cosim.tcl
+│   ├── csim.tcl
+│   ├── csynth.tcl
+│   ├── export.tcl
+│   └── init.tcl
+├── src
+└── test
+    ├── include
+    └── src
+
+6 directories, 7 files
+</code></pre><p>include/はヘッダ，src/はC++ファイルを置くディレクトリです．
+test/はテストコードを置くディレクトリです．</p>
+<h2 id="cシミュレーション">Cシミュレーション</h2>
+<p>加算モジュールのソースコードを書きます．</p>
+<ul>
+<li>include/adder.hpp</li>
+</ul>
+<pre tabindex="0"><code>#ifndef _ADDER_HPP_
+#define _ADDER_HPP_
+
+void adder(int a, int b, int *sum);
+
+#endif // _ADDER_HPP_
+</code></pre><ul>
+<li>src/adder.cpp</li>
+</ul>
+<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+
+void adder(int a, int b, int *sum) {
+    *sum = a + b;
+}
+</code></pre><p>テストベンチも書きましょう．</p>
+<ul>
+<li>test/src/test_adder.cpp</li>
+</ul>
+<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+
+#include &lt;cassert&gt;
+
+int main(int argc, const char **argv) {
+    int a, b, sum;
+    a = 10;
+    b = 24;
+
+    adder(a, b, &amp;sum);
+    assert(sum == (a + b));
+    
+    return 0;
+}
+</code></pre><p><code>make csim</code>でCシミュレーションを実行できます．</p>
+<h2 id="ipをビルド">IPをビルド</h2>
+<p>テストが通ったら，加算器をビルドしましょう．
+<code>make export</code>でIPが出力されます．
+Vivadoで確認してみましょう！</p>
+<p><img src="../2019-06-23-vivado_hls_create_project-en/ip.png" alt="加算器IP" title="加算器IP"></p>
+<h2 id="gitでバージョン管理">gitでバージョン管理</h2>
+<p>プロジェクトには.gitignoreがあるはずです．
+生成物を無視するように設定されているので，gitでソースコードとMakefile，tclスクリプトを管理できます．</p>
+<pre tabindex="0"><code>$ git init
+Initialized empty Git repository in /xxx/xxx/adder/.git/
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+
+        .gitignore
+        Makefile
+        directives.tcl
+        include/
+        script/
+        src/
+        test/
+
+nothing added to commit but untracked files present (use &#34;git add&#34; to track)
+</code></pre><h2 id="おわりに">おわりに</h2>
+<p>バグや問題がありましたら，<a href="https://twitter.com/isKenta14">私のtwitterアカウント</a>まで．</p>
+]]></content></item><item><title>vivado_hls_create_project ver.3.0.0へのアップデート</title><link>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project_v3-jp/</link><pubDate>Sun, 23 Jun 2019 20:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project_v3-jp/</guid><description>vivado_hls_create_projectを大改修しました．変更点は以下の通りです． pipでインストールできるように settings</description><content type="html"><![CDATA[<p>vivado_hls_create_projectを大改修しました．変更点は以下の通りです．</p>
+<ul>
+<li>pipでインストールできるように</li>
+<li>settings.*の廃止</li>
+<li>オプション名</li>
+</ul>
+<p>またリファクタリングを行い，バグの修正しました．
+修正したバグは以下の通りです．</p>
+<ul>
+<li>compiler_arg, linker_argで先頭がハイフンの引数を渡した場合にプロジェクトが作成されない</li>
+</ul>
+<h2 id="pipでのインストール">pipでのインストール</h2>
+<p>vivado_hls_create_projectはpipでインストールできるようになりました．</p>
+<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/vivado_hls_create_project
+$ sudo pip install vivado_hls_create_project
+$ vivado_hls_create_project -h
+Usage: vivado_hls_create_project [-h|--help] &lt;command&gt; [&lt;args&gt;]
+
+Makefile and tcl scripts generator for Vivado HLS
+
+&lt;command&gt;:
+    list         list usable boards
+    create       create Makefile and tcl scripts
+
+optional arguments:
+  -h, --help     show this help message and exit
+</code></pre><h2 id="settingsの廃止">settings.*の廃止</h2>
+<p>settings.*を廃止しました．.bashrc等に書いたsourceコマンドは削除することを推奨します．</p>
+<h2 id="オプション名">オプション名</h2>
+<p><code>vivado_hls_create_project create</code>のオプション名を一部変更しました．変更されたのは以下の2つです．</p>
+<ul>
+<li>compiler_arg -&gt; compiler_argument</li>
+<li>linker_arg -&gt; linker_argument</li>
+</ul>
+]]></content></item><item><title>Ubuntu 16.04にFast-RTPSをインストールする</title><link>https://Kenta11.github.io/posts/2019-05-22-install-fastrtps-on-ubuntu16.04-jp/</link><pubDate>Wed, 22 May 2019 19:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-05-22-install-fastrtps-on-ubuntu16.04-jp/</guid><description>はじめに Ubuntu 16.04 LTSにFast-RTPSをインストールする． fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールして</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>Ubuntu 16.04 LTSにFast-RTPSをインストールする．
+fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．</p>
+<h2 id="cmakeする">cmakeする</h2>
+<p><a href="https://dev.px4.io/en/setup/fast-rtps-installation.html">Fast RTPS Installation</a>によると，cmakeとmakeでFast-RTPSとfastrtpsgenをビルドするようだ．
+cmakeを実行すると，以下のログが表示された．</p>
+<pre tabindex="0"><code>$ git clone https://github.com/eProsima/Fast-RTPS
+$ cd Fast-RTPS
+$ mkdir build; cd build
+$ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
+-- Setting build type to &#39;Release&#39; as none was specified.
+
+(中略)
+
+CMake Error at /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148 (message):
+  Could NOT find Java (missing: Java_JAVA_EXECUTABLE Runtime) (Required is at
+  least version &#34;1.6&#34;)
+Call Stack (most recent call first):
+  /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:388 (_FPHSA_FAILURE_MESSAGE)
+  /usr/share/cmake-3.5/Modules/FindJava.cmake:244 (find_package_handle_standard_args)
+  cmake/dev/java_support.cmake:16 (find_package)
+  CMakeLists.txt:263 (gradle_build)
+
+
+-- Configuring incomplete, errors occurred!
+See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;.
+See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;.
+</code></pre><p>Javaが無いと言われた．
+ドキュメントには<code>Java is required to use our built-in code generation tool - fastrtpsgen. Java JDK 8 is recommended.</code>とあるので，openjdkのバージョン8をインストールする．</p>
+<pre tabindex="0"><code>$ sudo apt install openjdk-8-jdk
+$ rm -rf *
+$ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
+-- Configuring Fast RTPS
+-- Version: 1.8.0
+-- To change the version modify the file configure.ac
+-- fastcdr thirdparty is being updated...
+-- Configuring Fast CDR
+-- Version: 1.0.9
+-- To change the version modify the file configure.ac
+-- fastcdr library found...
+-- Found Java: /usr/bin/java (found suitable version &#34;1.8.0.212&#34;, minimum required is &#34;1.6&#34;) found components:  Runtime 
+CMake Error at cmake/dev/java_support.cmake:30 (message):
+  gradle is needed to build the java application.  Please install it
+  correctly
+Call Stack (most recent call first):
+  CMakeLists.txt:263 (gradle_build)
+
+
+-- Configuring incomplete, errors occurred!
+See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;.
+See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;.
+</code></pre><p>今度はgradleが必要だと言われた．インストールし，再度ビルドする．</p>
+<pre tabindex="0"><code>$ sudo apt install gradle
+$ rm -rf *
+$ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. # エラーなく終了！
+</code></pre><h2 id="ビルドしてインストールする">ビルドしてインストールする</h2>
+<pre tabindex="0"><code>$ make -j8 # エラーなく終了！
+$ sudo checkinstall
+
+checkinstall 1.6.2, Copyright 2009 Felipe Eduardo Sanchez Diaz Duran
+           このソフトウェアはGNU GPLの下でリリースしています。
+
+
+The package documentation directory ./doc-pak does not exist. 
+Should I create a default set of package docs?  [y]: y
+
+パッケージのドキュメンテーションを準備..OK
+
+*** No known documentation files were found. The new package 
+*** won&#39;t include a documentation directory.
+
+このパッケージの説明を書いてください
+説明の末尾は空行かEOFにしてください。
+&gt;&gt; Fast-RTPS and fastrtpsgen
+&gt;&gt; 
+
+*****************************************
+**** Debian package creation selected ***
+*****************************************
+
+(中略)
+
+このパッケージは以下の内容で構成されます: 
+
+0 -  Maintainer: [ kenta@xxxx ]
+1 -  Summary: [ Fast-RTPS and fastrtpsgen ]
+2 -  Name:    [ fastrtps ]
+3 -  Version: [ 20190522 ]
+4 -  Release: [ 1 ]
+5 -  License: [ GPL ]
+6 -  Group:   [ checkinstall ]
+7 -  Architecture: [ amd64 ]
+8 -  Source location: [ build ]
+9 -  Alternate source location: [  ]
+10 - Requires: [  ]
+11 - Provides: [ build ]
+12 - Conflicts: [  ]
+13 - Replaces: [  ]
+
+変更するものの番号を入力してください。Enterで続行します: 
+
+Installing with make install...
+========================= インストールの結果 ===========================
+[  1%] Updating Git module idl
+[  1%] Built target git_submodule_update_idl
+[  2%] Updating Git module fastcdr
+[  2%] Built target git_submodule_update_fastcdr
+[  3%] Generating Java application
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file &#39;/home/kenta/git/Fast-RTPS/fastrtpsgen/build.gradle&#39; line: 78
+
+* What went wrong:
+Could not resolve all dependencies for configuration &#39;:compile&#39;.
+&gt; Could not resolve junit:junit:4.+.
+  Required by:
+      :fastrtpsgen:unspecified
+   &gt; Could not resolve junit:junit:4.+.
+      &gt; Failed to list versions for junit:junit.
+         &gt; Unable to load Maven meta-data from https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml.
+            &gt; Could not GET &#39;https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml&#39;.
+               &gt; 接続がタイムアウトしました (Connection timed out)
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
+
+BUILD FAILED
+
+Total time: 2 mins 8.884 secs
+CMakeFiles/java.dir/build.make:57: ターゲット &#39;CMakeFiles/java&#39; のレシピで失敗しました
+make[2]: *** [CMakeFiles/java] エラー 1
+CMakeFiles/Makefile2:356: ターゲット &#39;CMakeFiles/java.dir/all&#39; のレシピで失敗しました
+make[1]: *** [CMakeFiles/java.dir/all] エラー 2
+Makefile:160: ターゲット &#39;all&#39; のレシピで失敗しました
+make: *** [all] エラー 2
+
+****  インストールは失敗しました。パッケージの作成を中断します
+
+上書きしたファイルをバックアップから復元..OK
+
+クリーンアップ..OK
+
+Bye.
+</code></pre><p>接続がタイムアウトしたと表示されており，インストールが完了しない．
+プロキシ環境にあるこのマシンでは，どうも<code>sudo checkinstall</code>の中で実行されるgradleがコケるようだ．</p>
+<p>そこでrootにgradleのプロキシ設定を反映させて，インストールをする．</p>
+<pre tabindex="0"><code>$ sudo cp ~/.gradle/gradle.properties /root/.gradle/ # 自分のgradleの設定をrootにも反映
+$ sudo checkinstall
+
+checkinstall 1.6.2, Copyright 2009 Felipe Eduardo Sanchez Diaz Duran
+           このソフトウェアはGNU GPLの下でリリースしています。
+
+
+The package documentation directory ./doc-pak does not exist. 
+Should I create a default set of package docs?  [y]: 
+
+パッケージのドキュメンテーションを準備..OK
+
+*** No known documentation files were found. The new package 
+*** won&#39;t include a documentation directory.
+
+*****************************************
+**** Debian package creation selected ***
+*****************************************
+(中略)
+
+このパッケージは以下の内容で構成されます: 
+
+0 -  Maintainer: [ kenta@xxxxx ]
+1 -  Summary: [ Fast-RTPS and fastrtpsgen ]
+2 -  Name:    [ fastrtps ]
+3 -  Version: [ 20190522 ]
+4 -  Release: [ 1 ]
+5 -  License: [ GPL ]
+6 -  Group:   [ checkinstall ]
+7 -  Architecture: [ amd64 ]
+8 -  Source location: [ build ]
+9 -  Alternate source location: [  ]
+10 - Requires: [  ]
+11 - Provides: [ build ]
+12 - Conflicts: [  ]
+13 - Replaces: [  ]
+
+変更するものの番号を入力してください。Enterで続行します: 
+
+Installing with make install...
+
+========================= インストールの結果 ===========================
+[  1%] Updating Git module idl
+[  1%] Built target git_submodule_update_idl
+[  2%] Updating Git module fastcdr
+[  2%] Built target git_submodule_update_fastcdr
+[  3%] Generating Java application
+:buildIDLParser
+Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.pom
+Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.jar
+Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.pom
+Download https://repo1.maven.org/maven2/org/antlr/antlr4-master/4.2.2/antlr4-master-4.2.2.pom
+Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom
+Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.pom
+Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.pom
+Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.pom
+Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.pom
+Download https://repo1.maven.org/maven2/org/antlr/antlr-master/3.5.2/antlr-master-3.5.2.pom
+Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/9/oss-parent-9.pom
+Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.pom
+Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom
+Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.pom
+Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.jar
+Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar
+Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.jar
+Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.jar
+Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar
+Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.jar
+Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar
+Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar
+:idl:clean
+:idl:antlr4
+:idl:compileJava
+警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
+注意:/home/kenta/git/Fast-RTPS/thirdparty/idl/src/main/java/com/eprosima/idl/generator/manager/TemplateUtil.javaの操作は、未チェックまたは安全ではありません。
+注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
+:idl:processResources
+:idl:classes
+:idl:jar
+:idl:assemble
+:idl:compileTestJava UP-TO-DATE
+:idl:processTestResources UP-TO-DATE
+:idl:testClasses UP-TO-DATE
+:idl:test UP-TO-DATE
+:idl:check UP-TO-DATE
+:idl:build
+:compileJava
+警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
+注意:入力ファイルの操作のうち、未チェックまたは安全ではないものがあります。
+注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
+:processResources UP-TO-DATE
+:classes
+:jar
+:assemble
+:compileTestJava UP-TO-DATE
+:processTestResources UP-TO-DATE
+:testClasses UP-TO-DATE
+:test UP-TO-DATE
+:check UP-TO-DATE
+:build
+
+BUILD SUCCESSFUL
+
+Total time: 11.629 secs
+
+This build could be faster, please consider using the Gradle Daemon: https://docs.gradle.org/2.10/userguide/gradle_daemon.html
+[  3%] Built target java
+[  8%] Built target fastcdr
+[100%] Built target fastrtps
+Install the project...
+-- Install configuration: &#34;Release&#34;
+-- Installing: /usr/local/share/fastrtps/LICENSE
+-- Installing: /usr/local/share/fastrtps/fastrtpsgen.jar
+-- Installing: /usr/local/bin/fastrtpsgen
+-- Installing: /usr/local/share/fastrtps/LICENSE
+-- Installing: /usr/local/include/fastcdr
+-- Installing: /usr/local/include/fastcdr/exceptions
+-- Installing: /usr/local/include/fastcdr/exceptions/NotEnoughMemoryException.h
+-- Installing: /usr/local/include/fastcdr/exceptions/Exception.h
+-- Installing: /usr/local/include/fastcdr/exceptions/BadParamException.h
+-- Installing: /usr/local/include/fastcdr/FastBuffer.h
+-- Installing: /usr/local/include/fastcdr/FastCdr.h
+-- Installing: /usr/local/include/fastcdr/fastcdr_dll.h
+-- Installing: /usr/local/include/fastcdr/eProsima_auto_link.h
+-- Installing: /usr/local/include/fastcdr/Cdr.h
+-- Installing: /usr/local/include/fastcdr/config.h
+-- Installing: /usr/local/lib/libfastcdr.so.1.0.8
+-- Installing: /usr/local/lib/libfastcdr.so.1
+-- Installing: /usr/local/lib/libfastcdr.so
+-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets.cmake
+-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets-release.cmake
+-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config.cmake
+-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config-version.cmake
+-- Installing: /usr/local/include/fastrtps
+-- Installing: /usr/local/include/fastrtps/xmlparser
+-- Installing: /usr/local/include/fastrtps/xmlparser/XMLEndpointParser.h
+-- Installing: /usr/local/include/fastrtps/xmlparser/XMLParser.h
+-- Installing: /usr/local/include/fastrtps/xmlparser/XMLProfileManager.h
+-- Installing: /usr/local/include/fastrtps/xmlparser/XMLTree.h
+-- Installing: /usr/local/include/fastrtps/xmlparser/XMLParserCommon.h
+-- Installing: /usr/local/include/fastrtps/qos
+-- Installing: /usr/local/include/fastrtps/qos/ParameterList.h
+-- Installing: /usr/local/include/fastrtps/qos/WriterQos.h
+-- Installing: /usr/local/include/fastrtps/qos/ReaderQos.h
+-- Installing: /usr/local/include/fastrtps/qos/ParameterTypes.h
+-- Installing: /usr/local/include/fastrtps/qos/QosPolicies.h
+-- Installing: /usr/local/include/fastrtps/log
+-- Installing: /usr/local/include/fastrtps/log/Colors.h
+-- Installing: /usr/local/include/fastrtps/log/StdoutConsumer.h
+-- Installing: /usr/local/include/fastrtps/log/Log.h
+-- Installing: /usr/local/include/fastrtps/fastrtps_dll.h
+-- Installing: /usr/local/include/fastrtps/subscriber
+-- Installing: /usr/local/include/fastrtps/subscriber/SubscriberHistory.h
+-- Installing: /usr/local/include/fastrtps/subscriber/Subscriber.h
+-- Installing: /usr/local/include/fastrtps/subscriber/SampleInfo.h
+-- Installing: /usr/local/include/fastrtps/subscriber/SubscriberListener.h
+-- Installing: /usr/local/include/fastrtps/participant
+-- Installing: /usr/local/include/fastrtps/participant/ParticipantListener.h
+-- Installing: /usr/local/include/fastrtps/participant/Participant.h
+-- Installing: /usr/local/include/fastrtps/fastrtps_fwd.h
+-- Installing: /usr/local/include/fastrtps/fastrtps_all.h
+-- Installing: /usr/local/include/fastrtps/publisher
+-- Installing: /usr/local/include/fastrtps/publisher/PublisherListener.h
+-- Installing: /usr/local/include/fastrtps/publisher/Publisher.h
+-- Installing: /usr/local/include/fastrtps/publisher/PublisherHistory.h
+-- Installing: /usr/local/include/fastrtps/TopicDataType.h
+-- Installing: /usr/local/include/fastrtps/types
+-- Installing: /usr/local/include/fastrtps/types/AnnotationParameterValue.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicDataFactory.h
+-- Installing: /usr/local/include/fastrtps/types/AnnotationDescriptor.h
+-- Installing: /usr/local/include/fastrtps/types/TypesBase.h
+-- Installing: /usr/local/include/fastrtps/types/TypeObjectHashId.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicType.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderFactory.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicPubSubType.h
+-- Installing: /usr/local/include/fastrtps/types/TypeIdentifier.h
+-- Installing: /usr/local/include/fastrtps/types/MemberDescriptor.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicTypePtr.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicData.h
+-- Installing: /usr/local/include/fastrtps/types/TypeIdentifierTypes.h
+-- Installing: /usr/local/include/fastrtps/types/TypeDescriptor.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicTypeMember.h
+-- Installing: /usr/local/include/fastrtps/types/TypeObject.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilder.h
+-- Installing: /usr/local/include/fastrtps/types/TypeObjectFactory.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicDataPtr.h
+-- Installing: /usr/local/include/fastrtps/types/TypeNamesGenerator.h
+-- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderPtr.h
+-- Installing: /usr/local/include/fastrtps/Domain.h
+-- Installing: /usr/local/include/fastrtps/attributes
+-- Installing: /usr/local/include/fastrtps/attributes/TopicAttributes.h
+-- Installing: /usr/local/include/fastrtps/attributes/all_attributes.h
+-- Installing: /usr/local/include/fastrtps/attributes/ParticipantAttributes.h
+-- Installing: /usr/local/include/fastrtps/attributes/SubscriberAttributes.h
+-- Installing: /usr/local/include/fastrtps/attributes/PublisherAttributes.h
+-- Installing: /usr/local/include/fastrtps/config
+-- Installing: /usr/local/include/fastrtps/config/doxygen_modules.h
+-- Installing: /usr/local/include/fastrtps/rtps
+-- Installing: /usr/local/include/fastrtps/rtps/writer
+-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent
+-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/PeriodicHeartbeat.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackSupressionDuration.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackResponseDelay.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessWriter.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/WriterDiscoveryInfo.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulWriter.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulPersistentWriter.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderLocator.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/WriterListener.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/PersistentWriter.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/RTPSWriter.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessPersistentWriter.h
+-- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderProxy.h
+-- Installing: /usr/local/include/fastrtps/rtps/exceptions
+-- Installing: /usr/local/include/fastrtps/rtps/exceptions/Exception.h
+-- Installing: /usr/local/include/fastrtps/rtps/RTPSDomain.h
+-- Installing: /usr/local/include/fastrtps/rtps/network
+-- Installing: /usr/local/include/fastrtps/rtps/network/NetworkFactory.h
+-- Installing: /usr/local/include/fastrtps/rtps/network/SenderResource.h
+-- Installing: /usr/local/include/fastrtps/rtps/network/ReceiverResource.h
+-- Installing: /usr/local/include/fastrtps/rtps/flowcontrol
+-- Installing: /usr/local/include/fastrtps/rtps/flowcontrol/ThroughputControllerDescriptor.h
+-- Installing: /usr/local/include/fastrtps/rtps/Endpoint.h
+-- Installing: /usr/local/include/fastrtps/rtps/participant
+-- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipantListener.h
+-- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipant.h
+-- Installing: /usr/local/include/fastrtps/rtps/participant/ParticipantDiscoveryInfo.h
+-- Installing: /usr/local/include/fastrtps/rtps/history
+-- Installing: /usr/local/include/fastrtps/rtps/history/History.h
+-- Installing: /usr/local/include/fastrtps/rtps/history/CacheChangePool.h
+-- Installing: /usr/local/include/fastrtps/rtps/history/ReaderHistory.h
+-- Installing: /usr/local/include/fastrtps/rtps/history/WriterHistory.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/ResendParticipantProxyDataPeriod.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/RemoteParticipantLeaseDuration.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimpleListener.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimple.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDP.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPSimple.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPStatic.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent/WLivelinessPeriodicAssertion.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLP.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLPListener.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/data
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ParticipantProxyData.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/data/WriterProxyData.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ReaderProxyData.h
+-- Installing: /usr/local/include/fastrtps/rtps/builtin/BuiltinProtocols.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader
+-- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderDiscoveryInfo.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent
+-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/HeartbeatResponseDelay.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/WriterProxyLiveliness.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/InitialAckNack.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessReader.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/WriterProxy.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessPersistentReader.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulReader.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderListener.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulPersistentReader.h
+-- Installing: /usr/local/include/fastrtps/rtps/reader/RTPSReader.h
+-- Installing: /usr/local/include/fastrtps/rtps/attributes
+-- Installing: /usr/local/include/fastrtps/rtps/attributes/EndpointAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/attributes/ReaderAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/attributes/HistoryAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/attributes/PropertyPolicy.h
+-- Installing: /usr/local/include/fastrtps/rtps/attributes/RTPSParticipantAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/attributes/WriterAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/common
+-- Installing: /usr/local/include/fastrtps/rtps/common/PortParameters.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/Token.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/WriteParams.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/all_common.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/Property.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/MatchingInfo.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/BinaryProperty.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/Types.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/SequenceNumber.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/Locator.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/CacheChange.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/SerializedPayload.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/InstanceHandle.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/FragmentNumber.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/Time_t.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/SampleIdentity.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/CDRMessage_t.h
+-- Installing: /usr/local/include/fastrtps/rtps/common/Guid.h
+-- Installing: /usr/local/include/fastrtps/rtps/rtps_fwd.h
+-- Installing: /usr/local/include/fastrtps/rtps/messages
+-- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.h
+-- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessagePool.h
+-- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageCreator.h
+-- Installing: /usr/local/include/fastrtps/rtps/messages/RTPS_messages.h
+-- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.hpp
+-- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageGroup.h
+-- Installing: /usr/local/include/fastrtps/rtps/messages/MessageReceiver.h
+-- Installing: /usr/local/include/fastrtps/rtps/security
+-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol
+-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/EndpointSecurityAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/ParticipantSecurityAttributes.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/SecurityMaskUtilities.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/AccessControl.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/exceptions
+-- Installing: /usr/local/include/fastrtps/rtps/security/exceptions/SecurityException.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography
+-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/Cryptography.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyFactory.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTypes.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyExchange.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTransform.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/authentication
+-- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Handshake.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Authentication.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/common
+-- Installing: /usr/local/include/fastrtps/rtps/security/common/ParticipantGenericMessage.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/common/Handle.h
+-- Installing: /usr/local/include/fastrtps/rtps/security/common/SharedSecretHandle.h
+-- Installing: /usr/local/include/fastrtps/rtps/resources
+-- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceManagement.h
+-- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncInterestTree.h
+-- Installing: /usr/local/include/fastrtps/rtps/resources/TimedEvent.h
+-- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceEvent.h
+-- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncWriterThread.h
+-- Installing: /usr/local/include/fastrtps/rtps/rtps_all.h
+-- Installing: /usr/local/include/fastrtps/eProsima_auto_link.h
+-- Installing: /usr/local/include/fastrtps/transport
+-- Installing: /usr/local/include/fastrtps/transport/TransportReceiverInterface.h
+-- Installing: /usr/local/include/fastrtps/transport/timedevent
+-- Installing: /usr/local/include/fastrtps/transport/timedevent/CleanTCPSocketsEvent.h
+-- Installing: /usr/local/include/fastrtps/transport/test_UDPv4Transport.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPv4Transport.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPv4TransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPTransportInterface.h
+-- Installing: /usr/local/include/fastrtps/transport/SocketTransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPv6Transport.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPTransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPChannelResource.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPv4Transport.h
+-- Installing: /usr/local/include/fastrtps/transport/TransportInterface.h
+-- Installing: /usr/local/include/fastrtps/transport/tcp
+-- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPHeader.h
+-- Installing: /usr/local/include/fastrtps/transport/tcp/TCPControlMessage.h
+-- Installing: /usr/local/include/fastrtps/transport/tcp/test_RTCPMessageManager.h
+-- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPMessageManager.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPTransportInterface.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPv6TransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/test_UDPv4TransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/test_TCPv4Transport.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPTransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/test_TCPv4TransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/TransportDescriptorInterface.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPChannelResource.h
+-- Installing: /usr/local/include/fastrtps/transport/UDPv6Transport.h
+-- Installing: /usr/local/include/fastrtps/transport/ChannelResource.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPv6TransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/transport/TCPv4TransportDescriptor.h
+-- Installing: /usr/local/include/fastrtps/utils
+-- Installing: /usr/local/include/fastrtps/utils/IPFinder.h
+-- Installing: /usr/local/include/fastrtps/utils/ObjectPool.h
+-- Installing: /usr/local/include/fastrtps/utils/System.h
+-- Installing: /usr/local/include/fastrtps/utils/IPLocator.h
+-- Installing: /usr/local/include/fastrtps/utils/md5.h
+-- Installing: /usr/local/include/fastrtps/utils/Semaphore.h
+-- Installing: /usr/local/include/fastrtps/utils/eClock.h
+-- Installing: /usr/local/include/fastrtps/utils/TimeConversion.h
+-- Installing: /usr/local/include/fastrtps/utils/DBQueue.h
+-- Installing: /usr/local/include/fastrtps/utils/StringMatching.h
+-- Installing: /usr/local/include/fastrtps/config.h
+-- Installing: /usr/local/lib/libfastrtps.so.1.7.0
+-- Installing: /usr/local/lib/libfastrtps.so.1
+-- Installing: /usr/local/lib/libfastrtps.so
+-- Set runtime path of &#34;/usr/local/lib/libfastrtps.so.1.7.0&#34; to &#34;&#34;
+-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets.cmake
+-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets-release.cmake
+-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config.cmake
+-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config-version.cmake
+
+======================== インストールに成功しました ==========================
+
+Some of the files created by the installation are inside the home directory: /home
+
+You probably don&#39;t want them to be included in the package.
+それらを表示しますか？ [n]: 
+それらをパッケージから除外しますか？(yesと答えることをおすすめします) [n]: 
+
+Some of the files created by the installation are inside the build
+directory: /home/kenta/git/Fast-RTPS/build
+
+You probably don&#39;t want them to be included in the package,
+especially if they are inside your home directory.
+Do you want me to list them?  [n]: 
+それらをパッケージから除外しますか？(yesと答えることをおすすめします) [y]: 
+
+tempディレクトリにファイルをコピー..OK
+
+Stripping ELF binaries and libraries...OK
+
+manページを圧縮..OK
+
+ファイルリストを作成..OK
+
+Debianパッケージを作成..OK
+
+Debianパッケージをインストール..OK
+
+tempファイルを削除..OK
+
+バックアップパッケージを書き込み..OK
+OK
+
+temp dirを削除..OK
+
+
+**********************************************************************
+
+ Done. The new package has been installed and saved to
+
+ /home/kenta/git/Fast-RTPS/build/fastrtps_20190522-1_amd64.deb
+
+ You can remove it from your system anytime using: 
+
+      dpkg -r fastrtps
+
+**********************************************************************
+
+$ dpkg --get-selections | grep fastrtps
+fastrtps                                        install
+$ which fastrtpsgen
+/usr/local/bin/fastrtpsgen
+</code></pre><p>これでインストールが完了した！</p>
+<h2 id="サンプルプログラムを動かす">サンプルプログラムを動かす</h2>
+<p>fastrtpsgenを使ってサンプルプログラムを作成する．
+プログラムの作成は<a href="https://eprosima.com/docs/fast-rtps/1.0.4/pdf/FASTRTPSGEN_User_Manual.pdf">FASTRTPSGEN v1.0.4 USER MANUAL</a>の<code>4 HelloWorld example</code>を参考にした．</p>
+<pre tabindex="0"><code>$ mkdir fastrtps-HelloWorld; cd fastrtps-HelloWorld
+$ vim HelloWorld.idl # メッセージを定義
+$ cat HelloWorld.idl
+struct sample {
+    @Key long id;
+    string message;
+};
+$ fastrtpsgen HelloWorld.idl -example CMake
+openjdk version &#34;1.8.0_212&#34;
+OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03)
+OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
+Loading templates...
+Processing the file HelloWorld.idl...
+HelloWorld.idl:2:16: error: Illegal identifier: id is already defined (Annotation: id)
+Exception in thread &#34;main&#34; java.lang.NullPointerException
+        at com.eprosima.fastrtps.fastrtpsgen.execute(fastrtpsgen.java:323)
+        at com.eprosima.fastrtps.fastrtpsgen.main(fastrtpsgen.java:1188)
+</code></pre><p>サンプルコードが動かない．
+idは定義済みだそうだ．
+別の名前を付けて再度挑戦してみる．</p>
+<pre tabindex="0"><code>$ vim HelloWorld.idl 
+$ cat HelloWorld.idl 
+struct HelloWorld {
+    @Key long index;
+    string message;
+};
+$ fastrtpsgen HelloWorld.idl -example CMake
+openjdk version &#34;1.8.0_212&#34;
+OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03)
+OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
+Loading templates...
+Processing the file HelloWorld.idl...
+Generating Type definition files...
+Generating TopicDataTypes files...
+Generating Publisher files...
+Generating Subscriber files...
+Generating main file...
+Adding project: HelloWorld.idl
+Generating solution for arch CMake...
+Generating CMakeLists solution
+$ ls 
+CMakeLists.txt  HelloWorldPubSubMain.cxx   HelloWorldPublisher.h
+HelloWorld.cxx  HelloWorldPubSubTypes.cxx  HelloWorldSubscriber.cxx
+HelloWorld.h    HelloWorldPubSubTypes.h    HelloWorldSubscriber.h
+HelloWorld.idl  HelloWorldPublisher.cxx
+</code></pre><p>ファイルが生成された．これをビルドする．</p>
+<pre tabindex="0"><code>$ mkdir build; cd build
+$ cmake ../
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libssl.so;/usr/lib/x86_64-linux-gnu/libcrypto.so (found version &#34;1.0.2g&#34;) 
+-- Configuring HelloWorld...
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/kenta/prog/c++/fastrtps-HelloWorld/build
+$ make
+Scanning dependencies of target HelloWorld_lib
+[ 14%] Building CXX object CMakeFiles/HelloWorld_lib.dir/HelloWorld.cxx.o
+[ 28%] Linking CXX static library libHelloWorld_lib.a
+[ 28%] Built target HelloWorld_lib
+Scanning dependencies of target HelloWorld
+[ 42%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubTypes.cxx.o
+[ 57%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubMain.cxx.o
+[ 85%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPublisher.cxx.o
+[ 85%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldSubscriber.cxx.o
+[100%] Linking CXX executable HelloWorld
+[100%] Built target HelloWorld
+$ ls
+$ ls
+CMakeCache.txt  CMakeFiles  HelloWorld  Makefile  cmake_install.cmake  libHelloWorld_lib.a
+$ ./HelloWorld 
+Error: Incorrect arguments.
+Usage: 
+
+./HelloWorld publisher|subscriber
+</code></pre><p>ターミナルを二つ用意し，それぞれで<code>./HelloWorld publisher</code>と<code>./HelloWorld subscriber</code>を実行する．</p>
+<pre tabindex="0"><code>$ ./HelloWorld publisher
+Starting 
+Publisher created, waiting for Subscribers.
+Publisher matched
+Sending sample, count=1, send another sample?(y-yes,n-stop): n
+Stopping execution
+</code></pre><pre tabindex="0"><code>$ ./HelloWorld subscriber
+Starting 
+Waiting for Data, press Enter to stop the Subscriber. 
+Subscriber matched
+Sample received, count=1
+Subscriber unmatched
+</code></pre><p>Fast-RTPSを使って通信ができた．</p>
+]]></content></item><item><title>manjaro linuxのミラーサーバを更新する</title><link>https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/</link><pubDate>Sun, 19 May 2019 14:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/</guid><description>tukubaのミラーサーバが死んだ pacmanでパッケージを更新しようとしたところ，以下のメッセージが表示された． :: パッケージデータベースの</description><content type="html"><![CDATA[<h2 id="tukubaのミラーサーバが死んだ">tukubaのミラーサーバが死んだ</h2>
+<p>pacmanでパッケージを更新しようとしたところ，以下のメッセージが表示された．</p>
+<pre tabindex="0"><code>:: パッケージデータベースの同期中...
+エラー: ファイル &#39;core.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: core の更新に失敗しました (予期しないエラー)
+エラー: ファイル &#39;extra.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: extra の更新に失敗しました (予期しないエラー)
+エラー: ファイル &#39;community.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: community の更新に失敗しました (予期しないエラー)
+エラー: ファイル &#39;multilib.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: multilib の更新に失敗しました (予期しないエラー)
+エラー: 全てのデータベースの同期に失敗しました
+</code></pre><p>403が帰ってきたということはつまり，ftp.tukuba.wide.ad.jpにアクセスできないわけだ．
+archlinuxのミラーサーバをチェックしにいくと，5月16日から接続不能になっていることがわかった．</p>
+<p><a href="https://www.archlinux.jp/mirrors/ftp.tsukuba.wide.ad.jp/">tukubaサーバのチェックログ</a>．</p>
+<h2 id="pacmanが参照するリポジトリを更新する">pacmanが参照するリポジトリを更新する</h2>
+<p>ミラーサーバの更新の仕方はmanjaro wikiに書かれていた．</p>
+<p><a href="https://wiki.manjaro.org/index.php?title=Pacman-mirrors%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AB%E3%82%88%E3%82%8B%E3%83%9F%E3%83%A9%E3%83%BC%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%83%AA%E3%82%B9%E3%83%88%E3%81%AE%E6%9B%B4%E6%96%B0">Pacman-mirrorsコマンドによるミラーサーバーリストの更新</a>．</p>
+<pre tabindex="0"><code>$ sudo pacman-mirrors --fasttrack &amp;&amp; sudo pacman -Syy
+[sudo] kenta のパスワード:
+::INFO Downloading mirrors from repo.manjaro.org
+::INFO Using custom mirror file
+::INFO Querying mirrors - This may take some time
+  0.130 Japan          : http://ftp.riken.jp/Linux/manjaro/
+  0.392 Japan          : ftp://ftp.riken.jp/Linux/manjaro/
+::INFO Writing mirror list
+::Japan           : http://ftp.riken.jp/Linux/manjaro/stable/$repo/$arch
+::INFO Mirror list generated and saved to: /etc/pacman.d/mirrorlist
+:: パッケージデータベースの同期中...
+ core                                                                                   151.1 KiB  4.92M/s 00:00 [####################################################################] 100%
+ extra                                                                                 1807.1 KiB  12.9M/s 00:00 [####################################################################] 100%
+ community                                                                                5.2 MiB  2.43M/s 00:02 [####################################################################] 100%
+ multilib                                                                               184.0 KiB  6.66M/s 00:00 [####################################################################] 100%
+</code></pre><p>理研のミラーサーバを利用する設定に変更された．</p>
+]]></content></item><item><title>vivado_hls_create_project(v2.0)へのアップデート</title><link>https://Kenta11.github.io/posts/2019-04-07-vivado_hls_create_project_v2-jp/</link><pubDate>Sun, 07 Apr 2019 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-04-07-vivado_hls_create_project_v2-jp/</guid><description>vivado_hls_create_projectにオプション機能を追加しすぎて使いづらくなったので，大幅な改修をしました． 破壊的更新をし，</description><content type="html"><![CDATA[<p><a href="https://github.com/Kenta11/vivado_hls_create_project">vivado_hls_create_project</a>にオプション機能を追加しすぎて使いづらくなったので，大幅な改修をしました．
+破壊的更新をし，gitのようにサブコマンドで使う機能を選択できるようにしました．
+といっても機能は<code>list</code>と<code>create</code>の2つだけです．
+そしてプロジェクトのディレクトリをはじめから作るようにも変更しました．
+簡単な使い方は<a href="https://github.com/Kenta11/vivado_hls_create_project/README.md">README</a>を見ていただければ分かると思いますが，そちらで説明していないオプションをこっちで解説したいと思います．</p>
+<p><code>create</code>コマンドのヘルプを見ると，以下の内容が表示されます．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project create --help
+usage: vivado_hls_create_project create [-h] [-s SOLUTION] [-c CLOCK] [--template] [--compiler_arg COMPILER_ARG] [--linker_arg LINKER_ARG] -b BOARD project_name
+
+positional arguments:
+  project_name
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s SOLUTION, --solution SOLUTION
+                        Solution name
+  -c CLOCK, --clock CLOCK                        Clock frequency of module
+  --template            Option for C++ template source code generation
+  --compiler_arg COMPILER_ARG
+                        Arguments for compiler
+  --linker_arg LINKER_ARG
+                        Arguments for linker
+  -b BOARD, --board BOARD
+                        Board name
+</code></pre><p><code>-s</code>，<code>-c</code>はソリューションの設定に使用します．
+<code>-s</code>はソリューション名を指定します．デフォルトではボード名と同じになります．
+<code>-c</code>はモジュールのクロック周期を指定します．デフォルトでは100MHzです．<code>-c 125MHz</code>や<code>-c 2.0ns</code>というようにクロック周期を指定すると，tclスクリプトに反映されます．</p>
+<p><code>--template</code>はC++のソースコードを自動で生成するオプションです．
+イチからプロジェクトを作る際に便利です．</p>
+<p>Cシミュレーションに外部のライブラリを使う際は<code>--compiler_arg</code>と<code>--linker_arg</code>を使うことになると思います．
+<code>--compiler_arg</code>はCシミュレーションのコンパイラ用の引数です．<code>src/</code>と<code>test/src</code>以下のコードをコンパイルする際に適用されます．
+<code>--linker_arg</code>はCシミュレーションのリンク用の引数です．リンクの際に適用されます．</p>
+<p>ZedBoard用にsampleというプロジェクトを作る場合は，以下のようにコマンドを実行して下さい．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project create sample -b Xilinx_ZedBoard
+INFO: Generating directory sample
+INFO: Generating directory sample/include
+INFO: Generating directory sample/src
+INFO: Generating directory sample/test/include
+INFO: Generating directory sample/test/src
+INFO: Generating directory sample/script
+INFO: Generating Makefile
+INFO: Generating tcl scripts
+INFO: Part of Xilinx_ZedBoard found -&gt; xc7z020clg484-1
+INFO: Generating directives.tcl
+INFO: Generating .gitignore
+$ tree sample
+sample
+├── Makefile
+├── directives.tcl
+├── include
+├── script
+│   ├── cosim.tcl
+│   ├── csim.tcl
+│   ├── csynth.tcl
+│   ├── export.tcl
+│   └── init.tcl
+├── src
+└── test
+    ├── include
+    └── src
+
+6 directories, 7 files
+</code></pre><p><code>-b</code>はボード名を指定します．
+使用可能なボード名は<code>list</code>コマンドで確認して下さい．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project list
+Board               Part
+--------------------------------------------------
+Alpha-Data          xc7vx690tffg1157-2
+KU_Alphadata        xcku060-ffva1156-2-e
+Xilinx_ZedBoard     xc7z020clg484-1
+Xilinx_AC701        xc7a200tfbg676-2
+Xilinx_KC705        xc7k325tffg900-2
+Xilinx_KCU105       xcku040-ffva1156-2-e
+Xilinx_KCU116       xcku5p-ffvb676-2-e
+Xilinx_KCU1500      xcku115-flvb2104-2-e
+Xilinx_VC707        xc7vx485tffg1761-2
+Xilinx_VC709        xc7vx690tffg1761-2
+Xilinx_VCU108       xcvu095-ffva2104-2-e
+Xilinx_VCU110       xcvu190-flgc2104-2-e
+Xilinx_VCU118       xcvu9p-flga2104-2L-e
+Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
+Xilinx_ZC702        xc7z020clg484-1
+Xilinx_ZC706        xc7z045ffg900-2
+Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
+Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
+Xilinx_A-U200       xcu200-fsgd2104-2-e
+Xilinx_A-U250       xcu250-figd2104-2L-e
+Basys3              xc7a35t1cpg236-1
+Genesys2            xc7k325t2ffg900c-1
+Zybo                xc7z010clg400-1
+Zybo_Z7_10          xc7z010clg400-1
+Zybo_Z7_20          xc7z020clg400-1
+</code></pre>]]></content></item><item><title>Vivadoを使用する際にのみVivadoへパスを通す(Zsh編)</title><link>https://Kenta11.github.io/posts/2019-02-17-vivado-with-zsh/</link><pubDate>Sun, 17 Feb 2019 20:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-02-17-vivado-with-zsh/</guid><description>settings64.shをsourceしてVivadoへパスを通すと，gccやらcmakeが全てXilinxディレクトリの下にあるものにな</description><content type="html"><![CDATA[<p>settings64.shをsourceしてVivadoへパスを通すと，gccやらcmakeが全てXilinxディレクトリの下にあるものになってしまう．
+そこで以前Qiitaにて，Vivadoを使用する際にのみVivadoへパスを通す方法について投稿した．</p>
+<p>当該記事：<a href="https://qiita.com/Kenta11/items/2d132a66c599df76639d">Vivadoの使用中にのみVivadoへのパスを通す</a></p>
+<p>このときはBashを使っていたのだが，私は最近はもっぱらZshを使っている．
+Zshであっても同じように，Vivadoを使用する際にのみVivadoへパスを通すことができる．</p>
+<p>.zshrcに以下の記述をする．</p>
+<pre tabindex="0"><code># vivado
+function vivado(){
+    source /path/to/Xilinx/Vivado/201x.x/settings64.sh
+
+    # activate
+    /path/to/Xilinx/Vivado/201x.x/bin/vivado $@
+
+    # remove path
+    xilinx_path=(`echo $PATH | tr &#34;:&#34; &#34;\n&#34; | grep &#34;^/path/to/Xilinx&#34;`)
+    for ((i = 0; i &lt;= ${#xilinx_path[@]}; i++)); do
+        export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: &#39;$0 != &#34;&#39;${xilinx_path[$i]}&#39;&#34;&#39; | sed &#39;s/:$//&#39;`
+    done
+}
+
+# vivado hls
+function vivado_hls(){
+    source /path/to/Xilinx/Vivado/201x.x/settings64.sh
+
+    # activate
+    /path/to/Xilinx/Vivado/201x.x/bin/vivado_hls $@
+
+    # remove path
+    xilinx_path=(`echo $PATH | tr &#34;:&#34; &#34;\n&#34; | grep &#34;^/path/to/Xilinx&#34;`)
+    for ((i = 0; i &lt;= ${#xilinx_path[@]}; i++)); do
+        export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: &#39;$0 != &#34;&#39;${xilinx_path[$i]}&#39;&#34;&#39; | sed &#39;s/:$//&#39;`
+    done
+}
+</code></pre><p>settings64.shはbashのスクリプトだが，Zshでsourceしても動いた．
+&ldquo;/path/to&quot;の部分はVivadoをインストールしたパスにすること．
+&ldquo;201x.x&quot;も同様に，使っているバージョンに合わせること．</p>
+<p>vivadoの呼び出しが絶対パスになっているが，もちろんここを単に&quot;vivado&quot;としないこと．
+ここで定義したvivado関数を永久に再帰呼び出しする羽目になる．</p>
+]]></content></item><item><title>makeコマンドでVivado HLSを使う</title><link>https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/</link><pubDate>Tue, 12 Feb 2019 07:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/</guid><description>はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力であ</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>私がVivado HLSでIPを作っているときに使う機能はほとんど限られている．
+Cシミュレーション，HDLの合成，そしてIPの出力である．
+これにGUIを使う必要はほとんど感じられない．
+makeコマンドでそれらの一連の処理が出来れば楽チンである．</p>
+<h2 id="cuiでvivado-hlsを使う">CUIでVivado HLSを使う</h2>
+<h3 id="tclでビルドする">tclでビルドする</h3>
+<p>FPGA開発日記のmsyksphinzさんが，tclとmakeを使ってビルドする方法を記事にしていた．</p>
+<p>記事：<a href="http://msyksphinz.hatenablog.com/entry/2016/09/15/020000">コマンドラインからVivado HLSを使用するためのスクリプト</a></p>
+<p>なるほど！
+Makefileで環境変数を定義しておいて，tclのスクリプトでそれらを参照すれば，汎用的なMakefileを作れるみたいだ．</p>
+<p>このMakefileのターゲットは，allとcleanしかない．
+allはCのソースコードをIPに，cleanは生成物やログを削除する．
+しかし私はHDLの合成までやって，Cのコードにpragmaを追加してチューニングを行うことがある．
+なので場合によっては，HDLの合成までで止めたい．</p>
+<h3 id="makeコマンドでビルドする">makeコマンドでビルドする</h3>
+<p>私がVivado HLSを使うときのディレクトリ構成に合わせて，Makefileとtclスクリプトを作る．
+作ったMakefileとサンプルプロジェクトは<a href="https://github.com/Kenta11/adder">Github</a>に用意した．
+ディレクトリ構成を下に示す</p>
+<pre tabindex="0"><code>adder/
+├── Makefile
+├── directives.tcl
+├── include: 合成する関数のヘッダ
+│   └── adder.hpp
+├── src: 合成する関数の定義
+│   └── adder.cpp
+├── test: 合成する関数のテストベンチ
+│   ├── include
+│   │  └── test_adder.hpp
+│   └── src
+│       └── test_adder.cpp
+└── script: 合成のためのtclスクリプト
+     ├── csim.tcl
+     ├── csynth.tcl
+     ├── cosim.tcl
+     └── export.tcl
+</code></pre><p>msyksphinzさんの記事を参考に作ったMakefileを下に示す．</p>
+<pre tabindex="0"><code>#### configuration #####
+
+# project and solution name
+export HLS_TARGET   = adder
+export HLS_SOLUTION = basys3
+# source files
+export HLS_SOURCE   = $(wildcard src/*)
+export HLS_TEST     = $(wildcard test/src/*)
+
+# result
+BASE_DIR = $(HLS_TARGET)/$(HLS_SOLUTION)
+IP       = $(BASE_DIR)/impl
+COSIM    = $(BASE_DIR)/sim
+HDL      = $(BASE_DIR)/syn
+CSIM     = $(BASE_DIR)/csim
+
+##### targets and commands #####
+
+.PHONY: all
+all: $(IP)
+
+.PHONY: export
+export: $(IP)
+$(IP): $(HDL)
+        vivado_hls script/export.tcl
+
+cosim: $(COSIM)
+$(COSIM): $(HDL)
+        vivado_hls script/cosim.tcl
+
+.PHONY: csynth
+csynth: $(HDL)
+$(HDL): $(CSIM) $(HLS_SOURCE)
+        vivado_hls script/csynth.tcl
+
+.PHONY: csim
+csim: $(CSIM)
+$(CSIM):
+        vivado_hls script/csim.tcl
+
+.PHONY: clean
+clean:
+        rm -rf $(HLS_TARGET) *.log
+</code></pre><p>これでmakeと打てばCのコードからIPが生成される．
+またHDLの合成だけやりたい場合は，make csynthと打てば良い．
+協調シミュレーション(cosim)は使わない場合もあるので，ターゲットを指定して実行した場合のみ使えるようになっている．</p>
+<h2 id="makefileとtclスクリプトを自動生成する">Makefileとtclスクリプトを自動生成する</h2>
+<p>新しくプロジェクトを作る場合，先程のMakefileとtclスクリプトをコピーすればよい．
+しかしプロジェクトによって変えたい部分がいくつかある．</p>
+<ul>
+<li>Makefile: プロジェクト名とソリューション名</li>
+<li>csynth.tcl: チップ情報とクロック制約</li>
+</ul>
+<p>これらの情報を入力として，Makefileとtclスクリプトを生成できるツールを作った↓</p>
+<p><a href="https://github.com/Kenta11/vivado_hls_create_project">vivado_hls_create_project</a></p>
+<h3 id="vivado_hls_create_projectの設定">vivado_hls_create_projectの設定</h3>
+<p>このツールを使うにあたって，設定が2つ必要となる．
+１つ目の設定は，Vivadoのパスである．
+ホームディレクトリに&quot;.vivado_hls_create_project&quot;という名前でVivadoのパスを書いたJSONファイルを置く．
+例えば&quot;/opt/Xilinx/Vivado/2018.3&quot;であれば，&quot;.vivado_hls_create_project&quot;の内容を以下のようにする．</p>
+<pre tabindex="0"><code>{
+    &#34;path_to_vivado&#34;: &#34;/opt/Xilinx/Vivado/2018.3&#34;
+}
+</code></pre><p>２つ目の設定は，vivado_hls_create_projectを使う際にsettings.(sh|zsh)をsourceすることである．</p>
+<p>またこれはオプションだが，Vivado HLSのボードファイルに普段使っているボードの情報を追記しておくと良い．
+ボードの情報は(Vivadoをインストールした場所が&quot;/opt/Xilinx/Vivado/2018.3&quot;であれば)，&quot;/opt/Xilinx/Vivado/2018.3/common/config/VivadoHls_boards.xml&quot;にある．
+ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．</p>
+<pre tabindex="0"><code>&lt;board name=&#34;Basys3&#34; display_name=&#34;Basys3&#34; family=&#34;artix7&#34; part=&#34;xc7a35t1cpg236-1&#34;  device=&#34;xc7a35t&#34; package=&#34;cpg236&#34; speedgrade=&#34;-1&#34; vendor=&#34;digilentinc.com&#34; /&gt;
+</code></pre><h3 id="vivado_hls_create_projectで使えるボードの情報を見る">vivado_hls_create_projectで使えるボードの情報を見る</h3>
+<p>vivado_hls_create_projectには，Makefileとtclスクリプトを作成できるボードの情報を表示する機能がある．
+&ldquo;vivado_hls_create_project -l&quot;と入力してみると，以下の表示が得られる．
+Vivado HLSにデフォルトで登録されているボードだけでなく，追記したBasys3も見えている．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project -l
+Board               Part
+----------------------------
+Alpha-Data          xc7vx690tffg1157-2
+KU_Alphadata        xcku060-ffva1156-2-e
+Xilinx_ZedBoard     xc7z020clg484-1
+Xilinx_AC701        xc7a200tfbg676-2
+Xilinx_KC705        xc7k325tffg900-2
+Xilinx_KCU105       xcku040-ffva1156-2-e
+Xilinx_KCU116       xcku5p-ffvb676-2-e
+Xilinx_KCU1500      xcku115-flvb2104-2-e
+Xilinx_VC707        xc7vx485tffg1761-2
+Xilinx_VC709        xc7vx690tffg1761-2
+Xilinx_VCU108       xcvu095-ffva2104-2-e
+Xilinx_VCU110       xcvu190-flgc2104-2-e
+Xilinx_VCU118       xcvu9p-flga2104-2L-e
+Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
+Xilinx_ZC702        xc7z020clg484-1
+Xilinx_ZC706        xc7z045ffg900-2
+Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
+Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
+Xilinx_A-U200       xcu200-fsgd2104-2-e
+Xilinx_A-U250       xcu250-figd2104-2L-e
+Basys3              xc7a35t1cpg236-1
+</code></pre><h3 id="vivado_hls_create_projectでmakefileとtclスクリプトを生成する">vivado_hls_create_projectでMakefileとtclスクリプトを生成する</h3>
+<p>プロジェクト名とボード名を入力して，以下のようにコマンドを入力する．
+-pにはプロジェクト名，-bにはボード名(先程-lオプションで表示したもの)を指定する．
+するとMakefileとtclスクリプト，そしていくつかのディレクトリが生成される．</p>
+<p>includeとsrcはハードウェア化する関数のためのディレクトリ，test以下はテスト用のディレクトリだ．</p>
+<pre tabindex="0"><code>$ vivado_hls_create_project -p adder -b Basys3
+INFO:  Found part
+INFO:  Generate Makefile
+INFO:  Generate directories
+INFO:  Generate tcl scripts
+$ tree .
+.
+├── Makefile
+├── directives.tcl
+├── include
+├── script
+│   ├── cosim.tcl
+│   ├── csim.tcl
+│   ├── csynth.tcl
+│   └── export.tcl
+├── src
+└── test
+    ├── include
+    └── src
+
+6 directories, 6 files
+</code></pre><p>ハードウェア化するCコードをinclude, srcに，テストコードをtestに置けば，makeでIPの生成までやってくれる．</p>
+<h2 id="おわりに">おわりに</h2>
+<p>これでGUI無しにVivado HLSのプロジェクトを作ったりIPの生成が出来るようになった．
+もしこのツールを使いたい人や使ってみた人がいれば，感想や質問等を是非聞かせてほしい．</p>
+]]></content></item><item><title>UbuntuにVim環境を用意する</title><link>https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/</link><pubDate>Mon, 14 Jan 2019 20:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/</guid><description>まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ． Vimをビルド GithubからVimをダウンロードする． $ git clone https://github.com/vim/vim ビ</description><content type="html"><![CDATA[<h2 id="まえがき">まえがき</h2>
+<p>いろんなマシンでVimをビルドすることがあるので，その手順をメモ．</p>
+<h2 id="vimをビルド">Vimをビルド</h2>
+<p>GithubからVimをダウンロードする．</p>
+<pre tabindex="0"><code>$ git clone https://github.com/vim/vim
+</code></pre><p>ビルドの設定をしてからビルドする．</p>
+<pre tabindex="0"><code>$ make distclean # すでにビルドをしたことがある場合は実行しておく
+$ ./configure --with-features=huge \
+            --disable-darwin \
+            --disable-selinux \
+            --enable-fail-if-missing \
+            --enable-python3interp=dynamic \
+            --enable-cscope \
+            --enable-fontset \
+            --with-compiledby=kenta \
+            --enable-gui=no \
+            --prefix=/usr/local
+
+$ make -j8 # マシンのスペックによって値は変える
+</code></pre><h2 id="vimをインストール">Vimをインストール</h2>
+<p>Ubuntuの場合，checkinstallを使うことでVimをaptで管理できる．
+make installせずにこちらを使う．</p>
+<pre tabindex="0"><code>$ apt install checkinstall
+$ checkinstall
+# インストールするパッケージが更新されないように，holdをかけておく
+$ echo &#34;vim hold&#34;         | dpkg --set-selections
+$ echo &#34;vim-common hold&#34;  | dpkg --set-selections
+$ echo &#34;vim-runtime hold&#34; | dpkg --set-selections
+$ echo &#34;vim-tiny hold&#34;    | dpkg --set-selections
+</code></pre><h2 id="plugin">Plugin</h2>
+<p>Vimのプラグインを準備する．私のVim用設定ファイルはGithub上に置いてあるので，これを使う．</p>
+<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/dotfiles ; cd dotfiles
+$ bash install.sh
+</code></pre><p>これでホームに.vimと.vimrcのシンボリックリンクができる．vimを実行すればプラグインがインストールされる．</p>
+<h2 id="もしuninstallする場合は">もしuninstallする場合は</h2>
+<p>以下のコマンドを実行する．</p>
+<pre tabindex="0"><code>$ echo &#34;vim install&#34;         | dpkg --set-selections
+$ echo &#34;vim-common install&#34;  | dpkg --set-selections
+$ echo &#34;vim-runtime install&#34; | dpkg --set-selections
+$ echo &#34;vim-tiny install&#34;    | dpkg --set-selections
+
+$ apt remove --purge vim
+</code></pre>]]></content></item><item><title>Windows PCにManajaro Linuxをデュアルブートする</title><link>https://Kenta11.github.io/posts/2019-01-08-install-manjaro-linux-jp/</link><pubDate>Tue, 08 Jan 2019 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-01-08-install-manjaro-linux-jp/</guid><description>前書き 新しいノートPCを購入した． SSDの容量が大きかったので，Linuxをデュアルブートしたいと思う． ディストリビューションはManajr</description><content type="html"><![CDATA[<h2 id="前書き">前書き</h2>
+<p>新しいノートPCを購入した．
+SSDの容量が大きかったので，Linuxをデュアルブートしたいと思う．
+ディストリビューションはManajro Linuxを選択した．</p>
+<p>Manjaro LinuxはArch Linuxにデスクトップ環境を追加したもので，<a href="https://distrowatch.com/dwres.php?resource=popularity">ディストロウォッチのヒットランキング</a>では最近一年で一位の人気のようだ．
+Manajro Linuxを選んだ理由は3つある．</p>
+<ul>
+<li>リリースモデルがローリング・リリースである
+<ul>
+<li>リポジトリ上のソフトウェアが常に最新</li>
+</ul>
+</li>
+<li>パッケージマネージャであるpacmanの使用感がシンプル
+<ul>
+<li>apt，dpkgやyumよりも使いやすくて好き</li>
+</ul>
+</li>
+<li>Arch Linuxが標準で持たないデスクトップ環境が備わっている</li>
+</ul>
+<h2 id="manjaro-linuxをインストールする">Manjaro Linuxをインストールする</h2>
+<p>インストールの手順はArch Wikiを参照しながら行った．</p>
+<h3 id="isoイメージを用意する">ISOイメージを用意する</h3>
+<p>まずは<a href="https://manjaro.org/download/">公式のホームページ</a>からISOイメージをダウンロードする．
+XFCEやGNOMEなどデスクトップ環境の異なるエディションがあるので，好きなものを選ぶ．
+私はi3エディションを選択した．</p>
+<p>ダウンロードが終わったら，<a href="https://rufus.ie/">Rufus</a>を使ってUSBメモリにISOイメージを焼く．
+書込みの際にDDモードで書き込むかを尋ねられるので，DDモードを選択する．</p>
+<p>これでインストールメディアが完成した．</p>
+<h3 id="ssdをデュアルブートが出来るように設定する">SSDをデュアルブートが出来るように設定する</h3>
+<p>購入したマシンのSSDはWindowsによって暗号化がされていた．
+このままUEFIの設定を変更するとWindows10がブートできなくなるので，まず暗号化を無効にする．
+まずWindowsのアイコンを右クリックし，設定を開く．
+『更新とセキュリティ』をクリックし，『デバイスの暗号化』にある『オフにする』を選択する．
+暫く待つと，暗号化が解除された．</p>
+<p>次にSSDにLinuxをインストールする領域を確保する．
+Windowsのアイコンを右クリックし,『ディスクの管理』を選択する．
+Cドライブを右クリックし，『ボリュームの縮小』を選択する．
+私はSSDをWindows10とLinux用で半分ずつに分けた．</p>
+<p>続いてUEFIの設定を変更する．
+このときインストールメディアのUSBメモリを接続しておく．
+同じくWindowsの設定ウィンドウで『更新とセキュリティ』をクリックし，『回復』の『今すぐ再起動』をクリックする．
+すると再起動にUEFIを起動するか聞かれるので，するを選ぶ．
+UEFIが起動したら，高速スタートアップの設定，ファストブート，セキュアブートを解除する．
+そしてUSBメモリのBoot Priorityを一番にし，その後OSを起動する．</p>
+<h3 id="インストール">インストール</h3>
+<p>USBメモリのManajro Linuxが起動したら，OSのインストーラを実行してSSDの空き領域にインストールする．
+インストーラの使い方はManjaro Wikiを参照すると良い(<a href="https://wiki.manjaro.org/index.php/Install_Desktop_Environments">https://wiki.manjaro.org/index.php/Install_Desktop_Environments</a>)．</p>
+<h2 id="環境設定">環境設定</h2>
+<h3 id="日本語入力">日本語入力</h3>
+<p>日本語入力が出来なかったので，そのためのパッケージをインストール</p>
+<p>参考：<a href="https://confluence.jaytaala.com/pages/viewpage.action?pageId=18579517">Japanese input with i3 and Arch/Manjaro</a></p>
+<pre tabindex="0"><code>sudo pacman -S fcitx-im fcitx-configtool fcitx-mozc yay
+yay -S ttf-vlgothic\
+
+echo &#34;# Japanese input\
+export QT_IM_MODULE=fcitx\
+export XMODIFIERS=@im=fcitx\
+export GTK_IM_MODULE=fcitx&#34; &gt;&gt; ~/.profile
+
+echo &#34;exec --no-startup-id fcitx -d&#34; &gt;&gt; ~/.config/i3/config
+</code></pre><h3 id="ディレクトリ名">ディレクトリ名</h3>
+<p>OSをインストールした際にリージョンをJapanとしたところ，ホームにあるディレクトリ名が日本語になってしまった．
+以下のコマンドで英語に書き換える．</p>
+<pre tabindex="0"><code>LANG=C xdg-user-dirs-update --force
+</code></pre><p>日本語名のディレクトリは残ってしまったので自分で消した．</p>
+<h3 id="時計">時計</h3>
+<p>Manajro Linuxでは9時間前の時刻が表示された．
+これはWindowsとハードウェアクロックを共有していることが原因だそうだ(参考：https://wiki.archlinux.org/index.php/System_time#Time_standard)．
+LinuxとWindowsの双方で正しい時刻が表示されるように設定する．</p>
+<h4 id="linux">Linux</h4>
+<p>ntpdを有効にして，ハードウェアクロックをUTCで同期する．</p>
+<p>参考</p>
+<ul>
+<li><a href="https://qiita.com/mopp/items/f1912433abbed69f5f99#%E6%99%82%E5%88%BB%E3%81%AE%E8%A8%AD%E5%AE%9A">VAIO Z で Arch LinuxとWindows 10をデュアルブートする</a></li>
+<li><a href="https://wiki.archlinux.jp/index.php/%E6%99%82%E5%88%BB#Windows_.E3.81.A7_UTC_.E3.82.92.E4.BD.BF.E3.81.86">ArchWiki 時刻</a></li>
+</ul>
+<pre tabindex="0"><code>pacman -S ntp
+timedatectl set-local-rtc false
+ntpd -gq
+hwclock --systohc
+systemctl enable ntpd.service
+</code></pre><h4 id="windows">Windows</h4>
+<p>WindowsにハードウェアクロックをUTCとして使わせる．
+Win+rでregeditを起動し，以下のレジストリに16進数で1のDWORD値を設定する．</p>
+<pre tabindex="0"><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation\RealTimeIsUniversal
+</code></pre><h2 id="後書き">後書き</h2>
+<p>Manjaro LinuxとWindowsを両方使える環境が出来た．
+PowerPointのスライドやWindowsでしか使えないアプリはWindows10で，開発やレポートはManjaro Linuxでやろうと思っている．</p>
+]]></content></item><item><title>【観劇記】ぼくらのいもうと(宇都宮大学演劇研究会)</title><link>https://Kenta11.github.io/posts/2018-11-28-gakusai-kouen-jp/</link><pubDate>Sun, 25 Nov 2018 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2018-11-28-gakusai-kouen-jp/</guid><description>11/23(金)に宇都宮大学演劇研究会の公演を観に行きました． 『ぼくらのいもうと』あらすじ(脚本の中野劇団ホームページより引用) 匿名の人物に</description><content type="html"><![CDATA[<p>11/23(金)に宇都宮大学演劇研究会の公演を観に行きました．</p>
+<p>『ぼくらのいもうと』あらすじ(脚本の<a href="http://nakanogekidan.com/plays/g06/">中野劇団ホームページ</a>より引用)</p>
+<blockquote>
+<p>匿名の人物によって
+インターネットの片隅にアップされ
+局所的な反響を呼んだ小説『天空』
+その物語を読んだ一人のファンが
+ある掲示板へ書き込む
+「天空高校は俺の母校かも知れない」
+そして、オフ会が開かれる</p>
+<p>駅前のマンションに住む安堂寺杏奈は、
+仕事の大事な契約をとるために、
+取引先の担当者であり、大学時代の先輩でもある
+笹原という男を待っていた。
+インターホンが鳴る。
+杏奈がドアを開けると、現れたのは職場の部下である
+昆陽という男だった。
+彼はいきなり部屋に入って来て、
+おもむろにノートPCを取り出すと、
+ある場所を盗撮盗聴しはじめた。
+盗撮しているのは同じマンションの別室で、
+今から某巨大掲示板のあるスレッドに集まる者による
+オフ会が始まろうとしていた。
+そこに盗撮カメラを持たせてスパイとして潜入しているのは
+昆陽の妹。</p>
+<p>２つの部屋を舞台にした一幕物コメディ！</p>
+</blockquote>
+<h2 id="感想">感想</h2>
+<h3 id="演出">演出</h3>
+<p>開演前の前説を演出と助演の二人で小気味良くこなし，その呼吸のセンスが劇中でも垣間見えました．&ldquo;オフ会&quot;では常に人々が会話しているために舞台がキャストだらけでしたが，キャストを上手く捌いて個々の魅力を引き出せていたように思います．また&quot;誠一&quot;と&quot;朴&rdquo;(主役とその親友)の掛け合いも気持ちの良いものでした．</p>
+<h3 id="キャスト">キャスト</h3>
+<ul>
+<li>安堂寺杏奈</li>
+</ul>
+<p>とても声が通り，しかも柔軟に演技の出来る方だなあという印象でした．深く言及するとネタバレになるので控えますが，ストーリーが進むにつれてより深く役柄を表現されていました．</p>
+<ul>
+<li>昆陽誠一</li>
+</ul>
+<p>今回が2回目の演劇とのことでしたが，全くそのようには思えないほどに『誠一』を演じられていました．序盤で杏奈の部屋に突然現れ，怪しげながらコミカルな感があり，とても楽しい役でした．またその後は物語の核心に迫るごとに，丁寧に気持ちの描写をされていました．今後も楽しみなキャストさんの一人です．</p>
+<ul>
+<li>朴</li>
+</ul>
+<p>気味の悪い姿で突如として現れ，毅然としながら周囲を驚かす数々の言動をこなし，まさに怪演という言葉が相応しい方だと思いました．『朴』自体は物語の核心に深くは関わってなかったように思いますが，存在感はピカイチでした(存在感がありすぎて，むしろ重要な役割があったような気がしてならない)．是非またこの方の演技を観たいです．</p>
+<ul>
+<li>笹原</li>
+</ul>
+<p>じっくりと落ち着いた演技をされており，対して中盤以降で&quot;とんでもない&quot;状況になった際の切り返しが強いギャップとして記憶に残りました．基本的にはキャラクターがしっかりしていて，態度を変えたときの差のつけ方が巧みでした．</p>
+<ul>
+<li>悦子</li>
+</ul>
+<p>落ち着いた雰囲気を見せつつ，時に間の抜けた発言をするなど(トンデモなく恐ろしいことも)，非常に魅力的な方でした．落ち着きと砕けた姿の調節具合が非常に素晴らしく，今回の舞台における隠れた名優だったのではないかと思います．</p>
+<ul>
+<li>悠太</li>
+</ul>
+<p>ハキハキとした口調で，大人数の舞台でもしっかりと存在感がある演技をされていました．しかし役柄がイロモノ揃いだったので，俳優さんからするとなかなかに難解な舞台だったのではないかと思います．他の役をされている舞台も観てみたいです．</p>
+<ul>
+<li>硬い彗星</li>
+</ul>
+<p>序盤は何だか冴えないように思っていたのですが，まさか，のタイミングで物語に深く関わる人物だと明らかになり，その後は主張強く役を演じられていました．この方も大学で初めて演劇をしているとのことですが，前述の&quot;主張&quot;の強さの踏み込みがとても経験の浅い風には思えませんでした．またも今後が楽しみな方が現れてしまいました．</p>
+<ul>
+<li>昆陽ミチル</li>
+</ul>
+<p>ある人物に成りすましてオフ会の会場に潜入し，兄 誠一とオフ会参加者に挟まれて騒動の渦中に飲み込まれていくのですが，他の参加者にバレないように振る舞う演技が印象的でした．&ldquo;演技をしている演技&quot;は中々に難しいものですが，とても堂々とこなしており格好良かったです．</p>
+<ul>
+<li>夏候惇</li>
+</ul>
+<p>ステレオタイプのオタク役で，一貫して不気味さを併せ持つコミカルな人物を好演されていました．この方の演技は1, 2年前から観ているのですが，劇的な成長を続けており，今回の役も経験を活かして(?)，見事に演じられていました．ちなみに直近で別の団体の公演にも参加するそうです．行きたいですね&hellip;</p>
+<ul>
+<li>ぱふぱふ</li>
+</ul>
+<p>声，表情，動きのどれをとっても不満が無く，とても完成された演技をする方でした．特に&quot;異なる話題に及ぶ場面&quot;や&quot;会話の途中に参入する場面&quot;などにおいて，直前まで話していたキャストの会話との間の取り具合が絶妙で，非常に感激しました．昨年の学祭公演『鳩とか腹とか振り子とか、きっと君の体内には廻るクロニクル』で初めて観たときから非常に気になっていた方で，またこうして観られて嬉しかったです．</p>
+<h3 id="スタッフ">スタッフ</h3>
+<p>舞台設計が非常にオシャレだと感じました．今回の舞台はマンションの一室が二つ並ぶ関係上，非常に横長にならざるをえません．しかしカーペットを舞台の両側で斜めに敷き，残りの床は会場である峰ヶ丘講堂の木のままにしたことで，舞台が対称的かつ落ち着いた印象でした．とても素敵な部屋に思えました．</p>
+<h2 id="最後に">最後に</h2>
+<p>公演時間は約二時間と非常に長い舞台だったにも関わらず，楽しくあっという間に時間が過ぎてしまいました．公演が面白かっただけでなく，素敵な俳優さんたちと出会うことができ，とても良い舞台が観られたと思います．今後の公演も是非観に行きたいです．</p>
+]]></content></item><item><title>I opened my blog</title><link>https://Kenta11.github.io/posts/2018-11-25-first-page-en/</link><pubDate>Sun, 25 Nov 2018 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2018-11-25-first-page-en/</guid><description>I&amp;rsquo;ve wanted to open a blog in github.io. So I&amp;rsquo;ve been developing&amp;hellip; I&amp;rsquo;m going to post articles about my development and hobbies.</description><content type="html"><![CDATA[<p>I&rsquo;ve wanted to open a blog in github.io. So I&rsquo;ve been developing&hellip;
+I&rsquo;m going to post articles about my development and hobbies.</p>
+]]></content></item></channel></rss>
