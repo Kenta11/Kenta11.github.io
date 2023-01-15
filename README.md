@@ -1,17 +1,17 @@
-kenta.github.io
-=======================
+# Kenta11.github.io
 
-This is a blog developed by Kenta Arai.
+Blogs by Kenta Arai.
 
-License:
---------
+## Run locally
 
-[GNU GENERAL PUBLIC LICENSE Version 2.0](LICENSE)
+```bash
+$ hugo server -D
+```
 
-Author:
--------
+## License
 
-Kenta Arai
-- twitter: [isKenta14](https://twitter.com/isKenta14)
+- [The MIT LICENSE](LICENSE)
 
-This blog uses [joytou.github.io](https://github.com/joytou/joytou.github.io), which is blog template developed by joytou.
+## Author
+
+- [Kenta Arai](https://twitter.com/isKenta14)
