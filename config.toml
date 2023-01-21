@@ -71,6 +71,10 @@ enableEmoji = true  # Shorthand emojis in content files - https://gohugo.io/func
     name = "qiita"
     url = "https://qiita.com/Kenta11"
 
+  [[params.social]]
+    name = "speakerdeck"
+    url = "https://speakerdeck.com/kenta11"
+
 [menu]
 
   [[menu.main]]
