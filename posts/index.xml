@@ -1,4 +1,172 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Electron-Shogi &amp; 水匠5 on Manjaro</title><link>https://Kenta11.github.io/posts/2023-01-01-shogi-on-manjaro/</link><pubDate>Sun, 01 Jan 2023 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-01-shogi-on-manjaro/</guid><description>はじめに うちには強いマシンが Manjaro サーバしかないので，将棋の解析をこのサーバでやりたい． ただし，いわゆる将棋ソフトは Windows で使うことを前提としている</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 30 Jan 2023 22:30:15 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #1</title><link>https://Kenta11.github.io/posts/2023-01-30-rust-raspberrypi-os-tutorials/</link><pubDate>Mon, 30 Jan 2023 22:30:15 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-30-rust-raspberrypi-os-tutorials/</guid><description>はじめに Rust で Raspberry Pi 向けのオペレーティングシステムを開発するチュートリアルが公開されている． 早速やってみよう． 00_before_we_start プロセッサ・アーキテクチャ固有の</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<p>Rust で Raspberry Pi 向けのオペレーティングシステムを開発する<a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials">チュートリアル</a>が公開されている．
+早速やってみよう．</p>
+<h1 id="00_before_we_starthttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster00_before_we_start"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/00_before_we_start">00_before_we_start</a></h1>
+<ul>
+<li>プロセッサ・アーキテクチャ固有のソースコードは <code>src/_arch</code> に配置される
+<ul>
+<li>例：<code>aarch64</code> 向けのコードは <code>src/_arch/aarch64</code> に置かれる</li>
+</ul>
+</li>
+<li>ボード固有のソースコードは <code>src/bsp.rs</code> に書かれる</li>
+<li>「アーキテクチャとボード」とカーネルは，トレイトで抽象化されたインターフェースで分離される
+<ul>
+<li>クリーンな抽象を提供する</li>
+</ul>
+</li>
+<li>boot の流れ
+<ul>
+<li>エントリポイントは <code>cpu:👢:arch_boot::_start()</code> (<code>src/_arch/__arch_name__/cpu/boot.s</code>)</li>
+</ul>
+</li>
+</ul>
+<h1 id="01_wait_foreverhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster01_wait_forever"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/01_wait_forever">01_wait_forever</a></h1>
+<ul>
+<li>すべての CPU コアを halt させるプロジェクト
+<ul>
+<li>Rust コードにはほとんど処理が記述されていない
+<ul>
+<li>モジュールの定義やアセンブリコード (<code>src/_arch/aarch64/cpu/boot.rs</code>)，パニックの定義 (<code>src/cpu/panic_wait.rs</code>) など</li>
+</ul>
+</li>
+<li>OS は qemu で実行できるようだ</li>
+</ul>
+</li>
+<li>qemu で OS を動かしてみよう</li>
+</ul>
+<pre tabindex="0"><code>$ make qemu
+
+Compiling kernel ELF - rpi3
+   Compiling mingo v0.1.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/01_wait_forever)
+    Finished release [optimized] target(s) in 0.32s
+
+Generating stripped binary
+make: rust-objcopy: そのようなファイルやディレクトリはありません
+make: *** [Makefile:130: kernel8.img] エラー 127
+</code></pre><ul>
+<li><code>rust-objcopy</code> が無いと言われた</li>
+<li><code>rust-objcopy</code> は <a href="https://github.com/rust-embedded/cargo-binutils">cargo-binutils</a> に含まれるコマンドのようだ
+<ul>
+<li>LLVM のツールチェインを呼び出すコマンドっぽい？</li>
+</ul>
+</li>
+<li>インストールして再度 OS を動かそう</li>
+</ul>
+<pre tabindex="0"><code>$ cargo install cargo-binutils
+（とても時間がかかる）
+$ make qemu
+
+Generating stripped binary
+        Name kernel8.img
+        Size 1 KiB
+
+Launching QEMU
+docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+See &#39;docker run --help&#39;.
+make: *** [Makefile:155: qemu] エラー 125
+</code></pre><ul>
+<li>docker も動かさないといけないらしい</li>
+</ul>
+<pre tabindex="0"><code>$ sudo systemctl restart docker
+$ make qemu
+
+Launching QEMU
+docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;: dial unix /var/run/docker.sock: connect: permission denied.
+See &#39;docker run --help&#39;.
+make: *** [Makefile:155: qemu] エラー 126
+</code></pre><ul>
+<li>管理者権限まで必要なのか&hellip;（docker を使う以上当たり前だが）</li>
+</ul>
+<pre tabindex="0"><code>$ sudo make qemu
+
+Launching QEMU
+Unable to find image &#39;rustembedded/osdev-utils:2021.12&#39; locally
+2021.12: Pulling from rustembedded/osdev-utils
+7b1a6ab2e44d: Pull complete 
+292c6ce995b4: Pull complete 
+afb6c3c2887b: Pull complete 
+888e016a338b: Pull complete 
+59ca2d6f9c6f: Pull complete 
+1ac893ad5b73: Pull complete 
+008bb9e6650e: Pull complete 
+Digest: sha256:9883c96e0e827e35b8d716683f85c7a9b8ffed85422fe418ed080d61e8641e78
+Status: Downloaded newer image for rustembedded/osdev-utils:2021.12
+----------------
+IN: 
+0x00000000:  580000c0  ldr      x0, #0x18
+0x00000004:  aa1f03e1  mov      x1, xzr
+0x00000008:  aa1f03e2  mov      x2, xzr
+0x0000000c:  aa1f03e3  mov      x3, xzr
+0x00000010:  58000084  ldr      x4, #0x20
+0x00000014:  d61f0080  br       x4
+
+----------------
+IN: 
+0x00000300:  d2801b05  mov      x5, #0xd8
+0x00000304:  d53800a6  mrs      x6, mpidr_el1
+0x00000308:  924004c6  and      x6, x6, #3
+0x0000030c:  d503205f  wfe      
+0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
+0x00000314:  b4ffffc4  cbz      x4, #0x30c
+
+----------------
+IN: 
+0x00000300:  d2801b05  mov      x5, #0xd8
+0x00000304:  d53800a6  mrs      x6, mpidr_el1
+0x00000308:  924004c6  and      x6, x6, #3
+0x0000030c:  d503205f  wfe      
+0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
+0x00000314:  b4ffffc4  cbz      x4, #0x30c
+
+----------------
+IN: 
+0x00000300:  d2801b05  mov      x5, #0xd8
+0x00000304:  d53800a6  mrs      x6, mpidr_el1
+0x00000308:  924004c6  and      x6, x6, #3
+0x0000030c:  d503205f  wfe      
+0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
+0x00000314:  b4ffffc4  cbz      x4, #0x30c
+
+----------------
+IN: 
+0x00080000:  d503205f  wfe      
+0x00080004:  17ffffff  b        #0x80000
+
+----------------
+IN: 
+0x0000030c:  d503205f  wfe      
+0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
+0x00000314:  b4ffffc4  cbz      x4, #0x30c
+
+----------------
+IN: 
+0x0000030c:  d503205f  wfe      
+0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
+0x00000314:  b4ffffc4  cbz      x4, #0x30c
+
+----------------
+IN: 
+0x0000030c:  d503205f  wfe      
+0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
+0x00000314:  b4ffffc4  cbz      x4, #0x30c
+</code></pre><ul>
+<li>
+<p>0x80000 番地で無限ループをしていることが分かる</p>
+</li>
+<li>
+<p>それ以外の命令で何をしているのかが分からない</p>
+<ul>
+<li>Raspberry Pi 3B+ に搭載された SoC は4コア構成なので，使わないコアも（0x30C-0x314 番地で）無限ループしている？</li>
+</ul>
+</li>
+<li>
+<p>分からないところがかなりあるが，進めていくうちに分かるかもしれない</p>
+</li>
+<li>
+<p>とりあえず次に進もう</p>
+</li>
+</ul>
+]]></content></item><item><title>Electron-Shogi &amp; 水匠5 on Manjaro</title><link>https://Kenta11.github.io/posts/2023-01-01-shogi-on-manjaro/</link><pubDate>Sun, 01 Jan 2023 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-01-shogi-on-manjaro/</guid><description>はじめに うちには強いマシンが Manjaro サーバしかないので，将棋の解析をこのサーバでやりたい． ただし，いわゆる将棋ソフトは Windows で使うことを前提としている</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
 <p>うちには強いマシンが Manjaro サーバしかないので，将棋の解析をこのサーバでやりたい．
 ただし，いわゆる将棋ソフトは Windows で使うことを前提としているので，Manjaro なんていう変な環境でトライした人はいなさそうだ．
 突貫工事ではあるが，Manjaro のデスクトップ環境で将棋の解析ができる環境を作ったので，その手順を記録しておく．</p>
