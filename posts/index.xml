@@ -1,4 +1,56 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 01 Feb 2023 22:52:52 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 03_hacky_hello_world QEMU がエミュレートする UART を介して，println! マクロで文字列を表示できるようにする console::console 関数は core::fmt::Write トレイトを実装した構</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 02 Feb 2023 21:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 04_safe_globals 概要 疑似ロックを導入する話 global data structure に対して安全にアクセスするための OS 同期プリミティブの showcase（ショーケース</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<p><a href="../2023-02-01-rust-raspberrypi-os-tutorials">前回</a>の続きから．</p>
+<h1 id="04_safe_globalshttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster04_safe_globals"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/04_safe_globals">04_safe_globals</a></h1>
+<h2 id="概要">概要</h2>
+<ul>
+<li>
+<p>疑似ロックを導入する話</p>
+</li>
+<li>
+<p>global data structure に対して安全にアクセスするための OS 同期プリミティブの showcase（ショーケースってなんだろう）</p>
+</li>
+<li>
+<p>safe Rust では <code>static mut</code> なグローバル変数を定義できないので，この章で排他制御の機能を導入し，変更可能なグローバル変数を実現する</p>
+</li>
+</ul>
+<h2 id="実行結果">実行結果</h2>
+<pre tabindex="0"><code>$ make
+
+Compiling kernel ELF - rpi3
+   Compiling mingo v0.4.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/04_safe_globals)
+   Compiling tock-registers v0.8.1
+   Compiling aarch64-cpu v9.0.0
+    Finished release [optimized] target(s) in 6.09s
+
+Generating stripped binary
+        Name kernel8.img
+        Size 7 KiB
+$ sudo make test
+[sudo] kenta のパスワード:
+
+Boot test - rpi3
+         -------------------------------------------------------------------
+         🦀 Running 1 console I/O tests
+         -------------------------------------------------------------------
+
+           1. Checking for the string: &#39;Stopping here&#39;..................[ok]
+         
+         Console log:
+           [0] Hello from Rust!
+           [1] Chars written: 22
+           [2] Stopping here
+
+         -------------------------------------------------------------------
+         ✅ Success: Boot test
+         -------------------------------------------------------------------
+
+$ sudo make qemu
+
+Launching QEMU
+[0] Hello from Rust!
+[1] Chars written: 22
+[2] Stopping here.
+</code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 03_hacky_hello_world QEMU がエミュレートする UART を介して，println! マクロで文字列を表示できるようにする console::console 関数は core::fmt::Write トレイトを実装した構</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
 <p><a href="../2023-01-31-rust-raspberrypi-os-tutorials">前回</a>の続きから．</p>
 <h1 id="03_hacky_hello_worldhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster03_hacky_hello_world"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/03_hacky_hello_world">03_hacky_hello_world</a></h1>
 <ul>
