@@ -1,4 +1,76 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 31 Jan 2023 22:17:41 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 02_runtime_init _start で主記憶の初期化を行う 初期化後に _start_rust（src/_arch/aarch64/cpu/boot.r</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 01 Feb 2023 22:52:52 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 03_hacky_hello_world QEMU がエミュレートする UART を介して，println! マクロで文字列を表示できるようにする console::console 関数は core::fmt::Write トレイトを実装した構</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<p><a href="../2023-01-31-rust-raspberrypi-os-tutorials">前回</a>の続きから．</p>
+<h1 id="03_hacky_hello_worldhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster03_hacky_hello_world"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/03_hacky_hello_world">03_hacky_hello_world</a></h1>
+<ul>
+<li>QEMU がエミュレートする UART を介して，<code>println!</code> マクロで文字列を表示できるようにする
+<ul>
+<li><code>console::console</code> 関数は <code>core::fmt::Write</code> トレイトを実装した構造体を返す (<code>src/bsp/raspberrypi.rs</code>)
+<ul>
+<li>このトレイトは <code>write_str</code>, <code>write_char</code>, <code>write_fmt</code> 関数をもつ</li>
+</ul>
+</li>
+<li><code>write_str</code> 関数は UART（アドレスが0x3F201000）に一文字ずつ書き込む (<code>src/console.rs</code>)</li>
+<li><code>print!</code> と <code>println!</code> はそれぞれ <code>write_fmt</code> 関数を呼び出す（<code>src/print.rs</code>）
+<ul>
+<li><code>write_str</code> を実装すると <code>write_fmt</code> も自動的に実装されるのか？</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="実行結果">実行結果</h2>
+<pre tabindex="0"><code>$ make
+
+Compiling kernel ELF - rpi3
+   Compiling tock-registers v0.8.1
+   Compiling mingo v0.3.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/03_hacky_hello_world)
+   Compiling aarch64-cpu v9.0.0
+    Finished release [optimized] target(s) in 3.88s
+
+Generating stripped binary
+        Name kernel8.img
+        Size 6 KiB
+$ make test
+
+Boot test - rpi3
+docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;: dial unix /var/run/docker.sock: connect: permission denied.
+See &#39;docker run --help&#39;.
+make: *** [Makefile:216: test_boot] エラー 126
+$ sudo make test
+[sudo] kenta のパスワード:
+
+Boot test - rpi3
+         -------------------------------------------------------------------
+         🦀 Running 1 console I/O tests
+         -------------------------------------------------------------------
+
+           1. Checking for the string: &#39;Stopping here&#39;..................[ok]
+         
+         Console log:
+           Hello from Rust!
+           Kernel panic!
+           
+           Panic location:
+                 File &#39;src/main.rs&#39;, line 129, column 5
+           
+           Stopping here
+
+         -------------------------------------------------------------------
+         ✅ Success: Boot test
+         -------------------------------------------------------------------
+
+
+$ sudo make qemu
+
+Launching QEMU
+Hello from Rust!
+Kernel panic!
+
+Panic location:
+      File &#39;src/main.rs&#39;, line 129, column 5
+
+Stopping here.
+</code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 02_runtime_init _start で主記憶の初期化を行う 初期化後に _start_rust（src/_arch/aarch64/cpu/boot.r</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
 <p><a href="2023-01-30-rust-raspberrypi-OS-tutorials.html">前回</a>の続きから．</p>
 <h1 id="02_runtime_inithttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster02_runtime_init"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/02_runtime_init">02_runtime_init</a></h1>
 <ul>
