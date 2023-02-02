@@ -5,7 +5,7 @@ tags: [Rust, Raspberry Pi, Operating System]
 ---
 # はじめに
 
-[前回](2023-01-30-rust-raspberrypi-OS-tutorials.html)の続きから．
+[前回](../2023-01-30-rust-raspberrypi-os-tutorials)の続きから．
 
 # [02_runtime_init](https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/02_runtime_init)
 
