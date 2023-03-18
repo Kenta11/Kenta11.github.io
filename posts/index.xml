@@ -1,4 +1,354 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 02 Feb 2023 21:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 04_safe_globals 概要 疑似ロックを導入する話 global data structure に対して安全にアクセスするための OS 同期プリミティブの showcase（ショーケース</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 18 Mar 2023 19:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>情報工学実験II（再々履修）</title><link>https://Kenta11.github.io/posts/2023-03-18-micro-alpha/</link><pubDate>Sat, 18 Mar 2023 19:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-03-18-micro-alpha/</guid><description>はじめに MICRO-1 の FPGA 実装をしました． 最近 SystemVerilog を書き始めたことと，HDL 開発におけるテスト手法を調べたことで，何か成果を作りたくなったためです． 成果 MICRO-alpha</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>MICRO-1 の FPGA 実装をしました．
+最近 SystemVerilog を書き始めたことと，HDL 開発におけるテスト手法を調べたことで，何か成果を作りたくなったためです．</p>
+<h2 id="成果">成果</h2>
+<ul>
+<li><a href="https://github.com/Kenta11/micro-alpha">MICRO-alpha</a></li>
+</ul>
+<h2 id="micro-1-との相違点">MICRO-1 との相違点</h2>
+<p>MICRO-alpha は MICRO-1 で実行できる制御命令を全てサポートしたのですが，実際に実装するにあたって，設計の細かな部分を変更しました．</p>
+<p>機械語の入出力命令はカードリーダとラインプリンタを扱うのですが，流石にそんなものは身の回りにありません．
+そこで UART を使ったシリアル通信で代用しました．</p>
+<p>入力命令は R0 レジスタにシリアル入力を書き込むように変更しました．
+ただし入力が無い場合が想定されるので，その場合は R0 をゼロクリアします．
+入力がないケースは少なくともテキストでは想定されていないので，やむを得ずこのような対処をしています．</p>
+<p>出力命令は R0 レジスタをシリアル出力するように変更しました．</p>
+<p>テキストでは，主記憶装置が「比較的大容量の記憶装置である」と書かれていますが，MICRO-1 の主記憶装置は現代の感覚ではかなり小さい（16bit x 64K）です．
+なので FPGA 実装では Block RAM を主記憶装置に充てました．</p>
+<p>また細かいところですが，制御装置の動作周波数はテキストの 20MHz ではなく 100MHz としました．
+これは実装した FPGA ボードのクロック入力と同じ動作周波数にしています．</p>
+<h2 id="遊び方">遊び方</h2>
+<p><a href="../2022-09-23-micro1">以前の記事</a>で紹介したツールをインストールしたマシンで回路合成します．
+<a href="https://github.com/Kenta11/micro-alpha">MICRO-alpha</a>のリポジトリをクローンして，そのディレクトリ内にて<a href="https://github.com/Kenta11/micro-alpha/releases/tag/v1.0.0">リリースのページ</a>で公開している Vivado プロジェクト (micro-alpha-arty-a7-100.tar.gz) を解凍します．</p>
+<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/micro-alpha
+$ cd micro-alpha
+$ wget https://github.com/Kenta11/micro-alpha/releases/download/v1.0.0/micro-alpha-arty-a7-100.tar.gz
+$ tar zxvf micro-alpha-arty-a7-100.tar.gz
+$ tree -L 1
+.
+├── LICENSE
+├── Makefile
+├── README.md
+├── micro-alpha-arty-a7-100.tar.gz
+├── run.py
+├── micro-alpha
+├── script
+├── src
+├── tb
+</code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
+<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
+$ rm1masm MICROONE -o MICROONE.o
+$ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
+</code></pre><p>続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
+<pre tabindex="0"><code>$ cat calculator 
+; This program is distributed under MIT LICENSE.
+; Copyright (c) 2023 Kenta Arai
+
+; 逆ポーランド記法電卓プログラム
+; 
+; 実行例（(3+4)*(4-2)）
+; (CALCULATOR)&gt;&gt; 3 4 + 4 2 - *
+; 14
+TITLE CALCULATOR
+             ORG  140
+CALCULATOR0: LA   1, PROMPT
+             BSR  PRINT
+             LA   1, INPUT
+             BSR  RWLINE
+             LA   0, INPUT
+             BSR  INTERPRET
+             BSR  PUTINT
+             B    CALCULATOR0
+             HLT
+
+; データ領域
+PROMPT:      DC   &#39; (
+             DC   &#39; c
+             DC   &#39; a
+             DC   &#39; l
+             DC   &#39; c
+             DC   &#39; )
+             DC   &#39; &gt;
+             DC   &#39; &gt;
+             DC   &#39;  
+             DC   0
+INPUT:       DS   32
+
+; 文字列を出力装置に書き込む関数
+; 入力: {r1: 文字列の先頭アドレス}
+; 出力: なし
+PRINT0:      WIO  LPT
+             LEA  1, 1(1)
+PRINT:       LX   0, (1)
+             OR   0, (0)
+             BNZ  PRINT0
+             RET
+
+; 入力装置から行を読む関数
+; 入力: {r1: 行の書込み先アドレス}
+; 出力: なし
+; NOTE: 読んだ文字は都度出力装置に書き込む
+RWLINE0:     STX  0, (1)
+             LEA  1, 1(1)
+RWLINE:      BSR  READWORD
+             WIO  LPT
+             LC   2, X&#34;0D
+             CMP  0, (2)
+             BNZ  RWLINE0
+             WIO  LPT
+             LC   0, X&#34;0A
+             WIO  LPT
+             LC   0, 0
+             STX  0, (1)
+             RET
+
+; 入力式を計算する
+; 入力: {r0: 入力文字列}
+; 出力: {r1: 計算結果}
+INTERPRET:   LX   1, (0)
+             CMP  1, 0       ; NULL
+             BZ   INTERPRET5
+             CMP  1, X&#34;20    ; SP
+             BZ   INTERPRET4
+             CMP  1, X&#34;2B    ; +
+             BNZ  INTERPRET0
+             POP  3, 2
+             ADD  2, (3)
+             PUSH 2, 1
+             B    INTERPRET4
+INTERPRET0:  CMP  1, X&#34;2D    ; -
+             BNZ  INTERPRET1
+             POP  3, 2
+             SUB  2, (3)
+             PUSH 2, 1
+             B    INTERPRET4
+INTERPRET1:  CMP  1, X&#34;2A    ; *
+             BNZ  INTERPRET2
+             POP  3, 1
+             POP  1, 1
+             MULT 1, (3)
+             PUSH 2, 1
+             B    INTERPRET4
+INTERPRET2:  CMP  1, X&#34;2F    ; /
+             BNZ  INTERPRET3
+             POP  3, 2
+             LC   1, 0
+             DIV  1, (3)
+             PUSH 2, 1
+             B    INTERPRET4
+INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
+             CMP  1, 0
+             BZ   INTERPRET6
+             BSR  ATOI
+             PUSH 1, 1
+INTERPRET4:  ADD  0, 1
+             B    INTERPRET
+INTERPRET5:  POP  1, 1
+INTERPRET6:  RET
+
+; 整数を出力装置に書き込む関数
+; 入力: {r1: 数値}
+; 出力: なし
+PUTINT:      LC   0, X&#34;30
+             WIO  LPT
+             LC   0, X&#34;78
+             WIO  LPT
+             LEA  2, (1)    ; r1[15:12] を出���
+             SC   2, 4
+             AND  2, X&#34;F
+             LA   3, DIGIT
+             ADD  2, (3)
+             LX   0, (2)
+             WIO  LPT
+             LEA  2, (1)    ; r1[11:8] を出力
+             SC   2, 8
+             AND  2, X&#34;F
+             LA   3, DIGIT
+             ADD  2, (3)
+             LX   0, (2)
+             WIO  LPT
+             LEA  2, (1)    ; r1[7:4] を出力
+             SC   2, 12
+             AND  2, X&#34;F
+             LA   3, DIGIT
+             ADD  2, (3)
+             LX   0, (2)
+             WIO  LPT
+             LEA  2, (1)    ; r1[3:0] を出力
+             AND  2, X&#34;F
+             LA   3, DIGIT
+             ADD  2, (3)
+             LX   0, (2)
+             WIO  LPT
+             LC   0, X&#34;0D
+             WIO  LPT
+             LC   0, X&#34;0A
+             WIO  LPT
+             RET
+DIGIT:       DC   X&#34;30
+             DC   X&#34;31
+             DC   X&#34;32
+             DC   X&#34;33
+             DC   X&#34;34
+             DC   X&#34;35
+             DC   X&#34;36
+             DC   X&#34;37
+             DC   X&#34;38
+             DC   X&#34;39
+             DC   X&#34;41
+             DC   X&#34;42
+             DC   X&#34;43
+             DC   X&#34;44
+             DC   X&#34;45
+             DC   X&#34;46
+
+; 入力装置から文字を読む関数
+; 入力: なし
+; 出力: {r0: 読んだ文字}
+; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
+;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
+READWORD:    RIO  CR
+             OR   0, (0)
+             BZ   READWORD
+             RET
+
+; 入力文字列を数値に変換する
+; 入力: {r0: 入力文字列}
+; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
+ATOI:        LC   1, 0
+ATOI0:       PUSH 1, 1
+             LX   1, (0)
+             BSR  ISDIGIT
+             CMP  1, 0
+             POP  1, 1
+             BNZ  ATOI1
+             RET
+ATOI1:       MULT 1, 10
+             LX   1, (0)
+             SUB  1, X&#34;30
+             ADD  1, (2)
+             ADD  0, 1
+             B    ATOI0
+
+; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
+; 入力: {r1: 入力文字}
+; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
+ISDIGIT:     CMP  1, X&#34;30
+             BM   ISDIGIT0
+             CMP  1, X&#34;39
+             BP   ISDIGIT0
+             LC   1, 1
+             RET
+ISDIGIT0:    LC   1, 0
+             RET
+END
+$ rm1asm calculator -o calculator.b
+$ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/ip/main_memory/machine_program.coe
+</code></pre><p>Vivado で回路を合成し，Arty A7-100 に書き込みましょう．
+シリアル通信で Arty A7-100 にキーボード入力をしましょう．</p>
+<pre tabindex="0"><code>$ sudo screen /dev/ttyUSB1 115200
+(calc)&gt;&gt; 3 4 + 4 2 - *
+0x000E
+(calc)&gt;&gt; 
+</code></pre><p>逆ポーランド記法の電卓で計算ができました！</p>
+<h2 id="おわりに">おわりに</h2>
+<p>今年度は MICRO-1 で散々遊びました．
+もう遊びたくないですね．</p>
+<p>何の役に立つのか分からない実装ですが，誰かしらに貢献できたら良いですね．
+コンピュータ・アーキテクチャの歴史を学ぶ上で少しは参考になるのではないでしょうか．
+なるのか？
+ならなそう．</p>
+]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #5</title><link>https://Kenta11.github.io/posts/2023-02-13-rust-raspberrypi-os-tutorials/</link><pubDate>Mon, 13 Feb 2023 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-13-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 05_drivers_gpio_uart 概要 UART と GPIO のコントローラ用ドライバを追加する これまでに作成した QEMU コンソールを捨てて， ドライバマネージャ を導入する ド</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
+<p><a href="../2023-02-02-rust-raspberrypi-os-tutorials">前回</a>の続きから．</p>
+<h1 id="05_drivers_gpio_uarthttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster05_drivers_gpio_uart"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/05_drivers_gpio_uart">05_drivers_gpio_uart</a></h1>
+<h2 id="概要">概要</h2>
+<ul>
+<li>UART と GPIO のコントローラ用ドライバを追加する
+<ul>
+<li>これまでに作成した QEMU コンソールを捨てて， <code>ドライバマネージャ</code> を導入する</li>
+</ul>
+</li>
+</ul>
+<h2 id="ドライバマネージャ">ドライバマネージャ</h2>
+<ul>
+<li>
+<p><code>ドライバサブシステム</code> をカーネルに追加</p>
+<ul>
+<li>参照：<code>src/driver.rs</code></li>
+</ul>
+</li>
+<li>
+<p><code>interface::DeviceDriver</code> トレイトは各デバイスドライバが実装する必要がある</p>
+</li>
+<li>
+<p><code>crate::driver::driver_manager().init_drivers(...)</code> はドライバマネージャに全ての登録済みドライバをループさせ，初期化をキックし，オプションの <code>初期化後コールバック</code> も実行する</p>
+</li>
+</ul>
+<h2 id="bsp-ドライバ実装">BSP ドライバ実装</h2>
+<ul>
+<li>
+<p><code>src/bsp/raspberrypi/driver.rs</code> の <code>init()</code> が <code>UART</code> と <code>GPIO</code> の登録の面倒をみる</p>
+</li>
+<li>
+<p>ドライバは <code>src/bsp/device_driver</code> に保存されており，<code>BSP</code> が使用する</p>
+</li>
+<li>
+<p>まず <code>PL011Uart</code> ドライバを追加する</p>
+<ul>
+<li><code>console::interface::*</code> トレイトを実装</li>
+<li>メインシステムのコンソールとして使用</li>
+</ul>
+</li>
+<li>
+<p>次に <code>GPIO</code> ドライバを追加する</p>
+<ul>
+<li>このドキュメントでは Raspberry Pi 3 向けに <code>Makefile</code> が書かれている</li>
+<li>Raspberry Pi 4 向けにビルドする場合は ターゲットに <code>BSP=rpi4</code> を指定
+<ul>
+<li>Raspberry Pi 3 しか持っていないので読み飛ばす</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>BSP</code> は <code>src/bsp/raspberrypi/memory.rs</code> でメモリマップをもつ</p>
+</li>
+</ul>
+<h2 id="sd-カードからブートする">SD カードからブートする</h2>
+<ol>
+<li><code>boot</code> という名前の <code>FAT32</code> のパーティションを作成</li>
+<li>所定の内容の <code>config.txt</code> を作成</li>
+<li><a href="https://github.com/raspberrypi/firmware/tree/master/ot">Raspberry Pi firmware repo</a> から <a href="https://github.com/raspberrypi/firmware/raw/master/boot/otcode.bin">bootcode.bin</a>, <a href="https://github.com/raspberrypi/firmware/raw/master/boot/xup.dat">fixup.dat</a>, <a href="https://github.com/raspberrypi/firmware/raw/master/boot/start.f">start.elf</a> をコピー</li>
+<li><code>make</code> を実行</li>
+<li><code>kernel8.img</code> をSDカードにコピーし，Raspberry Pi に挿入</li>
+<li>シリアル通信端末で <code>UART</code> と接続</li>
+<li>USB シリアルとホストPCを接続</li>
+<li>Raspberry Pi を電源に接続し，出力を観察する</li>
+</ol>
+<h2 id="実行結果">実行結果</h2>
+<pre tabindex="0"><code>$ make
+
+Compiling kernel ELF - rpi3
+   Compiling mingo v0.5.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/05_drivers_gpio_uart)
+   Compiling tock-registers v0.8.1
+   Compiling aarch64-cpu v9.0.0
+    Finished release [optimized] target(s) in 1.83s
+
+Generating stripped binary
+        Name kernel8.img
+        Size 10 KiB
+$ sudo make qemu
+[sudo] kenta のパスワード:
+
+Launching QEMU
+[0] mingo version 0.5.0
+[1] Booting on: Raspberry Pi 3
+[2] Drivers loaded:
+      1. BCM PL011 UART
+      2. BCM GPIO
+[3] Chars written: 117
+[4] Echoing input now
+</code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 04_safe_globals 概要 疑似ロックを導入する話 global data structure に対して安全にアクセスするための OS 同期プリミティブの showcase（ショーケース</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
 <p><a href="../2023-02-01-rust-raspberrypi-os-tutorials">前回</a>の続きから．</p>
 <h1 id="04_safe_globalshttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster04_safe_globals"><a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/04_safe_globals">04_safe_globals</a></h1>
 <h2 id="概要">概要</h2>
