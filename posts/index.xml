@@ -1,4 +1,85 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 18 Mar 2023 19:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>情報工学実験II（再々履修）</title><link>https://Kenta11.github.io/posts/2023-03-18-micro-alpha/</link><pubDate>Sat, 18 Mar 2023 19:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-03-18-micro-alpha/</guid><description>はじめに MICRO-1 の FPGA 実装をしました． 最近 SystemVerilog を書き始めたことと，HDL 開発におけるテスト手法を調べたことで，何か成果を作りたくなったためです． 成果 MICRO-alpha</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 28 Apr 2023 21:30:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Vitis HLS on Ubuntu on Manjaro</title><link>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</link><pubDate>Fri, 28 Apr 2023 21:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</guid><description>はじめに Manjaro で Vitis HLS のサンプルプログラムを試したところ，CSIM ができなかった． サポートされていない Manjaro で試行錯誤するのも時間の浪費なので，Doc</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<p>Manjaro で Vitis HLS の<a href="https://github.com/Kenta11/Vitis-HLS-Introductory-Examples">サンプルプログラム</a>を試したところ，CSIM ができなかった．
+サポートされていない Manjaro で試行錯誤するのも時間の浪費なので，Docker で Ubuntu コンテナを動かし，そこで Vitis HLS を試してみることにする．</p>
+<h2 id="前提条件">前提条件</h2>
+<ul>
+<li>Vitis HLS をインストールしたマシン上で Docker を動作させる
+<ul>
+<li>Ubuntu コンテナのファイルシステムで Vitis のディレクトリをマウントし，Vitis をインストールした Ubuntu 環境を擬似的に用意する</li>
+</ul>
+</li>
+</ul>
+<h2 id="docker-上で-ubuntu-コンテナを動作させる">Docker 上で Ubuntu コンテナを動作させる</h2>
+<p>以下の Dockerfile を準備する．
+<code>apt install</code> でいくつかパッケージをインストールする．
+これらのパッケージは CSIM で必要になる．
+また，環境変数<code>LIBRARY_PATH</code>を定義しているが，これも CSIM で必要になる．</p>
+<pre tabindex="0"><code>FROM ubuntu:22.04
+LABEL maintainer &#34;Kenta Arai &lt;&gt;&#34;
+
+RUN apt update -y \
+  &amp;&amp; apt dist-upgrade -y \
+  &amp;&amp; apt autoremove -y \
+  &amp;&amp; apt install build-essential gcc-multilib git language-pack-en libc6-dev libtinfo5 -y \
+  &amp;&amp; echo &#34;export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu&#34; &gt;&gt; ~/.bashrc
+</code></pre><p>次に Docker イメージを作成し，コンテナを生成する．
+<code>/opt</code> 下に Vitis をインストールしたディレクトリをマウントする．</p>
+<pre tabindex="0"><code>$ ls
+Dockerfile
+$ sudo docker buildx build -t ubuntu_22.04_for_vitis .
+$ sudo docker run -it --name ubuntu_22.04_for_vitis \
+--mount type=bind,src=https://Kenta11.github.io/opt/Xilinx/2022.2,dst=/opt/Xilinx/2022.2,readonly \
+ubuntu_22.04_for_vitis /bin/bash
+</code></pre><h2 id="ubuntu-上で-vitis-hls-を動作させる">Ubuntu 上で Vitis HLS を動作させる</h2>
+<p>Vitis HLS のサンプルプログラムをダウンロードし，<code>vitis_hls</code>で論理合成，CSIM，COSIM を開始する．</p>
+<pre tabindex="0"><code># cd ~
+# git clone https://github.com/Kenta11/Vitis-HLS-Introductory-Examples
+# cd Vitis-HLS-Introductory-Examples/Modeling/using_vectors/
+# source /opt/Xilinx/2022.2/Vivado/2022.2/settings64.sh
+# vitis_hls -f run_hls.tcl
+</code></pre><p>論理合成と CSIM を無事に完了することができた．
+ただし COSIM は途中で終了してしまった．
+以下は COSIM のログである．</p>
+<pre tabindex="0"><code>****** xsim v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 04:59:54 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/example/xsim_script.tcl
+# xsim {example} -autoloadwcfg -tclbatch {example.tcl}
+Time resolution is 1 ps
+source example.tcl
+## run all
+////////////////////////////////////////////////////////////////////////////////////
+// Inter-Transaction Progress: Completed Transaction / Total Transaction
+// Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
+//
+// RTL Simulation : &#34;Inter-Transaction Progress&#34; [&#34;Intra-Transaction Progress&#34;] @ &#34;Simulation Time&#34;
+////////////////////////////////////////////////////////////////////////////////////
+// RTL Simulation : 0 / 1 [n/a] @ &#34;128000&#34;
+// RTL Simulation : 1 / 1 [n/a] @ &#34;2523000&#34;
+////////////////////////////////////////////////////////////////////////////////////
+$finish called at time : 2552500 ps : File &#34;/root/Vitis-HLS-Introductory-Examples/Modeling/using_vectors/proj_example/solution1/sim/verilog/example.autotb.v&#34; Line 588
+## quit
+INFO: [Common 17-206] Exiting xsim at Fri Apr 28 12:31:04 2023...
+ERROR: [COSIM 212-4] *** C/RTL co-simulation finished: FAIL ***
+INFO: [COSIM 212-211] II is measurable only when transaction number is greater than 1 in RTL simulation. Otherwise, they will be marked as all NA. If user wants to calculate them, please make sure there are at least 2 transactions in RTL simulation.
+INFO: [HLS 200-111] Finished Command cosim_design CPU user time: 52.13 seconds. CPU system time: 2.92 seconds. Elapsed time: 46.81 seconds; current allocated memory: 9.879 MB.
+command &#39;ap_source&#39; returned error code
+    while executing
+&#34;source run_hls.tcl&#34;
+    (&#34;uplevel&#34; body line 1)
+    invoked from within
+&#34;uplevel \#0 [list source $arg] &#34;
+
+INFO: [HLS 200-112] Total CPU user time: 71.46 seconds. Total CPU system time: 4.64 seconds. Total elapsed time: 78.79 seconds; peak allocated memory: 912.445 MB.
+INFO: [Common 17-206] Exiting vitis_hls at Fri Apr 28 12:31:04 2023...
+</code></pre><h2 id="おわりに">おわりに</h2>
+<p>Vitis HLS の CSIM は Manjaro ではできなかったが，Docker 上で動作する Ubuntu コンテナでは CSIM をすることができた．
+ただし COSIM はできなかった．
+公式のサンプルプログラムなので COSIM ができないということは無いと思いたい．
+余力があれば原因を調べよう．</p>
+]]></content></item><item><title>情報工学実験II（再々履修）</title><link>https://Kenta11.github.io/posts/2023-03-18-micro-alpha/</link><pubDate>Sat, 18 Mar 2023 19:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-03-18-micro-alpha/</guid><description>はじめに MICRO-1 の FPGA 実装をしました． 最近 SystemVerilog を書き始めたことと，HDL 開発におけるテスト手法を調べたことで，何か成果を作りたくなったためです． 成果 MICRO-alpha</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
 <p>MICRO-1 の FPGA 実装をしました．
 最近 SystemVerilog を書き始めたことと，HDL 開発におけるテスト手法を調べたことで，何か成果を作りたくなったためです．</p>
 <h2 id="成果">成果</h2>
