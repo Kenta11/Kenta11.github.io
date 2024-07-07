@@ -1,4 +1,19 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 28 Apr 2023 21:30:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Vitis HLS on Ubuntu on Manjaro</title><link>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</link><pubDate>Fri, 28 Apr 2023 21:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</guid><description>はじめに Manjaro で Vitis HLS のサンプルプログラムを試したところ，CSIM ができなかった． サポートされていない Manjaro で試行錯誤するのも時間の浪費なので，Doc</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 07 Jul 2024 19:45:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>私淑</title><link>https://Kenta11.github.io/posts/2024-07-07-shishuku0/</link><pubDate>Sun, 07 Jul 2024 19:45:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2024-07-07-shishuku0/</guid><description>推しという言葉が分からない。 Wikipedia曰く「主にアイドルや俳優について用いられる日本語の俗語であり、人に薦めたいと思うほどに好感を持</description><content type="html"><![CDATA[<p>推しという言葉が分からない。
+Wikipedia曰く「主にアイドルや俳優について用いられる日本語の俗語であり、人に薦めたいと思うほどに好感を持っている人物のこと」とのこと。
+語義は理解できている。
+だがその感覚がイマイチよく分からない。</p>
+<p>自分にはこれまで、誰かに薦めたい人がいただろうか。
+好感を持っている人がいただろうか。
+他人の一挙手一投足に一喜一憂することがあっただろうか。</p>
+<p>無い、多分無い。
+でも、自分もそうありたいと思う人たちは沢山いる。</p>
+<p>私淑という言葉がある。
+なんとなく自分のこの気持ちに合う言葉な気がする。</p>
+<p>私はこれまで私淑する人たちを薦めたいとは思わなかった。
+しかし、誰かが彼らを知ることで、その誰かの人生がより良くなるのではないか。
+巡り巡って、彼らの人生も良くなるのではないか。
+推しという行為を知ってから、そんなことを思うようになった。</p>
+]]></content></item><item><title>Vitis HLS on Ubuntu on Manjaro</title><link>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</link><pubDate>Fri, 28 Apr 2023 21:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</guid><description>はじめに Manjaro で Vitis HLS のサンプルプログラムを試したところ，CSIM ができなかった． サポートされていない Manjaro で試行錯誤するのも時間の浪費なので，Doc</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
 <p>Manjaro で Vitis HLS の<a href="https://github.com/Kenta11/Vitis-HLS-Introductory-Examples">サンプルプログラム</a>を試したところ，CSIM ができなかった．
 サポートされていない Manjaro で試行錯誤するのも時間の浪費なので，Docker で Ubuntu コンテナを動かし，そこで Vitis HLS を試してみることにする．</p>
 <h2 id="前提条件">前提条件</h2>
@@ -15,13 +30,13 @@
 これらのパッケージは CSIM で必要になる．
 また，環境変数<code>LIBRARY_PATH</code>を定義しているが，これも CSIM で必要になる．</p>
 <pre tabindex="0"><code>FROM ubuntu:22.04
-LABEL maintainer &#34;Kenta Arai &lt;&gt;&#34;
+LABEL maintainer &quot;Kenta Arai &lt;&gt;&quot;
 
 RUN apt update -y \
   &amp;&amp; apt dist-upgrade -y \
   &amp;&amp; apt autoremove -y \
   &amp;&amp; apt install build-essential gcc-multilib git language-pack-en libc6-dev libtinfo5 -y \
-  &amp;&amp; echo &#34;export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu&#34; &gt;&gt; ~/.bashrc
+  &amp;&amp; echo &quot;export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu&quot; &gt;&gt; ~/.bashrc
 </code></pre><p>次に Docker イメージを作成し，コンテナを生成する．
 <code>/opt</code> 下に Vitis をインストールしたディレクトリをマウントする．</p>
 <pre tabindex="0"><code>$ ls
@@ -54,23 +69,23 @@ source example.tcl
 // Inter-Transaction Progress: Completed Transaction / Total Transaction
 // Intra-Transaction Progress: Measured Latency / Latency Estimation * 100%
 //
-// RTL Simulation : &#34;Inter-Transaction Progress&#34; [&#34;Intra-Transaction Progress&#34;] @ &#34;Simulation Time&#34;
+// RTL Simulation : &quot;Inter-Transaction Progress&quot; [&quot;Intra-Transaction Progress&quot;] @ &quot;Simulation Time&quot;
 ////////////////////////////////////////////////////////////////////////////////////
-// RTL Simulation : 0 / 1 [n/a] @ &#34;128000&#34;
-// RTL Simulation : 1 / 1 [n/a] @ &#34;2523000&#34;
+// RTL Simulation : 0 / 1 [n/a] @ &quot;128000&quot;
+// RTL Simulation : 1 / 1 [n/a] @ &quot;2523000&quot;
 ////////////////////////////////////////////////////////////////////////////////////
-$finish called at time : 2552500 ps : File &#34;/root/Vitis-HLS-Introductory-Examples/Modeling/using_vectors/proj_example/solution1/sim/verilog/example.autotb.v&#34; Line 588
+$finish called at time : 2552500 ps : File &quot;/root/Vitis-HLS-Introductory-Examples/Modeling/using_vectors/proj_example/solution1/sim/verilog/example.autotb.v&quot; Line 588
 ## quit
 INFO: [Common 17-206] Exiting xsim at Fri Apr 28 12:31:04 2023...
 ERROR: [COSIM 212-4] *** C/RTL co-simulation finished: FAIL ***
 INFO: [COSIM 212-211] II is measurable only when transaction number is greater than 1 in RTL simulation. Otherwise, they will be marked as all NA. If user wants to calculate them, please make sure there are at least 2 transactions in RTL simulation.
 INFO: [HLS 200-111] Finished Command cosim_design CPU user time: 52.13 seconds. CPU system time: 2.92 seconds. Elapsed time: 46.81 seconds; current allocated memory: 9.879 MB.
-command &#39;ap_source&#39; returned error code
+command 'ap_source' returned error code
     while executing
-&#34;source run_hls.tcl&#34;
-    (&#34;uplevel&#34; body line 1)
+&quot;source run_hls.tcl&quot;
+    (&quot;uplevel&quot; body line 1)
     invoked from within
-&#34;uplevel \#0 [list source $arg] &#34;
+&quot;uplevel \#0 [list source $arg] &quot;
 
 INFO: [HLS 200-112] Total CPU user time: 71.46 seconds. Total CPU system time: 4.64 seconds. Total elapsed time: 78.79 seconds; peak allocated memory: 912.445 MB.
 INFO: [Common 17-206] Exiting vitis_hls at Fri Apr 28 12:31:04 2023...
@@ -119,7 +134,7 @@ $ tree -L 1
 ├── src
 ├── tb
 </code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
-<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
+<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &quot;\32&quot; &gt; MICROONE
 $ rm1masm MICROONE -o MICROONE.o
 $ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
 </code></pre><p>続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
@@ -145,15 +160,15 @@ CALCULATOR0: LA   1, PROMPT
              HLT
 
 ; データ領域
-PROMPT:      DC   &#39; (
-             DC   &#39; c
-             DC   &#39; a
-             DC   &#39; l
-             DC   &#39; c
-             DC   &#39; )
-             DC   &#39; &gt;
-             DC   &#39; &gt;
-             DC   &#39;  
+PROMPT:      DC   ' (
+             DC   ' c
+             DC   ' a
+             DC   ' l
+             DC   ' c
+             DC   ' )
+             DC   ' &gt;
+             DC   ' &gt;
+             DC   '  
              DC   0
 INPUT:       DS   32
 
@@ -175,11 +190,11 @@ RWLINE0:     STX  0, (1)
              LEA  1, 1(1)
 RWLINE:      BSR  READWORD
              WIO  LPT
-             LC   2, X&#34;0D
+             LC   2, X&quot;0D
              CMP  0, (2)
              BNZ  RWLINE0
              WIO  LPT
-             LC   0, X&#34;0A
+             LC   0, X&quot;0A
              WIO  LPT
              LC   0, 0
              STX  0, (1)
@@ -191,35 +206,35 @@ RWLINE:      BSR  READWORD
 INTERPRET:   LX   1, (0)
              CMP  1, 0       ; NULL
              BZ   INTERPRET5
-             CMP  1, X&#34;20    ; SP
+             CMP  1, X&quot;20    ; SP
              BZ   INTERPRET4
-             CMP  1, X&#34;2B    ; +
+             CMP  1, X&quot;2B    ; +
              BNZ  INTERPRET0
              POP  3, 2
              ADD  2, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET0:  CMP  1, X&#34;2D    ; -
+INTERPRET0:  CMP  1, X&quot;2D    ; -
              BNZ  INTERPRET1
              POP  3, 2
              SUB  2, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET1:  CMP  1, X&#34;2A    ; *
+INTERPRET1:  CMP  1, X&quot;2A    ; *
              BNZ  INTERPRET2
              POP  3, 1
              POP  1, 1
              MULT 1, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET2:  CMP  1, X&#34;2F    ; /
+INTERPRET2:  CMP  1, X&quot;2F    ; /
              BNZ  INTERPRET3
              POP  3, 2
              LC   1, 0
              DIV  1, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
+INTERPRET3:  BSR  ISDIGIT    ; '0'-'9'
              CMP  1, 0
              BZ   INTERPRET6
              BSR  ATOI
@@ -232,58 +247,58 @@ INTERPRET6:  RET
 ; 整数を出力装置に書き込む関数
 ; 入力: {r1: 数値}
 ; 出力: なし
-PUTINT:      LC   0, X&#34;30
+PUTINT:      LC   0, X&quot;30
              WIO  LPT
-             LC   0, X&#34;78
+             LC   0, X&quot;78
              WIO  LPT
              LEA  2, (1)    ; r1[15:12] を出���
              SC   2, 4
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
              LEA  2, (1)    ; r1[11:8] を出力
              SC   2, 8
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
              LEA  2, (1)    ; r1[7:4] を出力
              SC   2, 12
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
              LEA  2, (1)    ; r1[3:0] を出力
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
-             LC   0, X&#34;0D
+             LC   0, X&quot;0D
              WIO  LPT
-             LC   0, X&#34;0A
+             LC   0, X&quot;0A
              WIO  LPT
              RET
-DIGIT:       DC   X&#34;30
-             DC   X&#34;31
-             DC   X&#34;32
-             DC   X&#34;33
-             DC   X&#34;34
-             DC   X&#34;35
-             DC   X&#34;36
-             DC   X&#34;37
-             DC   X&#34;38
-             DC   X&#34;39
-             DC   X&#34;41
-             DC   X&#34;42
-             DC   X&#34;43
-             DC   X&#34;44
-             DC   X&#34;45
-             DC   X&#34;46
+DIGIT:       DC   X&quot;30
+             DC   X&quot;31
+             DC   X&quot;32
+             DC   X&quot;33
+             DC   X&quot;34
+             DC   X&quot;35
+             DC   X&quot;36
+             DC   X&quot;37
+             DC   X&quot;38
+             DC   X&quot;39
+             DC   X&quot;41
+             DC   X&quot;42
+             DC   X&quot;43
+             DC   X&quot;44
+             DC   X&quot;45
+             DC   X&quot;46
 
 ; 入力装置から文字を読む関数
 ; 入力: なし
@@ -308,17 +323,17 @@ ATOI0:       PUSH 1, 1
              RET
 ATOI1:       MULT 1, 10
              LX   1, (0)
-             SUB  1, X&#34;30
+             SUB  1, X&quot;30
              ADD  1, (2)
              ADD  0, 1
              B    ATOI0
 
-; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
+; 入力文字が数字('0'-'9')であるかを判定する
 ; 入力: {r1: 入力文字}
 ; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
-ISDIGIT:     CMP  1, X&#34;30
+ISDIGIT:     CMP  1, X&quot;30
              BM   ISDIGIT0
-             CMP  1, X&#34;39
+             CMP  1, X&quot;39
              BP   ISDIGIT0
              LC   1, 1
              RET
@@ -352,7 +367,7 @@ $ tree -L 1
 
 5 directories, 3 files
 </code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
-<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
+<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &quot;\32&quot; &gt; MICROONE
 $ rm1masm MICROONE -o MICROONE.o
 $ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_program.coe
 </code></pre><p>続いて，機械語プログラムを主記憶に書き込むための COE ファイルを作成します．</p>
@@ -378,15 +393,15 @@ CALCULATOR0: LA   1, PROMPT
              HLT
 
 ; データ領域
-PROMPT:      DC   &#39; (
-             DC   &#39; c
-             DC   &#39; a
-             DC   &#39; l
-             DC   &#39; c
-             DC   &#39; )
-             DC   &#39; &gt;
-             DC   &#39; &gt;
-             DC   &#39;  
+PROMPT:      DC   ' (
+             DC   ' c
+             DC   ' a
+             DC   ' l
+             DC   ' c
+             DC   ' )
+             DC   ' &gt;
+             DC   ' &gt;
+             DC   '  
              DC   0
 INPUT:       DS   32
 
@@ -408,11 +423,11 @@ RWLINE0:     STX  0, (1)
              LEA  1, 1(1)
 RWLINE:      BSR  READWORD
              WIO  LPT
-             LC   2, X&#34;0D
+             LC   2, X&quot;0D
              CMP  0, (2)
              BNZ  RWLINE0
              WIO  LPT
-             LC   0, X&#34;0A
+             LC   0, X&quot;0A
              WIO  LPT
              LC   0, 0
              STX  0, (1)
@@ -424,35 +439,35 @@ RWLINE:      BSR  READWORD
 INTERPRET:   LX   1, (0)
              CMP  1, 0       ; NULL
              BZ   INTERPRET5
-             CMP  1, X&#34;20    ; SP
+             CMP  1, X&quot;20    ; SP
              BZ   INTERPRET4
-             CMP  1, X&#34;2B    ; +
+             CMP  1, X&quot;2B    ; +
              BNZ  INTERPRET0
              POP  3, 2
              ADD  2, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET0:  CMP  1, X&#34;2D    ; -
+INTERPRET0:  CMP  1, X&quot;2D    ; -
              BNZ  INTERPRET1
              POP  3, 2
              SUB  2, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET1:  CMP  1, X&#34;2A    ; *
+INTERPRET1:  CMP  1, X&quot;2A    ; *
              BNZ  INTERPRET2
              POP  3, 1
              POP  1, 1
              MULT 1, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET2:  CMP  1, X&#34;2F    ; /
+INTERPRET2:  CMP  1, X&quot;2F    ; /
              BNZ  INTERPRET3
              POP  3, 2
              LC   1, 0
              DIV  1, (3)
              PUSH 2, 1
              B    INTERPRET4
-INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
+INTERPRET3:  BSR  ISDIGIT    ; '0'-'9'
              CMP  1, 0
              BZ   INTERPRET6
              BSR  ATOI
@@ -465,58 +480,58 @@ INTERPRET6:  RET
 ; 整数を出力装置に書き込む関数
 ; 入力: {r1: 数値}
 ; 出力: なし
-PUTINT:      LC   0, X&#34;30
+PUTINT:      LC   0, X&quot;30
              WIO  LPT
-             LC   0, X&#34;78
+             LC   0, X&quot;78
              WIO  LPT
              LEA  2, (1)    ; r1[15:12] を出���
              SC   2, 4
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
              LEA  2, (1)    ; r1[11:8] を出力
              SC   2, 8
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
              LEA  2, (1)    ; r1[7:4] を出力
              SC   2, 12
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
              LEA  2, (1)    ; r1[3:0] を出力
-             AND  2, X&#34;F
+             AND  2, X&quot;F
              LA   3, DIGIT
              ADD  2, (3)
              LX   0, (2)
              WIO  LPT
-             LC   0, X&#34;0D
+             LC   0, X&quot;0D
              WIO  LPT
-             LC   0, X&#34;0A
+             LC   0, X&quot;0A
              WIO  LPT
              RET
-DIGIT:       DC   X&#34;30
-             DC   X&#34;31
-             DC   X&#34;32
-             DC   X&#34;33
-             DC   X&#34;34
-             DC   X&#34;35
-             DC   X&#34;36
-             DC   X&#34;37
-             DC   X&#34;38
-             DC   X&#34;39
-             DC   X&#34;41
-             DC   X&#34;42
-             DC   X&#34;43
-             DC   X&#34;44
-             DC   X&#34;45
-             DC   X&#34;46
+DIGIT:       DC   X&quot;30
+             DC   X&quot;31
+             DC   X&quot;32
+             DC   X&quot;33
+             DC   X&quot;34
+             DC   X&quot;35
+             DC   X&quot;36
+             DC   X&quot;37
+             DC   X&quot;38
+             DC   X&quot;39
+             DC   X&quot;41
+             DC   X&quot;42
+             DC   X&quot;43
+             DC   X&quot;44
+             DC   X&quot;45
+             DC   X&quot;46
 
 ; 入力装置から文字を読む関数
 ; 入力: なし
@@ -541,17 +556,17 @@ ATOI0:       PUSH 1, 1
              RET
 ATOI1:       MULT 1, 10
              LX   1, (0)
-             SUB  1, X&#34;30
+             SUB  1, X&quot;30
              ADD  1, (2)
              ADD  0, 1
              B    ATOI0
 
-; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
+; 入力文字が数字('0'-'9')であるかを判定する
 ; 入力: {r1: 入力文字}
 ; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
-ISDIGIT:     CMP  1, X&#34;30
+ISDIGIT:     CMP  1, X&quot;30
              BM   ISDIGIT0
-             CMP  1, X&#34;39
+             CMP  1, X&quot;39
              BP   ISDIGIT0
              LC   1, 1
              RET
@@ -713,7 +728,7 @@ Boot test - rpi3
          🦀 Running 1 console I/O tests
          -------------------------------------------------------------------
 
-           1. Checking for the string: &#39;Stopping here&#39;..................[ok]
+           1. Checking for the string: 'Stopping here'..................[ok]
          
          Console log:
            [0] Hello from Rust!
@@ -765,8 +780,8 @@ Generating stripped binary
 $ make test
 
 Boot test - rpi3
-docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;: dial unix /var/run/docker.sock: connect: permission denied.
-See &#39;docker run --help&#39;.
+docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &quot;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&quot;: dial unix /var/run/docker.sock: connect: permission denied.
+See 'docker run --help'.
 make: *** [Makefile:216: test_boot] エラー 126
 $ sudo make test
 [sudo] kenta のパスワード:
@@ -776,14 +791,14 @@ Boot test - rpi3
          🦀 Running 1 console I/O tests
          -------------------------------------------------------------------
 
-           1. Checking for the string: &#39;Stopping here&#39;..................[ok]
+           1. Checking for the string: 'Stopping here'..................[ok]
          
          Console log:
            Hello from Rust!
            Kernel panic!
            
            Panic location:
-                 File &#39;src/main.rs&#39;, line 129, column 5
+                 File 'src/main.rs', line 129, column 5
            
            Stopping here
 
@@ -799,7 +814,7 @@ Hello from Rust!
 Kernel panic!
 
 Panic location:
-      File &#39;src/main.rs&#39;, line 129, column 5
+      File 'src/main.rs', line 129, column 5
 
 Stopping here.
 </code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 02_runtime_init _start で主記憶の初期化を行う 初期化後に _start_rust（src/_arch/aarch64/cpu/boot.r</description><content type="html"><![CDATA[<h1 id="はじめに">はじめに</h1>
@@ -1055,7 +1070,7 @@ Generating stripped binary
 
 Launching QEMU
 docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
-See &#39;docker run --help&#39;.
+See 'docker run --help'.
 make: *** [Makefile:155: qemu] エラー 125
 </code></pre><ul>
 <li>docker も動かさないといけないらしい</li>
@@ -1064,8 +1079,8 @@ make: *** [Makefile:155: qemu] エラー 125
 $ make qemu
 
 Launching QEMU
-docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;: dial unix /var/run/docker.sock: connect: permission denied.
-See &#39;docker run --help&#39;.
+docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &quot;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&quot;: dial unix /var/run/docker.sock: connect: permission denied.
+See 'docker run --help'.
 make: *** [Makefile:155: qemu] エラー 126
 </code></pre><ul>
 <li>管理者権限まで必要なのか&hellip;（docker を使う以上当たり前だが）</li>
@@ -1073,7 +1088,7 @@ make: *** [Makefile:155: qemu] エラー 126
 <pre tabindex="0"><code>$ sudo make qemu
 
 Launching QEMU
-Unable to find image &#39;rustembedded/osdev-utils:2021.12&#39; locally
+Unable to find image 'rustembedded/osdev-utils:2021.12' locally
 2021.12: Pulling from rustembedded/osdev-utils
 7b1a6ab2e44d: Pull complete 
 292c6ce995b4: Pull complete 
@@ -1172,9 +1187,9 @@ $ cd electron-shogi
 $ git checkout v1.3.0 # 安定版が v1.3.0 らしい
 $ npm install @vue/cli @vue/cli-service-global
 $ npm run electron:build
-$ find . -name &#39;ElectronShogi*&#39;
+$ find . -name 'ElectronShogi*'
 ./dist_electron/ElectronShogi-1.3.0.AppImage
-$ cp $(find . -name &#39;ElectronShogi*&#39;) ~/.local/bin/
+$ cp $(find . -name 'ElectronShogi*') ~/.local/bin/
 </code></pre><h2 id="2-エンジンyaneuraouをインストール">2. エンジン（YaneuraOu）をインストール</h2>
 <p>こちらもまずは YaneuraOu の公式リポジトリからプロジェクト一式をダウンロードする．Makefile の設定を環境に合わせて編集し，コンパイルを実施する．
 Manjaro サーバの CPU は Ryzen 7 3700X なので，TARGET_CPU は ZEN2 とした．</p>
@@ -1276,14 +1291,14 @@ $ cp get_suisho5_nn/nn.bin /path/to/YaneuraOu/source/eval/
 $ cd micro1
 $ gcc m1sim.c -o m1sim
 </code></pre><p>　MICRO-1のマイクロプログラムをアセンブルします．</p>
-<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
+<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &quot;\32&quot; &gt; MICROONE
 $ rm1masm MICROONE -o MICROONE.o
 </code></pre><p>　続いて機械語プログラムをアセンブルします．</p>
 <pre tabindex="0"><code>$ cat sqrt
 ; This program is distributed under MIT LICENSE.
 ; Copyright (c) 2022 Kenta Arai
 ; 平方根を求めるプログラム
-; アルゴリズムは&#34;バビロニア人の方法&#34;である
+; アルゴリズムは&quot;バビロニア人の方法&quot;である
 
 TITLE SQRT
          L   1, X0
@@ -1320,7 +1335,7 @@ CALCXN1: DIV 0, (2)   ; S/X(n)
 ; 出力: {r2: 絶対値}
 ABS:     CMP 2, 0
          BNM ABS0
-         XOR 2, X&#34;FFFF
+         XOR 2, X&quot;FFFF
          ADD 2, 1
 ABS0:    RET 
 END
@@ -1333,12 +1348,12 @@ $ rm1asm sqrt -o sqrt.b
 &gt;&gt; load
 LOAD
   FILE NAME=?MICROONE.o
-  LOADING &#39;MICROONE.o&#39;
+  LOADING 'MICROONE.o'
  LOADED TO CM
 &gt;&gt; load       
 LOAD
   FILE NAME=?sqrt.b
-  LOADING &#39;sqrt.b&#39;
+  LOADING 'sqrt.b'
  LOADED TO MM
 &gt;&gt; trace
 TRACE
@@ -1426,29 +1441,29 @@ LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そう
 <h2 id="pythonを使って関数呼び出しを探す">Pythonを使って関数呼び出しを探す</h2>
 <h3 id="準備">準備</h3>
 <p>Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。</p>
-<pre tabindex="0"><code># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する
+<pre tabindex="0"><code class="language-{bash}" data-lang="{bash}"># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する
 $ sudo pacman -S clang llvm # clangだけでは今回のPythonプログラムが動かなかった...
 </code></pre><p>clangモジュールが<code>/usr/lib/python3.9/site-packages/clang/</code>にあれば、準備完了だ。</p>
 <h3 id="関数呼び出しの箇所を探す">関数呼び出しの箇所を探す</h3>
 <p><code>parse()</code>を呼び出すと、よしなにASTにしてくれる。
 どうやらプリプロセスまでしてくれるようだ。</p>
-<pre tabindex="0"><code># -*- coding: utf-8 -*-
+<pre tabindex="0"><code class="language-{python}" data-lang="{python}"># -*- coding: utf-8 -*-
 
 import sys
 import clang.cindex
 
 def visitNode(node, search_function_name, declared_function_name=None):
-    if node.kind.name == &#39;FUNCTION_DECL&#39;:
+    if node.kind.name == 'FUNCTION_DECL':
         declared_function_name = node.spelling
-    elif node.kind.name == &#39;CALL_EXPR&#39;:
+    elif node.kind.name == 'CALL_EXPR':
         print(search_function_name, declared_function_name, node.location.line)
 
     for c in node.get_children():
         visitNode(c, search_function_name, declared_function_name)
 
-if __name__ == &#39;__main__&#39;:
+if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print(f&#34;Usage: {sys.argv[0]} FUNCTION_NAME FILE&#34;, file=sys.stderr)
+        print(f&quot;Usage: {sys.argv[0]} FUNCTION_NAME FILE&quot;, file=sys.stderr)
         exit(1)
 
     index = clang.cindex.Index.create()
@@ -1475,8 +1490,8 @@ vim_snprintf main 230
 <h2 id="読者プレゼント">読者プレゼント</h2>
 <p>お使いの環境で作業を試せる<code>Dockerfile</code>を置いておきます。
 リンクは<a href="Dockerfile">こちら</a>。</p>
-<pre tabindex="0"><code>FROM ubuntu:20.04
-LABEL maintainer &#34;Kenta Arai &lt;&gt;&#34;
+<pre tabindex="0"><code class="language-{Dockerfile}" data-lang="{Dockerfile}">FROM ubuntu:20.04
+LABEL maintainer &quot;Kenta Arai &lt;&gt;&quot;
 
 COPY sample.py /sample.py
 
@@ -1712,20 +1727,20 @@ FPGA班は講義でディジタル回路の復習ができ，さらに講義で�
 <li>横溝 憲治, &ldquo;【これからはCでFPGA開発！】もっとも簡単な加算回路からマンデルブロ集合の演算回路まで 高位合成ツールVivado HLSを使ってC言語でFPGAを開発しよう！&rdquo;, FPGAマガジン, No.15, <a href="http://www.kumikomi.net/fpga/contents/0015.php">http://www.kumikomi.net/fpga/contents/0015.php</a> .</li>
 </ol>
 <h2 id="注釈">注釈</h2>
-<div class="footnotes" role="doc-endnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1">
+<li id="fn:1" role="doc-endnote">
 <p>数年程度の経験ですが，これはどんな研究室でもいるように思います．&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2">
+<li id="fn:2" role="doc-endnote">
 <p>本当はもういくつかあったのですが，運営スタッフが私だけだったので，なんとか学生をサポート出来るように二つに絞りました&hellip;&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3">
+<li id="fn:3" role="doc-endnote">
 <p>みんな大体Step4くらいまで行ったような&hellip;私としてはみなさん上出来だと思ったのですが，楽しかったのかは怖くて聞けませんでした&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</div>
+</section>
 ]]></content></item><item><title>Gitチュートリアル</title><link>https://Kenta11.github.io/posts/2020-04-04-git-introduction-jp/</link><pubDate>Sat, 04 Apr 2020 12:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-04-04-git-introduction-jp/</guid><description>Gitの教材を作りました 学生時代に，研究室に新しく入ってきた学部生向けにGitの解説をする機会がありました． 作成したドキュメントは簡単なC言</description><content type="html"><![CDATA[<h2 id="gitの教材を作りました">Gitの教材を作りました</h2>
 <p>学生時代に，研究室に新しく入ってきた学部生向けにGitの解説をする機会がありました．
 作成したドキュメントは簡単なC言語プログラムのバージョン管理を題材としており，Gitにおける必要最低限のサブコマンドが使えるようになることを目指しています．
@@ -1859,7 +1874,7 @@ void adder(int a, int b, int *sum);
 </code></pre><ul>
 <li>src/adder.cpp</li>
 </ul>
-<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+<pre tabindex="0"><code>#include &quot;adder.hpp&quot;
 
 void adder(int a, int b, int *sum) {
     *sum = a + b;
@@ -1868,7 +1883,7 @@ void adder(int a, int b, int *sum) {
 <ul>
 <li>test/src/test_adder.cpp</li>
 </ul>
-<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+<pre tabindex="0"><code>#include &quot;adder.hpp&quot;
 
 #include &lt;cassert&gt;
 
@@ -1900,7 +1915,7 @@ On branch master
 No commits yet
 
 Untracked files:
-  (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
 
         .gitignore
         Makefile
@@ -1910,7 +1925,7 @@ Untracked files:
         src/
         test/
 
-nothing added to commit but untracked files present (use &#34;git add&#34; to track)
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
 </code></pre><h2 id="conclusion">Conclusion</h2>
 <p>If you find out bugs or problems, send me a message to <a href="https://twitter.com/isKenta14">my twitter</a>.</p>
 ]]></content></item><item><title>vivado_hls_create_projectでVivado HLSを使う</title><link>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project-jp/</link><pubDate>Sun, 23 Jun 2019 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project-jp/</guid><description>はじめに vivado_hls_create_projectはコマンドラインでVivado HLSを使うためのツールです． 具体的には，makeコ</description><content type="html"><![CDATA[<h2 id="はじめに">はじめに</h2>
@@ -1996,7 +2011,7 @@ void adder(int a, int b, int *sum);
 </code></pre><ul>
 <li>src/adder.cpp</li>
 </ul>
-<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+<pre tabindex="0"><code>#include &quot;adder.hpp&quot;
 
 void adder(int a, int b, int *sum) {
     *sum = a + b;
@@ -2005,7 +2020,7 @@ void adder(int a, int b, int *sum) {
 <ul>
 <li>test/src/test_adder.cpp</li>
 </ul>
-<pre tabindex="0"><code>#include &#34;adder.hpp&#34;
+<pre tabindex="0"><code>#include &quot;adder.hpp&quot;
 
 #include &lt;cassert&gt;
 
@@ -2036,7 +2051,7 @@ On branch master
 No commits yet
 
 Untracked files:
-  (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
 
         .gitignore
         Makefile
@@ -2046,7 +2061,7 @@ Untracked files:
         src/
         test/
 
-nothing added to commit but untracked files present (use &#34;git add&#34; to track)
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
 </code></pre><h2 id="おわりに">おわりに</h2>
 <p>バグや問題がありましたら，<a href="https://twitter.com/isKenta14">私のtwitterアカウント</a>まで．</p>
 ]]></content></item><item><title>vivado_hls_create_project ver.3.0.0へのアップデート</title><link>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project_v3-jp/</link><pubDate>Sun, 23 Jun 2019 20:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project_v3-jp/</guid><description>vivado_hls_create_projectを大改修しました．変更点は以下の通りです． pipでインストールできるように settings</description><content type="html"><![CDATA[<p>vivado_hls_create_projectを大改修しました．変更点は以下の通りです．</p>
@@ -2093,13 +2108,13 @@ cmakeを実行すると，以下のログが表示された．</p>
 $ cd Fast-RTPS
 $ mkdir build; cd build
 $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
--- Setting build type to &#39;Release&#39; as none was specified.
+-- Setting build type to 'Release' as none was specified.
 
 (中略)
 
 CMake Error at /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148 (message):
   Could NOT find Java (missing: Java_JAVA_EXECUTABLE Runtime) (Required is at
-  least version &#34;1.6&#34;)
+  least version &quot;1.6&quot;)
 Call Stack (most recent call first):
   /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:388 (_FPHSA_FAILURE_MESSAGE)
   /usr/share/cmake-3.5/Modules/FindJava.cmake:244 (find_package_handle_standard_args)
@@ -2108,8 +2123,8 @@ Call Stack (most recent call first):
 
 
 -- Configuring incomplete, errors occurred!
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;.
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;.
+See also &quot;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&quot;.
+See also &quot;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&quot;.
 </code></pre><p>Javaが無いと言われた．
 ドキュメントには<code>Java is required to use our built-in code generation tool - fastrtpsgen. Java JDK 8 is recommended.</code>とあるので，openjdkのバージョン8をインストールする．</p>
 <pre tabindex="0"><code>$ sudo apt install openjdk-8-jdk
@@ -2123,7 +2138,7 @@ $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
 -- Version: 1.0.9
 -- To change the version modify the file configure.ac
 -- fastcdr library found...
--- Found Java: /usr/bin/java (found suitable version &#34;1.8.0.212&#34;, minimum required is &#34;1.6&#34;) found components:  Runtime 
+-- Found Java: /usr/bin/java (found suitable version &quot;1.8.0.212&quot;, minimum required is &quot;1.6&quot;) found components:  Runtime 
 CMake Error at cmake/dev/java_support.cmake:30 (message):
   gradle is needed to build the java application.  Please install it
   correctly
@@ -2132,8 +2147,8 @@ Call Stack (most recent call first):
 
 
 -- Configuring incomplete, errors occurred!
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;.
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;.
+See also &quot;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&quot;.
+See also &quot;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&quot;.
 </code></pre><p>今度はgradleが必要だと言われた．インストールし，再度ビルドする．</p>
 <pre tabindex="0"><code>$ sudo apt install gradle
 $ rm -rf *
@@ -2152,7 +2167,7 @@ Should I create a default set of package docs?  [y]: y
 パッケージのドキュメンテーションを準備..OK
 
 *** No known documentation files were found. The new package 
-*** won&#39;t include a documentation directory.
+*** won't include a documentation directory.
 
 このパッケージの説明を書いてください
 説明の末尾は空行かEOFにしてください。
@@ -2195,17 +2210,17 @@ Installing with make install...
 FAILURE: Build failed with an exception.
 
 * Where:
-Build file &#39;/home/kenta/git/Fast-RTPS/fastrtpsgen/build.gradle&#39; line: 78
+Build file '/home/kenta/git/Fast-RTPS/fastrtpsgen/build.gradle' line: 78
 
 * What went wrong:
-Could not resolve all dependencies for configuration &#39;:compile&#39;.
+Could not resolve all dependencies for configuration ':compile'.
 &gt; Could not resolve junit:junit:4.+.
   Required by:
       :fastrtpsgen:unspecified
    &gt; Could not resolve junit:junit:4.+.
       &gt; Failed to list versions for junit:junit.
          &gt; Unable to load Maven meta-data from https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml.
-            &gt; Could not GET &#39;https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml&#39;.
+            &gt; Could not GET 'https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml'.
                &gt; 接続がタイムアウトしました (Connection timed out)
 
 * Try:
@@ -2214,11 +2229,11 @@ Run with --stacktrace option to get the stack trace. Run with --info or --debug 
 BUILD FAILED
 
 Total time: 2 mins 8.884 secs
-CMakeFiles/java.dir/build.make:57: ターゲット &#39;CMakeFiles/java&#39; のレシピで失敗しました
+CMakeFiles/java.dir/build.make:57: ターゲット 'CMakeFiles/java' のレシピで失敗しました
 make[2]: *** [CMakeFiles/java] エラー 1
-CMakeFiles/Makefile2:356: ターゲット &#39;CMakeFiles/java.dir/all&#39; のレシピで失敗しました
+CMakeFiles/Makefile2:356: ターゲット 'CMakeFiles/java.dir/all' のレシピで失敗しました
 make[1]: *** [CMakeFiles/java.dir/all] エラー 2
-Makefile:160: ターゲット &#39;all&#39; のレシピで失敗しました
+Makefile:160: ターゲット 'all' のレシピで失敗しました
 make: *** [all] エラー 2
 
 ****  インストールは失敗しました。パッケージの作成を中断します
@@ -2244,7 +2259,7 @@ Should I create a default set of package docs?  [y]:
 パッケージのドキュメンテーションを準備..OK
 
 *** No known documentation files were found. The new package 
-*** won&#39;t include a documentation directory.
+*** won't include a documentation directory.
 
 *****************************************
 **** Debian package creation selected ***
@@ -2341,7 +2356,7 @@ This build could be faster, please consider using the Gradle Daemon: https://doc
 [  8%] Built target fastcdr
 [100%] Built target fastrtps
 Install the project...
--- Install configuration: &#34;Release&#34;
+-- Install configuration: &quot;Release&quot;
 -- Installing: /usr/local/share/fastrtps/LICENSE
 -- Installing: /usr/local/share/fastrtps/fastrtpsgen.jar
 -- Installing: /usr/local/bin/fastrtpsgen
@@ -2608,7 +2623,7 @@ Install the project...
 -- Installing: /usr/local/lib/libfastrtps.so.1.7.0
 -- Installing: /usr/local/lib/libfastrtps.so.1
 -- Installing: /usr/local/lib/libfastrtps.so
--- Set runtime path of &#34;/usr/local/lib/libfastrtps.so.1.7.0&#34; to &#34;&#34;
+-- Set runtime path of &quot;/usr/local/lib/libfastrtps.so.1.7.0&quot; to &quot;&quot;
 -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets.cmake
 -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets-release.cmake
 -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config.cmake
@@ -2618,14 +2633,14 @@ Install the project...
 
 Some of the files created by the installation are inside the home directory: /home
 
-You probably don&#39;t want them to be included in the package.
+You probably don't want them to be included in the package.
 それらを表示しますか？ [n]: 
 それらをパッケージから除外しますか？(yesと答えることをおすすめします) [n]: 
 
 Some of the files created by the installation are inside the build
 directory: /home/kenta/git/Fast-RTPS/build
 
-You probably don&#39;t want them to be included in the package,
+You probably don't want them to be included in the package,
 especially if they are inside your home directory.
 Do you want me to list them?  [n]: 
 それらをパッケージから除外しますか？(yesと答えることをおすすめします) [y]: 
@@ -2678,13 +2693,13 @@ struct sample {
     string message;
 };
 $ fastrtpsgen HelloWorld.idl -example CMake
-openjdk version &#34;1.8.0_212&#34;
+openjdk version &quot;1.8.0_212&quot;
 OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03)
 OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
 Loading templates...
 Processing the file HelloWorld.idl...
 HelloWorld.idl:2:16: error: Illegal identifier: id is already defined (Annotation: id)
-Exception in thread &#34;main&#34; java.lang.NullPointerException
+Exception in thread &quot;main&quot; java.lang.NullPointerException
         at com.eprosima.fastrtps.fastrtpsgen.execute(fastrtpsgen.java:323)
         at com.eprosima.fastrtps.fastrtpsgen.main(fastrtpsgen.java:1188)
 </code></pre><p>サンプルコードが動かない．
@@ -2697,7 +2712,7 @@ struct HelloWorld {
     string message;
 };
 $ fastrtpsgen HelloWorld.idl -example CMake
-openjdk version &#34;1.8.0_212&#34;
+openjdk version &quot;1.8.0_212&quot;
 OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03)
 OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
 Loading templates...
@@ -2732,7 +2747,7 @@ $ cmake ../
 -- Detecting CXX compiler ABI info - done
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libssl.so;/usr/lib/x86_64-linux-gnu/libcrypto.so (found version &#34;1.0.2g&#34;) 
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libssl.so;/usr/lib/x86_64-linux-gnu/libcrypto.so (found version &quot;1.0.2g&quot;) 
 -- Configuring HelloWorld...
 -- Configuring done
 -- Generating done
@@ -2774,13 +2789,13 @@ Subscriber unmatched
 ]]></content></item><item><title>manjaro linuxのミラーサーバを更新する</title><link>https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/</link><pubDate>Sun, 19 May 2019 14:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/</guid><description>tukubaのミラーサーバが死んだ pacmanでパッケージを更新しようとしたところ，以下のメッセージが表示された． :: パッケージデータベースの</description><content type="html"><![CDATA[<h2 id="tukubaのミラーサーバが死んだ">tukubaのミラーサーバが死んだ</h2>
 <p>pacmanでパッケージを更新しようとしたところ，以下のメッセージが表示された．</p>
 <pre tabindex="0"><code>:: パッケージデータベースの同期中...
-エラー: ファイル &#39;core.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: ファイル 'core.db' を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
 エラー: core の更新に失敗しました (予期しないエラー)
-エラー: ファイル &#39;extra.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: ファイル 'extra.db' を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
 エラー: extra の更新に失敗しました (予期しないエラー)
-エラー: ファイル &#39;community.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: ファイル 'community.db' を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
 エラー: community の更新に失敗しました (予期しないエラー)
-エラー: ファイル &#39;multilib.db&#39; を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
+エラー: ファイル 'multilib.db' を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
 エラー: multilib の更新に失敗しました (予期しないエラー)
 エラー: 全てのデータベースの同期に失敗しました
 </code></pre><p>403が帰ってきたということはつまり，ftp.tukuba.wide.ad.jpにアクセスできないわけだ．
@@ -2911,9 +2926,9 @@ function vivado(){
     /path/to/Xilinx/Vivado/201x.x/bin/vivado $@
 
     # remove path
-    xilinx_path=(`echo $PATH | tr &#34;:&#34; &#34;\n&#34; | grep &#34;^/path/to/Xilinx&#34;`)
+    xilinx_path=(`echo $PATH | tr &quot;:&quot; &quot;\n&quot; | grep &quot;^/path/to/Xilinx&quot;`)
     for ((i = 0; i &lt;= ${#xilinx_path[@]}; i++)); do
-        export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: &#39;$0 != &#34;&#39;${xilinx_path[$i]}&#39;&#34;&#39; | sed &#39;s/:$//&#39;`
+        export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != &quot;'${xilinx_path[$i]}'&quot;' | sed 's/:$//'`
     done
 }
 
@@ -2925,9 +2940,9 @@ function vivado_hls(){
     /path/to/Xilinx/Vivado/201x.x/bin/vivado_hls $@
 
     # remove path
-    xilinx_path=(`echo $PATH | tr &#34;:&#34; &#34;\n&#34; | grep &#34;^/path/to/Xilinx&#34;`)
+    xilinx_path=(`echo $PATH | tr &quot;:&quot; &quot;\n&quot; | grep &quot;^/path/to/Xilinx&quot;`)
     for ((i = 0; i &lt;= ${#xilinx_path[@]}; i++)); do
-        export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: &#39;$0 != &#34;&#39;${xilinx_path[$i]}&#39;&#34;&#39; | sed &#39;s/:$//&#39;`
+        export PATH=`echo -n $PATH | awk -v RS=: -v ORS=: '$0 != &quot;'${xilinx_path[$i]}'&quot;' | sed 's/:$//'`
     done
 }
 </code></pre><p>settings64.shはbashのスクリプトだが，Zshでsourceしても動いた．
@@ -3033,13 +3048,13 @@ clean:
 ホームディレクトリに&quot;.vivado_hls_create_project&quot;という名前でVivadoのパスを書いたJSONファイルを置く．
 例えば&quot;/opt/Xilinx/Vivado/2018.3&quot;であれば，&quot;.vivado_hls_create_project&quot;の内容を以下のようにする．</p>
 <pre tabindex="0"><code>{
-    &#34;path_to_vivado&#34;: &#34;/opt/Xilinx/Vivado/2018.3&#34;
+    &quot;path_to_vivado&quot;: &quot;/opt/Xilinx/Vivado/2018.3&quot;
 }
 </code></pre><p>２つ目の設定は，vivado_hls_create_projectを使う際にsettings.(sh|zsh)をsourceすることである．</p>
 <p>またこれはオプションだが，Vivado HLSのボードファイルに普段使っているボードの情報を追記しておくと良い．
 ボードの情報は(Vivadoをインストールした場所が&quot;/opt/Xilinx/Vivado/2018.3&quot;であれば)，&quot;/opt/Xilinx/Vivado/2018.3/common/config/VivadoHls_boards.xml&quot;にある．
 ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．</p>
-<pre tabindex="0"><code>&lt;board name=&#34;Basys3&#34; display_name=&#34;Basys3&#34; family=&#34;artix7&#34; part=&#34;xc7a35t1cpg236-1&#34;  device=&#34;xc7a35t&#34; package=&#34;cpg236&#34; speedgrade=&#34;-1&#34; vendor=&#34;digilentinc.com&#34; /&gt;
+<pre tabindex="0"><code>&lt;board name=&quot;Basys3&quot; display_name=&quot;Basys3&quot; family=&quot;artix7&quot; part=&quot;xc7a35t1cpg236-1&quot;  device=&quot;xc7a35t&quot; package=&quot;cpg236&quot; speedgrade=&quot;-1&quot; vendor=&quot;digilentinc.com&quot; /&gt;
 </code></pre><h3 id="vivado_hls_create_projectで使えるボードの情報を見る">vivado_hls_create_projectで使えるボードの情報を見る</h3>
 <p>vivado_hls_create_projectには，Makefileとtclスクリプトを作成できるボードの情報を表示する機能がある．
 &ldquo;vivado_hls_create_project -l&quot;と入力してみると，以下の表示が得られる．
@@ -3123,10 +3138,10 @@ make installせずにこちらを使う．</p>
 <pre tabindex="0"><code>$ apt install checkinstall
 $ checkinstall
 # インストールするパッケージが更新されないように，holdをかけておく
-$ echo &#34;vim hold&#34;         | dpkg --set-selections
-$ echo &#34;vim-common hold&#34;  | dpkg --set-selections
-$ echo &#34;vim-runtime hold&#34; | dpkg --set-selections
-$ echo &#34;vim-tiny hold&#34;    | dpkg --set-selections
+$ echo &quot;vim hold&quot;         | dpkg --set-selections
+$ echo &quot;vim-common hold&quot;  | dpkg --set-selections
+$ echo &quot;vim-runtime hold&quot; | dpkg --set-selections
+$ echo &quot;vim-tiny hold&quot;    | dpkg --set-selections
 </code></pre><h2 id="plugin">Plugin</h2>
 <p>Vimのプラグインを準備する．私のVim用設定ファイルはGithub上に置いてあるので，これを使う．</p>
 <pre tabindex="0"><code>$ git clone https://github.com/Kenta11/dotfiles ; cd dotfiles
@@ -3134,10 +3149,10 @@ $ bash install.sh
 </code></pre><p>これでホームに.vimと.vimrcのシンボリックリンクができる．vimを実行すればプラグインがインストールされる．</p>
 <h2 id="もしuninstallする場合は">もしuninstallする場合は</h2>
 <p>以下のコマンドを実行する．</p>
-<pre tabindex="0"><code>$ echo &#34;vim install&#34;         | dpkg --set-selections
-$ echo &#34;vim-common install&#34;  | dpkg --set-selections
-$ echo &#34;vim-runtime install&#34; | dpkg --set-selections
-$ echo &#34;vim-tiny install&#34;    | dpkg --set-selections
+<pre tabindex="0"><code>$ echo &quot;vim install&quot;         | dpkg --set-selections
+$ echo &quot;vim-common install&quot;  | dpkg --set-selections
+$ echo &quot;vim-runtime install&quot; | dpkg --set-selections
+$ echo &quot;vim-tiny install&quot;    | dpkg --set-selections
 
 $ apt remove --purge vim
 </code></pre>]]></content></item><item><title>Windows PCにManajaro Linuxをデュアルブートする</title><link>https://Kenta11.github.io/posts/2019-01-08-install-manjaro-linux-jp/</link><pubDate>Tue, 08 Jan 2019 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-01-08-install-manjaro-linux-jp/</guid><description>前書き 新しいノートPCを購入した． SSDの容量が大きかったので，Linuxをデュアルブートしたいと思う． ディストリビューションはManajr</description><content type="html"><![CDATA[<h2 id="前書き">前書き</h2>
@@ -3194,12 +3209,12 @@ UEFIが起動したら，高速スタートアップの設定，ファストブ�
 <pre tabindex="0"><code>sudo pacman -S fcitx-im fcitx-configtool fcitx-mozc yay
 yay -S ttf-vlgothic\
 
-echo &#34;# Japanese input\
+echo &quot;# Japanese input\
 export QT_IM_MODULE=fcitx\
 export XMODIFIERS=@im=fcitx\
-export GTK_IM_MODULE=fcitx&#34; &gt;&gt; ~/.profile
+export GTK_IM_MODULE=fcitx&quot; &gt;&gt; ~/.profile
 
-echo &#34;exec --no-startup-id fcitx -d&#34; &gt;&gt; ~/.config/i3/config
+echo &quot;exec --no-startup-id fcitx -d&quot; &gt;&gt; ~/.config/i3/config
 </code></pre><h3 id="ディレクトリ名">ディレクトリ名</h3>
 <p>OSをインストールした際にリージョンをJapanとしたところ，ホームにあるディレクトリ名が日本語になってしまった．
 以下のコマンドで英語に書き換える．</p>
@@ -3228,6 +3243,8 @@ Win+rでregeditを起動し，以下のレジストリに16進数で1のDWORD値
 </code></pre><h2 id="後書き">後書き</h2>
 <p>Manjaro LinuxとWindowsを両方使える環境が出来た．
 PowerPointのスライドやWindowsでしか使えないアプリはWindows10で，開発やレポートはManjaro Linuxでやろうと思っている．</p>
+]]></content></item><item><title>I opened my blog</title><link>https://Kenta11.github.io/posts/2018-11-25-first-page-en/</link><pubDate>Sun, 25 Nov 2018 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2018-11-25-first-page-en/</guid><description>I&amp;rsquo;ve wanted to open a blog in github.io. So I&amp;rsquo;ve been developing&amp;hellip; I&amp;rsquo;m going to post articles about my development and hobbies.</description><content type="html"><![CDATA[<p>I&rsquo;ve wanted to open a blog in github.io. So I&rsquo;ve been developing&hellip;
+I&rsquo;m going to post articles about my development and hobbies.</p>
 ]]></content></item><item><title>【観劇記】ぼくらのいもうと(宇都宮大学演劇研究会)</title><link>https://Kenta11.github.io/posts/2018-11-28-gakusai-kouen-jp/</link><pubDate>Sun, 25 Nov 2018 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2018-11-28-gakusai-kouen-jp/</guid><description>11/23(金)に宇都宮大学演劇研究会の公演を観に行きました． 『ぼくらのいもうと』あらすじ(脚本の中野劇団ホームページより引用) 匿名の人物に</description><content type="html"><![CDATA[<p>11/23(金)に宇都宮大学演劇研究会の公演を観に行きました．</p>
 <p>『ぼくらのいもうと』あらすじ(脚本の<a href="http://nakanogekidan.com/plays/g06/">中野劇団ホームページ</a>より引用)</p>
 <blockquote>
@@ -3303,6 +3320,4 @@ PowerPointのスライドやWindowsでしか使えないアプリはWindows10で
 <p>舞台設計が非常にオシャレだと感じました．今回の舞台はマンションの一室が二つ並ぶ関係上，非常に横長にならざるをえません．しかしカーペットを舞台の両側で斜めに敷き，残りの床は会場である峰ヶ丘講堂の木のままにしたことで，舞台が対称的かつ落ち着いた印象でした．とても素敵な部屋に思えました．</p>
 <h2 id="最後に">最後に</h2>
 <p>公演時間は約二時間と非常に長い舞台だったにも関わらず，楽しくあっという間に時間が過ぎてしまいました．公演が面白かっただけでなく，素敵な俳優さんたちと出会うことができ，とても良い舞台が観られたと思います．今後の公演も是非観に行きたいです．</p>
-]]></content></item><item><title>I opened my blog</title><link>https://Kenta11.github.io/posts/2018-11-25-first-page-en/</link><pubDate>Sun, 25 Nov 2018 00:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2018-11-25-first-page-en/</guid><description>I&amp;rsquo;ve wanted to open a blog in github.io. So I&amp;rsquo;ve been developing&amp;hellip; I&amp;rsquo;m going to post articles about my development and hobbies.</description><content type="html"><![CDATA[<p>I&rsquo;ve wanted to open a blog in github.io. So I&rsquo;ve been developing&hellip;
-I&rsquo;m going to post articles about my development and hobbies.</p>
 ]]></content></item></channel></rss>
