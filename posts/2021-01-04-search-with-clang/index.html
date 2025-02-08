@@ -3,7 +3,7 @@
 しかし巨大なプロジェクト相手には骨が折れる。
 ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。</p><p>そこでプリプロセス済みのソースコードを一旦ASTにし、関数呼び出しをしている箇所を取り出せばいいと気付いた。
 調べてみると、LLVMのASTをイジったり中身を見る方法があるようだ。</p><p>本稿ではPythonを使ってCソースコードの関数呼び出しを見つける。
-LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そうなので、PythonのClangインターフェースを使うことにする。</p><h2 id=開発環境>開発環境<a href=#%e9%96%8b%e7%99%ba%e7%92%b0%e5%a2%83 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><ul><li>CPU: x64</li><li>OS: Manjaro XFCE</li></ul><h2 id=pythonを使って関数呼び出しを探す>Pythonを使って関数呼び出しを探す<a href=#python%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e9%96%a2%e6%95%b0%e5%91%bc%e3%81%b3%e5%87%ba%e3%81%97%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><h3 id=準備>準備<a href=#%e6%ba%96%e5%82%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する</span>
+LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そうなので、PythonのClangインターフェースを使うことにする。</p><h2 id=開発環境>開発環境<a href=#%e9%96%8b%e7%99%ba%e7%92%b0%e5%a2%83 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><ul><li>CPU: x64</li><li>OS: Manjaro XFCE</li></ul><h2 id=pythonを使って関数呼び出しを探す>Pythonを使って関数呼び出しを探す<a href=#python%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e9%96%a2%e6%95%b0%e5%91%bc%e3%81%b3%e5%87%ba%e3%81%97%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><h3 id=準備>準備<a href=#%e6%ba%96%e5%82%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する</span>
 </span></span><span class=line><span class=cl>$ sudo pacman -S clang llvm <span class=c1># clangだけでは今回のPythonプログラムが動かなかった...</span>
 </span></span></code></pre></div><p>clangモジュールが<code>/usr/lib/python3.9/site-packages/clang/</code>にあれば、準備完了だ。</p><h3 id=関数呼び出しの箇所を探す>関数呼び出しの箇所を探す<a href=#%e9%96%a2%e6%95%b0%e5%91%bc%e3%81%b3%e5%87%ba%e3%81%97%e3%81%ae%e7%ae%87%e6%89%80%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p><code>parse()</code>を呼び出すと、よしなにASTにしてくれる。
 どうやらプリプロセスまでしてくれるようだ。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># -*- coding: utf-8 -*-</span>
@@ -31,17 +31,17 @@ LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そう
 </span></span></code></pre></div><p>もしも特定の名前の型や変数名を検索したい場合は、<code>visitNode()</code>を改造すればできる。
 なおASTのノードの種類については、clangモジュールに書かれていたコメントを参考に記述した。
 （FUNCTION_DECLは関数宣言な気もするが、どうも関数定義も含んでいるようだ。）</p><h3 id=vim_snprintfを探す>vim_snprintf()を探す<a href=#vim_snprintf%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>作成したPythonプログラムを使用して、関数呼び出しを探してみる。
-今回はvimのソースコードをターゲットに、<code>vim_snprintf</code>を探す。</p><pre tabindex=0><code>$ git clone https://github.com/vim/vim
-$ python3 sample.py vim_snprintf vim/src/main.c
-vim_snprintf main 106
-vim_snprintf main 119
-vim_snprintf main 153
-vim_snprintf main 164
-vim_snprintf main 185
-vim_snprintf main 191
-vim_snprintf main 230
-# 長いので割愛
-</code></pre><p>1列目に検索した関数名（もちろん<code>vim_snprintf</code>）、2列目に<code>vim_snprintf</code>を呼び出している関数名、3列目に行番号が標準出力されている。
+今回はvimのソースコードをターゲットに、<code>vim_snprintf</code>を探す。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git clone https://github.com/vim/vim
+</span></span><span class=line><span class=cl>$ python3 sample.py vim_snprintf vim/src/main.c
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>106</span>
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>119</span>
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>153</span>
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>164</span>
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>185</span>
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>191</span>
+</span></span><span class=line><span class=cl>vim_snprintf main <span class=m>230</span>
+</span></span><span class=line><span class=cl><span class=c1># 長いので割愛</span>
+</span></span></code></pre></div><p>1列目に検索した関数名（もちろん<code>vim_snprintf</code>）、2列目に<code>vim_snprintf</code>を呼び出している関数名、3列目に行番号が標準出力されている。
 無事に<code>vim_snprintf</code>を呼び出している場所を見つけられた。</p><h2 id=読者プレゼント>読者プレゼント<a href=#%e8%aa%ad%e8%80%85%e3%83%97%e3%83%ac%e3%82%bc%e3%83%b3%e3%83%88 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>お使いの環境で作業を試せる<code>Dockerfile</code>を置いておきます。
 リンクは<a href=Dockerfile>こちら</a>。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Dockerfile data-lang=Dockerfile><span class=line><span class=cl><span class=k>FROM</span><span class=s> ubuntu:20.04</span><span class=err>
 </span></span></span><span class=line><span class=cl><span class=err></span><span class=k>LABEL</span> maintainer <span class=s2>&#34;Kenta Arai &lt;&gt;&#34;</span><span class=err>

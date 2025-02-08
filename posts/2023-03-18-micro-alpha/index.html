@@ -6,467 +6,467 @@
 入力がないケースは少なくともテキストでは想定されていないので，やむを得ずこのような対処をしています．</p><p>出力命令は R0 レジスタをシリアル出力するように変更しました．</p><p>テキストでは，主記憶装置が「比較的大容量の記憶装置である」と書かれていますが，MICRO-1 の主記憶装置は現代の感覚ではかなり小さい（16bit x 64K）です．
 なので FPGA 実装では Block RAM を主記憶装置に充てました．</p><p>また細かいところですが，制御装置の動作周波数はテキストの 20MHz ではなく 100MHz としました．
 これは実装した FPGA ボードのクロック入力と同じ動作周波数にしています．</p><h2 id=遊び方>遊び方<a href=#%e9%81%8a%e3%81%b3%e6%96%b9 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p><strong>（追記）v1.1.4 から CLI 上で Vivado プロジェクトを作成できるようにしました． v1.1.4 で遊ぶ場合は「Vivado プロジェクトを作成（v1.1.4 以降）」を参照してください．</strong></p><h3 id=vivado-プロジェクトを作成v114-以前>Vivado プロジェクトを作成（v1.1.4 以前）<a href=#vivado-%e3%83%97%e3%83%ad%e3%82%b8%e3%82%a7%e3%82%af%e3%83%88%e3%82%92%e4%bd%9c%e6%88%90v114-%e4%bb%a5%e5%89%8d class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p><a href=../2022-09-23-micro1>以前の記事</a>で紹介したツールをインストールしたマシンで回路合成します．
-<a href=https://github.com/Kenta11/micro-alpha>MICRO-alpha</a>のリポジトリをクローンして，そのディレクトリ内にて<a href=https://github.com/Kenta11/micro-alpha/releases/tag/v1.0.0>リリースのページ</a>で公開している Vivado プロジェクト (micro-alpha-arty-a7-100.tar.gz) を解凍します．</p><pre tabindex=0><code>$ git clone https://github.com/Kenta11/micro-alpha
-$ cd micro-alpha
-$ wget https://github.com/Kenta11/micro-alpha/releases/download/v1.0.0/micro-alpha-arty-a7-100.tar.gz
-$ tar zxvf micro-alpha-arty-a7-100.tar.gz
-$ tree -L 1
-.
-├── LICENSE
-├── Makefile
-├── README.md
-├── micro-alpha-arty-a7-100.tar.gz
-├── run.py
-├── micro-alpha
-├── script
-├── src
-├── tb
-</code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p><pre tabindex=0><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
-$ rm1masm MICROONE -o MICROONE.o
-$ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
-</code></pre><p>続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．</p><pre tabindex=0><code>$ cat calculator 
-; This program is distributed under MIT LICENSE.
-; Copyright (c) 2023 Kenta Arai
-
-; 逆ポーランド記法電卓プログラム
-; 
-; 実行例（(3+4)*(4-2)）
-; (CALCULATOR)&gt;&gt; 3 4 + 4 2 - *
-; 14
-TITLE CALCULATOR
-             ORG  140
-CALCULATOR0: LA   1, PROMPT
-             BSR  PRINT
-             LA   1, INPUT
-             BSR  RWLINE
-             LA   0, INPUT
-             BSR  INTERPRET
-             BSR  PUTINT
-             B    CALCULATOR0
-             HLT
-
-; データ領域
-PROMPT:      DC   &#39; (
-             DC   &#39; c
-             DC   &#39; a
-             DC   &#39; l
-             DC   &#39; c
-             DC   &#39; )
-             DC   &#39; &gt;
-             DC   &#39; &gt;
-             DC   &#39;  
-             DC   0
-INPUT:       DS   32
-
-; 文字列を出力装置に書き込む関数
-; 入力: {r1: 文字列の先頭アドレス}
-; 出力: なし
-PRINT0:      WIO  LPT
-             LEA  1, 1(1)
-PRINT:       LX   0, (1)
-             OR   0, (0)
-             BNZ  PRINT0
-             RET
-
-; 入力装置から行を読む関数
-; 入力: {r1: 行の書込み先アドレス}
-; 出力: なし
-; NOTE: 読んだ文字は都度出力装置に書き込む
-RWLINE0:     STX  0, (1)
-             LEA  1, 1(1)
-RWLINE:      BSR  READWORD
-             WIO  LPT
-             LC   2, X&#34;0D
-             CMP  0, (2)
-             BNZ  RWLINE0
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             LC   0, 0
-             STX  0, (1)
-             RET
-
-; 入力式を計算する
-; 入力: {r0: 入力文字列}
-; 出力: {r1: 計算結果}
-INTERPRET:   LX   1, (0)
-             CMP  1, 0       ; NULL
-             BZ   INTERPRET5
-             CMP  1, X&#34;20    ; SP
-             BZ   INTERPRET4
-             CMP  1, X&#34;2B    ; +
-             BNZ  INTERPRET0
-             POP  3, 2
-             ADD  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET0:  CMP  1, X&#34;2D    ; -
-             BNZ  INTERPRET1
-             POP  3, 2
-             SUB  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET1:  CMP  1, X&#34;2A    ; *
-             BNZ  INTERPRET2
-             POP  3, 1
-             POP  1, 1
-             MULT 1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET2:  CMP  1, X&#34;2F    ; /
-             BNZ  INTERPRET3
-             POP  3, 2
-             LC   1, 0
-             DIV  1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
-             CMP  1, 0
-             BZ   INTERPRET6
-             BSR  ATOI
-             PUSH 1, 1
-INTERPRET4:  ADD  0, 1
-             B    INTERPRET
-INTERPRET5:  POP  1, 1
-INTERPRET6:  RET
-
-; 整数を出力装置に書き込む関数
-; 入力: {r1: 数値}
-; 出力: なし
-PUTINT:      LC   0, X&#34;30
-             WIO  LPT
-             LC   0, X&#34;78
-             WIO  LPT
-             LEA  2, (1)    ; r1[15:12] を出���
-             SC   2, 4
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[11:8] を出力
-             SC   2, 8
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[7:4] を出力
-             SC   2, 12
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[3:0] を出力
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LC   0, X&#34;0D
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             RET
-DIGIT:       DC   X&#34;30
-             DC   X&#34;31
-             DC   X&#34;32
-             DC   X&#34;33
-             DC   X&#34;34
-             DC   X&#34;35
-             DC   X&#34;36
-             DC   X&#34;37
-             DC   X&#34;38
-             DC   X&#34;39
-             DC   X&#34;41
-             DC   X&#34;42
-             DC   X&#34;43
-             DC   X&#34;44
-             DC   X&#34;45
-             DC   X&#34;46
-
-; 入力装置から文字を読む関数
-; 入力: なし
-; 出力: {r0: 読んだ文字}
-; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
-;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
-READWORD:    RIO  CR
-             OR   0, (0)
-             BZ   READWORD
-             RET
-
-; 入力文字列を数値に変換する
-; 入力: {r0: 入力文字列}
-; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
-ATOI:        LC   1, 0
-ATOI0:       PUSH 1, 1
-             LX   1, (0)
-             BSR  ISDIGIT
-             CMP  1, 0
-             POP  1, 1
-             BNZ  ATOI1
-             RET
-ATOI1:       MULT 1, 10
-             LX   1, (0)
-             SUB  1, X&#34;30
-             ADD  1, (2)
-             ADD  0, 1
-             B    ATOI0
-
-; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
-; 入力: {r1: 入力文字}
-; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
-ISDIGIT:     CMP  1, X&#34;30
-             BM   ISDIGIT0
-             CMP  1, X&#34;39
-             BP   ISDIGIT0
-             LC   1, 1
-             RET
-ISDIGIT0:    LC   1, 0
-             RET
-END
-$ rm1asm calculator -o calculator.b
-$ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/ip/main_memory/machine_program.coe
-</code></pre><h3 id=vivado-プロジェクトを作成v114-以降>Vivado プロジェクトを作成（v1.1.4 以降）<a href=#vivado-%e3%83%97%e3%83%ad%e3%82%b8%e3%82%a7%e3%82%af%e3%83%88%e3%82%92%e4%bd%9c%e6%88%90v114-%e4%bb%a5%e9%99%8d class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><ul><li><strong>注意：Basys 3 で動かす場合は以下のように読み替えてください</strong><ul><li><code>fpga/arty-a7-100/</code> -> <code>fpga/basys-3/</code></li><li>Makefile の変数 <code>SCRIPT</code> を Basys3 用に切り替える</li></ul></li></ul><p><a href=../2022-09-23-micro1>以前の記事</a>で紹介したツールをインストールしたマシンで回路合成します．
-<a href=https://github.com/Kenta11/micro-alpha>MICRO-alpha</a>のリポジトリをクローンしてください．</p><pre tabindex=0><code>$ git clone https://github.com/Kenta11/micro-alpha
-$ cd micro-alpha
-$ tree -L 1
-.
-├── LICENSE
-├── Makefile
-├── README.md
-├── fpga
-├── script
-├── src
-└── tb
-
-5 directories, 3 files
-</code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p><pre tabindex=0><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
-$ rm1masm MICROONE -o MICROONE.o
-$ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_program.coe
-</code></pre><p>続いて，機械語プログラムを主記憶に書き込むための COE ファイルを作成します．</p><pre tabindex=0><code>$ cat calculator 
-; This program is distributed under MIT LICENSE.
-; Copyright (c) 2023 Kenta Arai
-
-; 逆ポーランド記法電卓プログラム
-; 
-; 実行例（(3+4)*(4-2)）
-; (CALCULATOR)&gt;&gt; 3 4 + 4 2 - *
-; 14
-TITLE CALCULATOR
-             ORG  140
-CALCULATOR0: LA   1, PROMPT
-             BSR  PRINT
-             LA   1, INPUT
-             BSR  RWLINE
-             LA   0, INPUT
-             BSR  INTERPRET
-             BSR  PUTINT
-             B    CALCULATOR0
-             HLT
-
-; データ領域
-PROMPT:      DC   &#39; (
-             DC   &#39; c
-             DC   &#39; a
-             DC   &#39; l
-             DC   &#39; c
-             DC   &#39; )
-             DC   &#39; &gt;
-             DC   &#39; &gt;
-             DC   &#39;  
-             DC   0
-INPUT:       DS   32
-
-; 文字列を出力装置に書き込む関数
-; 入力: {r1: 文字列の先頭アドレス}
-; 出力: なし
-PRINT0:      WIO  LPT
-             LEA  1, 1(1)
-PRINT:       LX   0, (1)
-             OR   0, (0)
-             BNZ  PRINT0
-             RET
-
-; 入力装置から行を読む関数
-; 入力: {r1: 行の書込み先アドレス}
-; 出力: なし
-; NOTE: 読んだ文字は都度出力装置に書き込む
-RWLINE0:     STX  0, (1)
-             LEA  1, 1(1)
-RWLINE:      BSR  READWORD
-             WIO  LPT
-             LC   2, X&#34;0D
-             CMP  0, (2)
-             BNZ  RWLINE0
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             LC   0, 0
-             STX  0, (1)
-             RET
-
-; 入力式を計算する
-; 入力: {r0: 入力文字列}
-; 出力: {r1: 計算結果}
-INTERPRET:   LX   1, (0)
-             CMP  1, 0       ; NULL
-             BZ   INTERPRET5
-             CMP  1, X&#34;20    ; SP
-             BZ   INTERPRET4
-             CMP  1, X&#34;2B    ; +
-             BNZ  INTERPRET0
-             POP  3, 2
-             ADD  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET0:  CMP  1, X&#34;2D    ; -
-             BNZ  INTERPRET1
-             POP  3, 2
-             SUB  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET1:  CMP  1, X&#34;2A    ; *
-             BNZ  INTERPRET2
-             POP  3, 1
-             POP  1, 1
-             MULT 1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET2:  CMP  1, X&#34;2F    ; /
-             BNZ  INTERPRET3
-             POP  3, 2
-             LC   1, 0
-             DIV  1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
-             CMP  1, 0
-             BZ   INTERPRET6
-             BSR  ATOI
-             PUSH 1, 1
-INTERPRET4:  ADD  0, 1
-             B    INTERPRET
-INTERPRET5:  POP  1, 1
-INTERPRET6:  RET
-
-; 整数を出力装置に書き込む関数
-; 入力: {r1: 数値}
-; 出力: なし
-PUTINT:      LC   0, X&#34;30
-             WIO  LPT
-             LC   0, X&#34;78
-             WIO  LPT
-             LEA  2, (1)    ; r1[15:12] を出���
-             SC   2, 4
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[11:8] を出力
-             SC   2, 8
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[7:4] を出力
-             SC   2, 12
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[3:0] を出力
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LC   0, X&#34;0D
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             RET
-DIGIT:       DC   X&#34;30
-             DC   X&#34;31
-             DC   X&#34;32
-             DC   X&#34;33
-             DC   X&#34;34
-             DC   X&#34;35
-             DC   X&#34;36
-             DC   X&#34;37
-             DC   X&#34;38
-             DC   X&#34;39
-             DC   X&#34;41
-             DC   X&#34;42
-             DC   X&#34;43
-             DC   X&#34;44
-             DC   X&#34;45
-             DC   X&#34;46
-
-; 入力装置から文字を読む関数
-; 入力: なし
-; 出力: {r0: 読んだ文字}
-; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
-;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
-READWORD:    RIO  CR
-             OR   0, (0)
-             BZ   READWORD
-             RET
-
-; 入力文字列を数値に変換する
-; 入力: {r0: 入力文字列}
-; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
-ATOI:        LC   1, 0
-ATOI0:       PUSH 1, 1
-             LX   1, (0)
-             BSR  ISDIGIT
-             CMP  1, 0
-             POP  1, 1
-             BNZ  ATOI1
-             RET
-ATOI1:       MULT 1, 10
-             LX   1, (0)
-             SUB  1, X&#34;30
-             ADD  1, (2)
-             ADD  0, 1
-             B    ATOI0
-
-; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
-; 入力: {r1: 入力文字}
-; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
-ISDIGIT:     CMP  1, X&#34;30
-             BM   ISDIGIT0
-             CMP  1, X&#34;39
-             BP   ISDIGIT0
-             LC   1, 1
-             RET
-ISDIGIT0:    LC   1, 0
-             RET
-END
-$ rm1asm calculator -o calculator.b
-$ python script/obj2coe.py arty-a7-100 calculator.b fpga/arty-a7-100/machine_program.coe
-</code></pre><p>make コマンドを実行すると，Vivado のプロジェクトが作成されます．</p><pre tabindex=0><code>$ make all
-$ tree -L 2 vivado
-vivado
-└── arty-a7-100
-    ├── arty-a7-100.cache
-    ├── arty-a7-100.gen
-    ├── arty-a7-100.hw
-    ├── arty-a7-100.ip_user_files
-    ├── arty-a7-100.srcs
-    └── arty-a7-100.xpr
-
-7 directories, 1 file
-</code></pre><h3 id=fpga-上で逆ポーランド記法プログラムを動作させる>FPGA 上で逆ポーランド記法プログラムを動作させる<a href=#fpga-%e4%b8%8a%e3%81%a7%e9%80%86%e3%83%9d%e3%83%bc%e3%83%a9%e3%83%b3%e3%83%89%e8%a8%98%e6%b3%95%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%82%92%e5%8b%95%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>Vivado で回路を合成し，Arty A7-100 に書き込みましょう．
-シリアル通信で Arty A7-100 にキーボード入力をしましょう．</p><pre tabindex=0><code>$ sudo screen /dev/ttyUSB1 115200
-(calc)&gt;&gt; 3 4 + 4 2 - *
-0x000E
-(calc)&gt;&gt; 
-</code></pre><p>逆ポーランド記法の電卓で計算ができました！</p><h2 id=おわりに>おわりに<a href=#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>今年度は MICRO-1 で散々遊びました．
+<a href=https://github.com/Kenta11/micro-alpha>MICRO-alpha</a>のリポジトリをクローンして，そのディレクトリ内にて<a href=https://github.com/Kenta11/micro-alpha/releases/tag/v1.0.0>リリースのページ</a>で公開している Vivado プロジェクト (micro-alpha-arty-a7-100.tar.gz) を解凍します．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git clone https://github.com/Kenta11/micro-alpha
+</span></span><span class=line><span class=cl>$ <span class=nb>cd</span> micro-alpha
+</span></span><span class=line><span class=cl>$ wget https://github.com/Kenta11/micro-alpha/releases/download/v1.0.0/micro-alpha-arty-a7-100.tar.gz
+</span></span><span class=line><span class=cl>$ tar zxvf micro-alpha-arty-a7-100.tar.gz
+</span></span><span class=line><span class=cl>$ tree -L <span class=m>1</span>
+</span></span><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── LICENSE
+</span></span><span class=line><span class=cl>├── Makefile
+</span></span><span class=line><span class=cl>├── README.md
+</span></span><span class=line><span class=cl>├── micro-alpha-arty-a7-100.tar.gz
+</span></span><span class=line><span class=cl>├── run.py
+</span></span><span class=line><span class=cl>├── micro-alpha
+</span></span><span class=line><span class=cl>├── script
+</span></span><span class=line><span class=cl>├── src
+</span></span><span class=line><span class=cl>├── tb
+</span></span></code></pre></div><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class=p>|</span> iconv -f sjis -t utf8 <span class=p>|</span> tr -d <span class=s2>&#34;\32&#34;</span> &gt; MICROONE
+</span></span><span class=line><span class=cl>$ rm1masm MICROONE -o MICROONE.o
+</span></span><span class=line><span class=cl>$ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
+</span></span></code></pre></div><p>続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ cat calculator 
+</span></span><span class=line><span class=cl><span class=p>;</span> This program is distributed under MIT LICENSE.
+</span></span><span class=line><span class=cl><span class=p>;</span> Copyright <span class=o>(</span>c<span class=o>)</span> <span class=m>2023</span> Kenta Arai
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>;</span> 逆ポーランド記法電卓プログラム
+</span></span><span class=line><span class=cl><span class=p>;</span> 
+</span></span><span class=line><span class=cl><span class=p>;</span> 実行例（<span class=o>(</span>3+4<span class=o>)</span>*<span class=o>(</span>4-2<span class=o>)</span>）
+</span></span><span class=line><span class=cl><span class=p>;</span> <span class=o>(</span>CALCULATOR<span class=o>)</span>&gt;&gt; <span class=m>3</span> <span class=m>4</span> + <span class=m>4</span> <span class=m>2</span> - *
+</span></span><span class=line><span class=cl><span class=p>;</span> <span class=m>14</span>
+</span></span><span class=line><span class=cl>TITLE CALCULATOR
+</span></span><span class=line><span class=cl>             ORG  <span class=m>140</span>
+</span></span><span class=line><span class=cl>CALCULATOR0: LA   1, PROMPT
+</span></span><span class=line><span class=cl>             BSR  PRINT
+</span></span><span class=line><span class=cl>             LA   1, INPUT
+</span></span><span class=line><span class=cl>             BSR  RWLINE
+</span></span><span class=line><span class=cl>             LA   0, INPUT
+</span></span><span class=line><span class=cl>             BSR  INTERPRET
+</span></span><span class=line><span class=cl>             BSR  PUTINT
+</span></span><span class=line><span class=cl>             B    CALCULATOR0
+</span></span><span class=line><span class=cl>             HLT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>;</span> データ領域
+</span></span><span class=line><span class=cl>PROMPT:      DC   <span class=s1>&#39; (
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> c
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39; a
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> l
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39; c
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> <span class=o>)</span>
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39; &gt;
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> &gt;
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39;  
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   0
+</span></span></span><span class=line><span class=cl><span class=s1>INPUT:       DS   32
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 文字列を出力装置に書き込む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r1: 文字列の先頭アドレス}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>PRINT0:      WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  1, 1(1)
+</span></span></span><span class=line><span class=cl><span class=s1>PRINT:       LX   0, (1)
+</span></span></span><span class=line><span class=cl><span class=s1>             OR   0, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  PRINT0
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力装置から行を読む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r1: 行の書込み先アドレス}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>; NOTE: 読んだ文字は都度出力装置に書き込む
+</span></span></span><span class=line><span class=cl><span class=s1>RWLINE0:     STX  0, (1)
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  1, 1(1)
+</span></span></span><span class=line><span class=cl><span class=s1>RWLINE:      BSR  READWORD
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   2, X&#34;0D
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  RWLINE0
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;0A
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             STX  0, (1)
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力式を計算する
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r0: 入力文字列}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: {r1: 計算結果}
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET:   LX   1, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, 0       ; NULL
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   INTERPRET5
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, X&#34;20    ; SP
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, X&#34;2B    ; +
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET0
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 2
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET0:  CMP  1, X&#34;2D    ; -
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET1
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 2
+</span></span></span><span class=line><span class=cl><span class=s1>             SUB  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET1:  CMP  1, X&#34;2A    ; *
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET2
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             MULT 1, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET2:  CMP  1, X&#34;2F    ; /
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET3
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 2
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             DIV  1, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET3:  BSR  ISDIGIT    ; &#39;</span>0<span class=s1>&#39;-&#39;</span>9<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   INTERPRET6
+</span></span></span><span class=line><span class=cl><span class=s1>             BSR  ATOI
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET4:  ADD  0, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET5:  POP  1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET6:  RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 整数を出力装置に書き込む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r1: 数値}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>PUTINT:      LC   0, X&#34;30
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;78
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[15:12] を出���
+</span></span></span><span class=line><span class=cl><span class=s1>             SC   2, 4
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[11:8] を出力
+</span></span></span><span class=line><span class=cl><span class=s1>             SC   2, 8
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[7:4] を出力
+</span></span></span><span class=line><span class=cl><span class=s1>             SC   2, 12
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[3:0] を出力
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;0D
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;0A
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>DIGIT:       DC   X&#34;30
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;31
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;32
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;33
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;34
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;35
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;36
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;37
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;38
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;39
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;41
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;42
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;43
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;44
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;45
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;46
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力装置から文字を読む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: {r0: 読んだ文字}
+</span></span></span><span class=line><span class=cl><span class=s1>; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
+</span></span></span><span class=line><span class=cl><span class=s1>;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
+</span></span></span><span class=line><span class=cl><span class=s1>READWORD:    RIO  CR
+</span></span></span><span class=line><span class=cl><span class=s1>             OR   0, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   READWORD
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力文字列を数値に変換する
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r0: 入力文字列}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
+</span></span></span><span class=line><span class=cl><span class=s1>ATOI:        LC   1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>ATOI0:       PUSH 1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   1, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             BSR  ISDIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  ATOI1
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>ATOI1:       MULT 1, 10
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   1, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             SUB  1, X&#34;30
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  1, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  0, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    ATOI0
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力文字が数字(&#39;</span>0<span class=s1>&#39;-&#39;</span>9<span class=err>&#39;</span><span class=o>)</span>であるかを判定する
+</span></span><span class=line><span class=cl><span class=p>;</span> 入力: <span class=o>{</span>r1: 入力文字<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=p>;</span> 出力: <span class=o>{</span>r1: 判定結果<span class=o>(</span>1: 数字である，0: 数字でない<span class=o>)}</span>
+</span></span><span class=line><span class=cl>ISDIGIT:     CMP  1, X<span class=s2>&#34;30
+</span></span></span><span class=line><span class=cl><span class=s2>             BM   ISDIGIT0
+</span></span></span><span class=line><span class=cl><span class=s2>             CMP  1, X&#34;</span><span class=m>39</span>
+</span></span><span class=line><span class=cl>             BP   ISDIGIT0
+</span></span><span class=line><span class=cl>             LC   1, <span class=m>1</span>
+</span></span><span class=line><span class=cl>             RET
+</span></span><span class=line><span class=cl>ISDIGIT0:    LC   1, <span class=m>0</span>
+</span></span><span class=line><span class=cl>             RET
+</span></span><span class=line><span class=cl>END
+</span></span><span class=line><span class=cl>$ rm1asm calculator -o calculator.b
+</span></span><span class=line><span class=cl>$ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/ip/main_memory/machine_program.coe
+</span></span></code></pre></div><h3 id=vivado-プロジェクトを作成v114-以降>Vivado プロジェクトを作成（v1.1.4 以降）<a href=#vivado-%e3%83%97%e3%83%ad%e3%82%b8%e3%82%a7%e3%82%af%e3%83%88%e3%82%92%e4%bd%9c%e6%88%90v114-%e4%bb%a5%e9%99%8d class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><ul><li><strong>注意：Basys 3 で動かす場合は以下のように読み替えてください</strong><ul><li><code>fpga/arty-a7-100/</code> -> <code>fpga/basys-3/</code></li><li>Makefile の変数 <code>SCRIPT</code> を Basys3 用に切り替える</li></ul></li></ul><p><a href=../2022-09-23-micro1>以前の記事</a>で紹介したツールをインストールしたマシンで回路合成します．
+<a href=https://github.com/Kenta11/micro-alpha>MICRO-alpha</a>のリポジトリをクローンしてください．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git clone https://github.com/Kenta11/micro-alpha
+</span></span><span class=line><span class=cl>$ <span class=nb>cd</span> micro-alpha
+</span></span><span class=line><span class=cl>$ tree -L <span class=m>1</span>
+</span></span><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── LICENSE
+</span></span><span class=line><span class=cl>├── Makefile
+</span></span><span class=line><span class=cl>├── README.md
+</span></span><span class=line><span class=cl>├── fpga
+</span></span><span class=line><span class=cl>├── script
+</span></span><span class=line><span class=cl>├── src
+</span></span><span class=line><span class=cl>└── tb
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=m>5</span> directories, <span class=m>3</span> files
+</span></span></code></pre></div><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class=p>|</span> iconv -f sjis -t utf8 <span class=p>|</span> tr -d <span class=s2>&#34;\32&#34;</span> &gt; MICROONE
+</span></span><span class=line><span class=cl>$ rm1masm MICROONE -o MICROONE.o
+</span></span><span class=line><span class=cl>$ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_program.coe
+</span></span></code></pre></div><p>続いて，機械語プログラムを主記憶に書き込むための COE ファイルを作成します．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ cat calculator 
+</span></span><span class=line><span class=cl><span class=p>;</span> This program is distributed under MIT LICENSE.
+</span></span><span class=line><span class=cl><span class=p>;</span> Copyright <span class=o>(</span>c<span class=o>)</span> <span class=m>2023</span> Kenta Arai
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>;</span> 逆ポーランド記法電卓プログラム
+</span></span><span class=line><span class=cl><span class=p>;</span> 
+</span></span><span class=line><span class=cl><span class=p>;</span> 実行例（<span class=o>(</span>3+4<span class=o>)</span>*<span class=o>(</span>4-2<span class=o>)</span>）
+</span></span><span class=line><span class=cl><span class=p>;</span> <span class=o>(</span>CALCULATOR<span class=o>)</span>&gt;&gt; <span class=m>3</span> <span class=m>4</span> + <span class=m>4</span> <span class=m>2</span> - *
+</span></span><span class=line><span class=cl><span class=p>;</span> <span class=m>14</span>
+</span></span><span class=line><span class=cl>TITLE CALCULATOR
+</span></span><span class=line><span class=cl>             ORG  <span class=m>140</span>
+</span></span><span class=line><span class=cl>CALCULATOR0: LA   1, PROMPT
+</span></span><span class=line><span class=cl>             BSR  PRINT
+</span></span><span class=line><span class=cl>             LA   1, INPUT
+</span></span><span class=line><span class=cl>             BSR  RWLINE
+</span></span><span class=line><span class=cl>             LA   0, INPUT
+</span></span><span class=line><span class=cl>             BSR  INTERPRET
+</span></span><span class=line><span class=cl>             BSR  PUTINT
+</span></span><span class=line><span class=cl>             B    CALCULATOR0
+</span></span><span class=line><span class=cl>             HLT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>;</span> データ領域
+</span></span><span class=line><span class=cl>PROMPT:      DC   <span class=s1>&#39; (
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> c
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39; a
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> l
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39; c
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> <span class=o>)</span>
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39; &gt;
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   &#39;</span> &gt;
+</span></span><span class=line><span class=cl>             DC   <span class=s1>&#39;  
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   0
+</span></span></span><span class=line><span class=cl><span class=s1>INPUT:       DS   32
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 文字列を出力装置に書き込む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r1: 文字列の先頭アドレス}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>PRINT0:      WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  1, 1(1)
+</span></span></span><span class=line><span class=cl><span class=s1>PRINT:       LX   0, (1)
+</span></span></span><span class=line><span class=cl><span class=s1>             OR   0, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  PRINT0
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力装置から行を読む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r1: 行の書込み先アドレス}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>; NOTE: 読んだ文字は都度出力装置に書き込む
+</span></span></span><span class=line><span class=cl><span class=s1>RWLINE0:     STX  0, (1)
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  1, 1(1)
+</span></span></span><span class=line><span class=cl><span class=s1>RWLINE:      BSR  READWORD
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   2, X&#34;0D
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  RWLINE0
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;0A
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             STX  0, (1)
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力式を計算する
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r0: 入力文字列}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: {r1: 計算結果}
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET:   LX   1, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, 0       ; NULL
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   INTERPRET5
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, X&#34;20    ; SP
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, X&#34;2B    ; +
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET0
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 2
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET0:  CMP  1, X&#34;2D    ; -
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET1
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 2
+</span></span></span><span class=line><span class=cl><span class=s1>             SUB  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET1:  CMP  1, X&#34;2A    ; *
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET2
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             MULT 1, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET2:  CMP  1, X&#34;2F    ; /
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  INTERPRET3
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  3, 2
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             DIV  1, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 2, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET4
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET3:  BSR  ISDIGIT    ; &#39;</span>0<span class=s1>&#39;-&#39;</span>9<span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   INTERPRET6
+</span></span></span><span class=line><span class=cl><span class=s1>             BSR  ATOI
+</span></span></span><span class=line><span class=cl><span class=s1>             PUSH 1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET4:  ADD  0, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    INTERPRET
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET5:  POP  1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>INTERPRET6:  RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 整数を出力装置に書き込む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r1: 数値}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>PUTINT:      LC   0, X&#34;30
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;78
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[15:12] を出���
+</span></span></span><span class=line><span class=cl><span class=s1>             SC   2, 4
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[11:8] を出力
+</span></span></span><span class=line><span class=cl><span class=s1>             SC   2, 8
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[7:4] を出力
+</span></span></span><span class=line><span class=cl><span class=s1>             SC   2, 12
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LEA  2, (1)    ; r1[3:0] を出力
+</span></span></span><span class=line><span class=cl><span class=s1>             AND  2, X&#34;F
+</span></span></span><span class=line><span class=cl><span class=s1>             LA   3, DIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  2, (3)
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   0, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;0D
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             LC   0, X&#34;0A
+</span></span></span><span class=line><span class=cl><span class=s1>             WIO  LPT
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>DIGIT:       DC   X&#34;30
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;31
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;32
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;33
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;34
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;35
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;36
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;37
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;38
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;39
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;41
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;42
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;43
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;44
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;45
+</span></span></span><span class=line><span class=cl><span class=s1>             DC   X&#34;46
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力装置から文字を読む関数
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: なし
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: {r0: 読んだ文字}
+</span></span></span><span class=line><span class=cl><span class=s1>; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
+</span></span></span><span class=line><span class=cl><span class=s1>;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
+</span></span></span><span class=line><span class=cl><span class=s1>READWORD:    RIO  CR
+</span></span></span><span class=line><span class=cl><span class=s1>             OR   0, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             BZ   READWORD
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力文字列を数値に変換する
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力: {r0: 入力文字列}
+</span></span></span><span class=line><span class=cl><span class=s1>; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
+</span></span></span><span class=line><span class=cl><span class=s1>ATOI:        LC   1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>ATOI0:       PUSH 1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   1, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             BSR  ISDIGIT
+</span></span></span><span class=line><span class=cl><span class=s1>             CMP  1, 0
+</span></span></span><span class=line><span class=cl><span class=s1>             POP  1, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             BNZ  ATOI1
+</span></span></span><span class=line><span class=cl><span class=s1>             RET
+</span></span></span><span class=line><span class=cl><span class=s1>ATOI1:       MULT 1, 10
+</span></span></span><span class=line><span class=cl><span class=s1>             LX   1, (0)
+</span></span></span><span class=line><span class=cl><span class=s1>             SUB  1, X&#34;30
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  1, (2)
+</span></span></span><span class=line><span class=cl><span class=s1>             ADD  0, 1
+</span></span></span><span class=line><span class=cl><span class=s1>             B    ATOI0
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>; 入力文字が数字(&#39;</span>0<span class=s1>&#39;-&#39;</span>9<span class=err>&#39;</span><span class=o>)</span>であるかを判定する
+</span></span><span class=line><span class=cl><span class=p>;</span> 入力: <span class=o>{</span>r1: 入力文字<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=p>;</span> 出力: <span class=o>{</span>r1: 判定結果<span class=o>(</span>1: 数字である，0: 数字でない<span class=o>)}</span>
+</span></span><span class=line><span class=cl>ISDIGIT:     CMP  1, X<span class=s2>&#34;30
+</span></span></span><span class=line><span class=cl><span class=s2>             BM   ISDIGIT0
+</span></span></span><span class=line><span class=cl><span class=s2>             CMP  1, X&#34;</span><span class=m>39</span>
+</span></span><span class=line><span class=cl>             BP   ISDIGIT0
+</span></span><span class=line><span class=cl>             LC   1, <span class=m>1</span>
+</span></span><span class=line><span class=cl>             RET
+</span></span><span class=line><span class=cl>ISDIGIT0:    LC   1, <span class=m>0</span>
+</span></span><span class=line><span class=cl>             RET
+</span></span><span class=line><span class=cl>END
+</span></span><span class=line><span class=cl>$ rm1asm calculator -o calculator.b
+</span></span><span class=line><span class=cl>$ python script/obj2coe.py arty-a7-100 calculator.b fpga/arty-a7-100/machine_program.coe
+</span></span></code></pre></div><p>make コマンドを実行すると，Vivado のプロジェクトが作成されます．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ make all
+</span></span><span class=line><span class=cl>$ tree -L <span class=m>2</span> vivado
+</span></span><span class=line><span class=cl>vivado
+</span></span><span class=line><span class=cl>└── arty-a7-100
+</span></span><span class=line><span class=cl>    ├── arty-a7-100.cache
+</span></span><span class=line><span class=cl>    ├── arty-a7-100.gen
+</span></span><span class=line><span class=cl>    ├── arty-a7-100.hw
+</span></span><span class=line><span class=cl>    ├── arty-a7-100.ip_user_files
+</span></span><span class=line><span class=cl>    ├── arty-a7-100.srcs
+</span></span><span class=line><span class=cl>    └── arty-a7-100.xpr
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=m>7</span> directories, <span class=m>1</span> file
+</span></span></code></pre></div><h3 id=fpga-上で逆ポーランド記法プログラムを動作させる>FPGA 上で逆ポーランド記法プログラムを動作させる<a href=#fpga-%e4%b8%8a%e3%81%a7%e9%80%86%e3%83%9d%e3%83%bc%e3%83%a9%e3%83%b3%e3%83%89%e8%a8%98%e6%b3%95%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%82%92%e5%8b%95%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>Vivado で回路を合成し，Arty A7-100 に書き込みましょう．
+シリアル通信で Arty A7-100 にキーボード入力をしましょう．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ sudo screen /dev/ttyUSB1 <span class=m>115200</span>
+</span></span><span class=line><span class=cl><span class=o>(</span>calc<span class=o>)</span>&gt;&gt; <span class=m>3</span> <span class=m>4</span> + <span class=m>4</span> <span class=m>2</span> - *
+</span></span><span class=line><span class=cl>0x000E
+</span></span><span class=line><span class=cl><span class=o>(</span>calc<span class=o>)</span>&gt;&gt; 
+</span></span></code></pre></div><p>逆ポーランド記法の電卓で計算ができました！</p><h2 id=おわりに>おわりに<a href=#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>今年度は MICRO-1 で散々遊びました．
 もう遊びたくないですね．</p><p>何の役に立つのか分からない実装ですが，誰かしらに貢献できたら良いですね．
 コンピュータ・アーキテクチャの歴史を学ぶ上で少しは参考になるのではないでしょうか．
 なるのか？

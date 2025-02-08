@@ -79,58 +79,58 @@
  &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
  &lt;/svg>&lt;/a>&lt;/h2>
-&lt;pre tabindex="0">&lt;code>$ make
-
-Compiling kernel ELF - rpi3
- Compiling tock-registers v0.8.1
- Compiling mingo v0.3.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/03_hacky_hello_world)
- Compiling aarch64-cpu v9.0.0
- Finished release [optimized] target(s) in 3.88s
-
-Generating stripped binary
- Name kernel8.img
- Size 6 KiB
-$ make test
-
-Boot test - rpi3
-docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &amp;#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&amp;#34;: dial unix /var/run/docker.sock: connect: permission denied.
-See &amp;#39;docker run --help&amp;#39;.
-make: *** [Makefile:216: test_boot] エラー 126
-$ sudo make test
-[sudo] kenta のパスワード:
-
-Boot test - rpi3
- -------------------------------------------------------------------
- 🦀 Running 1 console I/O tests
- -------------------------------------------------------------------
-
- 1. Checking for the string: &amp;#39;Stopping here&amp;#39;..................[ok]
- 
- Console log:
- Hello from Rust!
- Kernel panic!
- 
- Panic location:
- File &amp;#39;src/main.rs&amp;#39;, line 129, column 5
- 
- Stopping here
-
- -------------------------------------------------------------------
- ✅ Success: Boot test
- -------------------------------------------------------------------
-
-
-$ sudo make qemu
-
-Launching QEMU
-Hello from Rust!
-Kernel panic!
-
-Panic location:
- File &amp;#39;src/main.rs&amp;#39;, line 129, column 5
-
-Stopping here.
-&lt;/code>&lt;/pre></description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ make
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Compiling kernel ELF - rpi3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compiling tock-registers v0.8.1
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compiling mingo v0.3.0 &lt;span class="o">(&lt;/span>/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/03_hacky_hello_world&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Compiling aarch64-cpu v9.0.0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Finished release &lt;span class="o">[&lt;/span>optimized&lt;span class="o">]&lt;/span> target&lt;span class="o">(&lt;/span>s&lt;span class="o">)&lt;/span> in 3.88s
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Generating stripped binary
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Name kernel8.img
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Size &lt;span class="m">6&lt;/span> KiB
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ make &lt;span class="nb">test&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Boot &lt;span class="nb">test&lt;/span> - rpi3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker: Got permission denied &lt;span class="k">while&lt;/span> trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &lt;span class="s2">&amp;#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&amp;#34;&lt;/span>: dial unix /var/run/docker.sock: connect: permission denied.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">See &lt;span class="s1">&amp;#39;docker run --help&amp;#39;&lt;/span>.
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">make: *** &lt;span class="o">[&lt;/span>Makefile:216: test_boot&lt;span class="o">]&lt;/span> エラー &lt;span class="m">126&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo make &lt;span class="nb">test&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>sudo&lt;span class="o">]&lt;/span> kenta のパスワード:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Boot &lt;span class="nb">test&lt;/span> - rpi3
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -------------------------------------------------------------------
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 🦀 Running &lt;span class="m">1&lt;/span> console I/O tests
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -------------------------------------------------------------------
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 1. Checking &lt;span class="k">for&lt;/span> the string: &lt;span class="s1">&amp;#39;Stopping here&amp;#39;&lt;/span>..................&lt;span class="o">[&lt;/span>ok&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Console log:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Hello from Rust!
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Kernel panic!
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Panic location:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> File &lt;span class="s1">&amp;#39;src/main.rs&amp;#39;&lt;/span>, line 129, column &lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> 
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Stopping here
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -------------------------------------------------------------------
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ✅ Success: Boot &lt;span class="nb">test&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> -------------------------------------------------------------------
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo make qemu
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Launching QEMU
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Hello from Rust!
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Kernel panic!
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Panic location:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> File &lt;span class="s1">&amp;#39;src/main.rs&amp;#39;&lt;/span>, line 129, column &lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Stopping here.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
  stroke-linecap="round" stroke-linejoin="round">
  &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>

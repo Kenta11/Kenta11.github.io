@@ -3,88 +3,88 @@
 破壊的更新をし，gitのようにサブコマンドで使う機能を選択できるようにしました．
 といっても機能は<code>list</code>と<code>create</code>の2つだけです．
 そしてプロジェクトのディレクトリをはじめから作るようにも変更しました．
-簡単な使い方は<a href=https://github.com/Kenta11/vivado_hls_create_project/README.md>README</a>を見ていただければ分かると思いますが，そちらで説明していないオプションをこっちで解説したいと思います．</p><p><code>create</code>コマンドのヘルプを見ると，以下の内容が表示されます．</p><pre tabindex=0><code>$ vivado_hls_create_project create --help
-usage: vivado_hls_create_project create [-h] [-s SOLUTION] [-c CLOCK] [--template] [--compiler_arg COMPILER_ARG] [--linker_arg LINKER_ARG] -b BOARD project_name
-
-positional arguments:
-  project_name
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -s SOLUTION, --solution SOLUTION
-                        Solution name
-  -c CLOCK, --clock CLOCK                        Clock frequency of module
-  --template            Option for C++ template source code generation
-  --compiler_arg COMPILER_ARG
-                        Arguments for compiler
-  --linker_arg LINKER_ARG
-                        Arguments for linker
-  -b BOARD, --board BOARD
-                        Board name
-</code></pre><p><code>-s</code>，<code>-c</code>はソリューションの設定に使用します．
+簡単な使い方は<a href=https://github.com/Kenta11/vivado_hls_create_project/README.md>README</a>を見ていただければ分かると思いますが，そちらで説明していないオプションをこっちで解説したいと思います．</p><p><code>create</code>コマンドのヘルプを見ると，以下の内容が表示されます．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ vivado_hls_create_project create --help
+</span></span><span class=line><span class=cl>usage: vivado_hls_create_project create <span class=o>[</span>-h<span class=o>]</span> <span class=o>[</span>-s SOLUTION<span class=o>]</span> <span class=o>[</span>-c CLOCK<span class=o>]</span> <span class=o>[</span>--template<span class=o>]</span> <span class=o>[</span>--compiler_arg COMPILER_ARG<span class=o>]</span> <span class=o>[</span>--linker_arg LINKER_ARG<span class=o>]</span> -b BOARD project_name
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>positional arguments:
+</span></span><span class=line><span class=cl>  project_name
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>optional arguments:
+</span></span><span class=line><span class=cl>  -h, --help            show this <span class=nb>help</span> message and <span class=nb>exit</span>
+</span></span><span class=line><span class=cl>  -s SOLUTION, --solution SOLUTION
+</span></span><span class=line><span class=cl>                        Solution name
+</span></span><span class=line><span class=cl>  -c CLOCK, --clock CLOCK                        Clock frequency of module
+</span></span><span class=line><span class=cl>  --template            Option <span class=k>for</span> C++ template <span class=nb>source</span> code generation
+</span></span><span class=line><span class=cl>  --compiler_arg COMPILER_ARG
+</span></span><span class=line><span class=cl>                        Arguments <span class=k>for</span> compiler
+</span></span><span class=line><span class=cl>  --linker_arg LINKER_ARG
+</span></span><span class=line><span class=cl>                        Arguments <span class=k>for</span> linker
+</span></span><span class=line><span class=cl>  -b BOARD, --board BOARD
+</span></span><span class=line><span class=cl>                        Board name
+</span></span></code></pre></div><p><code>-s</code>，<code>-c</code>はソリューションの設定に使用します．
 <code>-s</code>はソリューション名を指定します．デフォルトではボード名と同じになります．
 <code>-c</code>はモジュールのクロック周期を指定します．デフォルトでは100MHzです．<code>-c 125MHz</code>や<code>-c 2.0ns</code>というようにクロック周期を指定すると，tclスクリプトに反映されます．</p><p><code>--template</code>はC++のソースコードを自動で生成するオプションです．
 イチからプロジェクトを作る際に便利です．</p><p>Cシミュレーションに外部のライブラリを使う際は<code>--compiler_arg</code>と<code>--linker_arg</code>を使うことになると思います．
 <code>--compiler_arg</code>はCシミュレーションのコンパイラ用の引数です．<code>src/</code>と<code>test/src</code>以下のコードをコンパイルする際に適用されます．
-<code>--linker_arg</code>はCシミュレーションのリンク用の引数です．リンクの際に適用されます．</p><p>ZedBoard用にsampleというプロジェクトを作る場合は，以下のようにコマンドを実行して下さい．</p><pre tabindex=0><code>$ vivado_hls_create_project create sample -b Xilinx_ZedBoard
-INFO: Generating directory sample
-INFO: Generating directory sample/include
-INFO: Generating directory sample/src
-INFO: Generating directory sample/test/include
-INFO: Generating directory sample/test/src
-INFO: Generating directory sample/script
-INFO: Generating Makefile
-INFO: Generating tcl scripts
-INFO: Part of Xilinx_ZedBoard found -&gt; xc7z020clg484-1
-INFO: Generating directives.tcl
-INFO: Generating .gitignore
-$ tree sample
-sample
-├── Makefile
-├── directives.tcl
-├── include
-├── script
-│   ├── cosim.tcl
-│   ├── csim.tcl
-│   ├── csynth.tcl
-│   ├── export.tcl
-│   └── init.tcl
-├── src
-└── test
-    ├── include
-    └── src
-
-6 directories, 7 files
-</code></pre><p><code>-b</code>はボード名を指定します．
-使用可能なボード名は<code>list</code>コマンドで確認して下さい．</p><pre tabindex=0><code>$ vivado_hls_create_project list
-Board               Part
---------------------------------------------------
-Alpha-Data          xc7vx690tffg1157-2
-KU_Alphadata        xcku060-ffva1156-2-e
-Xilinx_ZedBoard     xc7z020clg484-1
-Xilinx_AC701        xc7a200tfbg676-2
-Xilinx_KC705        xc7k325tffg900-2
-Xilinx_KCU105       xcku040-ffva1156-2-e
-Xilinx_KCU116       xcku5p-ffvb676-2-e
-Xilinx_KCU1500      xcku115-flvb2104-2-e
-Xilinx_VC707        xc7vx485tffg1761-2
-Xilinx_VC709        xc7vx690tffg1761-2
-Xilinx_VCU108       xcvu095-ffva2104-2-e
-Xilinx_VCU110       xcvu190-flgc2104-2-e
-Xilinx_VCU118       xcvu9p-flga2104-2L-e
-Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
-Xilinx_ZC702        xc7z020clg484-1
-Xilinx_ZC706        xc7z045ffg900-2
-Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
-Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
-Xilinx_A-U200       xcu200-fsgd2104-2-e
-Xilinx_A-U250       xcu250-figd2104-2L-e
-Basys3              xc7a35t1cpg236-1
-Genesys2            xc7k325t2ffg900c-1
-Zybo                xc7z010clg400-1
-Zybo_Z7_10          xc7z010clg400-1
-Zybo_Z7_20          xc7z020clg400-1
-</code></pre></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>manjaro linuxのミラーサーバを更新する</span>
+<code>--linker_arg</code>はCシミュレーションのリンク用の引数です．リンクの際に適用されます．</p><p>ZedBoard用にsampleというプロジェクトを作る場合は，以下のようにコマンドを実行して下さい．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ vivado_hls_create_project create sample -b Xilinx_ZedBoard
+</span></span><span class=line><span class=cl>INFO: Generating directory sample
+</span></span><span class=line><span class=cl>INFO: Generating directory sample/include
+</span></span><span class=line><span class=cl>INFO: Generating directory sample/src
+</span></span><span class=line><span class=cl>INFO: Generating directory sample/test/include
+</span></span><span class=line><span class=cl>INFO: Generating directory sample/test/src
+</span></span><span class=line><span class=cl>INFO: Generating directory sample/script
+</span></span><span class=line><span class=cl>INFO: Generating Makefile
+</span></span><span class=line><span class=cl>INFO: Generating tcl scripts
+</span></span><span class=line><span class=cl>INFO: Part of Xilinx_ZedBoard found -&gt; xc7z020clg484-1
+</span></span><span class=line><span class=cl>INFO: Generating directives.tcl
+</span></span><span class=line><span class=cl>INFO: Generating .gitignore
+</span></span><span class=line><span class=cl>$ tree sample
+</span></span><span class=line><span class=cl>sample
+</span></span><span class=line><span class=cl>├── Makefile
+</span></span><span class=line><span class=cl>├── directives.tcl
+</span></span><span class=line><span class=cl>├── include
+</span></span><span class=line><span class=cl>├── script
+</span></span><span class=line><span class=cl>│   ├── cosim.tcl
+</span></span><span class=line><span class=cl>│   ├── csim.tcl
+</span></span><span class=line><span class=cl>│   ├── csynth.tcl
+</span></span><span class=line><span class=cl>│   ├── export.tcl
+</span></span><span class=line><span class=cl>│   └── init.tcl
+</span></span><span class=line><span class=cl>├── src
+</span></span><span class=line><span class=cl>└── <span class=nb>test</span>
+</span></span><span class=line><span class=cl>    ├── include
+</span></span><span class=line><span class=cl>    └── src
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=m>6</span> directories, <span class=m>7</span> files
+</span></span></code></pre></div><p><code>-b</code>はボード名を指定します．
+使用可能なボード名は<code>list</code>コマンドで確認して下さい．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ vivado_hls_create_project list
+</span></span><span class=line><span class=cl>Board               Part
+</span></span><span class=line><span class=cl>--------------------------------------------------
+</span></span><span class=line><span class=cl>Alpha-Data          xc7vx690tffg1157-2
+</span></span><span class=line><span class=cl>KU_Alphadata        xcku060-ffva1156-2-e
+</span></span><span class=line><span class=cl>Xilinx_ZedBoard     xc7z020clg484-1
+</span></span><span class=line><span class=cl>Xilinx_AC701        xc7a200tfbg676-2
+</span></span><span class=line><span class=cl>Xilinx_KC705        xc7k325tffg900-2
+</span></span><span class=line><span class=cl>Xilinx_KCU105       xcku040-ffva1156-2-e
+</span></span><span class=line><span class=cl>Xilinx_KCU116       xcku5p-ffvb676-2-e
+</span></span><span class=line><span class=cl>Xilinx_KCU1500      xcku115-flvb2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_VC707        xc7vx485tffg1761-2
+</span></span><span class=line><span class=cl>Xilinx_VC709        xc7vx690tffg1761-2
+</span></span><span class=line><span class=cl>Xilinx_VCU108       xcvu095-ffva2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_VCU110       xcvu190-flgc2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_VCU118       xcvu9p-flga2104-2L-e
+</span></span><span class=line><span class=cl>Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
+</span></span><span class=line><span class=cl>Xilinx_ZC702        xc7z020clg484-1
+</span></span><span class=line><span class=cl>Xilinx_ZC706        xc7z045ffg900-2
+</span></span><span class=line><span class=cl>Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
+</span></span><span class=line><span class=cl>Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
+</span></span><span class=line><span class=cl>Xilinx_A-U200       xcu200-fsgd2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_A-U250       xcu250-figd2104-2L-e
+</span></span><span class=line><span class=cl>Basys3              xc7a35t1cpg236-1
+</span></span><span class=line><span class=cl>Genesys2            xc7k325t2ffg900c-1
+</span></span><span class=line><span class=cl>Zybo                xc7z010clg400-1
+</span></span><span class=line><span class=cl>Zybo_Z7_10          xc7z010clg400-1
+</span></span><span class=line><span class=cl>Zybo_Z7_20          xc7z020clg400-1
+</span></span></code></pre></div></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>manjaro linuxのミラーサーバを更新する</span>
 </a><a class=prev-post href=https://Kenta11.github.io/posts/2019-02-17-vivado-with-zsh/><span class=post-nav-label>Older&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Vivadoを使用する際にのみVivadoへパスを通す(Zsh編)</span></a></div><div id=comments class=thin></div></main><footer id=site-footer class="section-inner thin animated fadeIn faster"><p>&copy; 2025 <a href=https://Kenta11.github.io/>Kenta Arai Webpage</a>
 &#183; &#183; Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>
 &#183; Theme <a href=https://github.com/1bl4z3r/hermit-V2 target=_blank rel=noopener>Hermit-V2</a></p></footer><script async src=https://Kenta11.github.io/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin=anonymous></script></body></html>

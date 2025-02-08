@@ -3,113 +3,113 @@
 過ごした時間に思いを馳せながら，マイクロプログラミングをしましょう（急展開）．</p><h2 id=アセンブラ>アセンブラ<a href=#%e3%82%a2%e3%82%bb%e3%83%b3%e3%83%96%e3%83%a9 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><h3 id=一覧>一覧<a href=#%e4%b8%80%e8%a6%a7 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><ul><li>機械語アセンブラ: <a href=https://github.com/Kenta11/rm1asm>rm1asm</a></li><li>マイクロアセンブラ: <a href=https://github.com/Kenta11/rm1masm>rm1masm</a></li></ul><h3 id=特徴>特徴<a href=#%e7%89%b9%e5%be%b4 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><ul><li>Unicode対応</li><li>マルチプラットフォームで動作（Windows，Linux，MacOS）</li><li>エラー表示機能付き（期待に添える程のクオリティ<strong>ではない</strong>）</li></ul><h2 id=遊び方>遊び方<a href=#%e9%81%8a%e3%81%b3%e6%96%b9 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>　まずはアセンブラとシミュレータをインストールして下さい．
 アセンブラは<code>cargo install</code>でもインストールできますが，特にLinuxをお使いの方は<a href=https://github.com/Kenta11/rm1asm/releases/tag/v1.0.0>パッケージ</a>からのインストールが便利です．
 シミュレータはWindowsユーザなら公式（？）に配布されているものを使いましょう．
-それ以外の方は自前でビルドして下さい．</p><pre tabindex=0><code>$ git clone https://github.com/Kenta11/micro1
-$ cd micro1
-$ gcc m1sim.c -o m1sim
-</code></pre><p>　MICRO-1のマイクロプログラムをアセンブルします．</p><pre tabindex=0><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
-$ rm1masm MICROONE -o MICROONE.o
-</code></pre><p>　続いて機械語プログラムをアセンブルします．</p><pre tabindex=0><code>$ cat sqrt
-; This program is distributed under MIT LICENSE.
-; Copyright (c) 2022 Kenta Arai
-; 平方根を求めるプログラム
-; アルゴリズムは&#34;バビロニア人の方法&#34;である
-
-TITLE SQRT
-         L   1, X0
-         L   3, ERROR
-; X(n+1)を計算
-HEAD:    LEA 2, (1)
-         LC  0, 0
-         L   1, S
-         BSR CALCXN1
-; |X(n+1) - X(n)| &lt; ERROR の場合は計算を終了する
-         SUB 2, (1)   ; X(n) - X(n+1)
-         BSR ABS      ; |X(n+1) - X(n)|
-         SUB 2, (3)   ; |X(n+1) - X(n)| - ERROR
-         BNM HEAD
-; 解を保存し，プログラムを終了
-         ST  1, XN
-         HLT
-
-S:       DC  487      ; 入力
-X0:      DC  20       ; 初期値X(0)
-ERROR:   DC  5        ; エラー
-XN:      DS  1        ; 解X(n)
-
-; X(n+1)を計算する関数
-; 入力: {r0: 0, r1: S, r2: X(n)}
-; 出力: {r1: X(n+1), r2: X(n)}
-CALCXN1: DIV 0, (2)   ; S/X(n)
-         ADD 1, (2)   ; S/X(n) + X(n)
-         SA  1, -1    ; (S/X(n) + X(n)) / 2 = X(n+1)
-         RET
-
-; 絶対値を計算する関数
-; 入力: {r2: 整数}
-; 出力: {r2: 絶対値}
-ABS:     CMP 2, 0
-         BNM ABS0
-         XOR 2, X&#34;FFFF
-         ADD 2, 1
-ABS0:    RET 
-END
-$ rm1asm sqrt -o sqrt.b
-</code></pre><p>　プログラムを実行してみましょう．</p><pre tabindex=0><code>$ ./m1sim
-
-   *** MICRO-1 SIMULATOR (C-Ver. 1.0d) [Sep 23 2022] ***
-
-&gt;&gt; load
-LOAD
-  FILE NAME=?MICROONE.o
-  LOADING &#39;MICROONE.o&#39;
- LOADED TO CM
-&gt;&gt; load       
-LOAD
-  FILE NAME=?sqrt.b
-  LOADING &#39;sqrt.b&#39;
- LOADED TO MM
-&gt;&gt; trace
-TRACE
-  T?device
-   TD?set
-   DEVICE ?pc
-   DEVICE ?ir
-   DEVICE ?flag
-   DEVICE ?r0
-   DEVICE ?r1
-   DEVICE ?r2
-   DEVICE ?r3
-   DEVICE ?lbus
-   DEVICE ?rbus
-   DEVICE ?abus
-   DEVICE ?sbus
-   DEVICE ?.
-   TD?.
-
-  T?go
- CMAR=?101
- MAX STEP=?300
-CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
-102  0000 0000 000010 0000 0000 0000 0000 0000 0040 0040 0040 
-～中略～
-CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
-0FD  000C EF00 000010 0007 0016 FFFD 0005 0000 0000 0000 0000 
- CPU HALTED !
-  259 STEPS USED
-  T?.
-&gt;&gt; dump
-DUMP
-  D?mm
-    START ADRS ?000C
-    END   ADRS ?000F
-000C:01E7
-000D:0014
-000E:0005
-000F:0016
-  D?.
-&gt;&gt; end
-&gt;&gt;   MICRO-1 TERMINATED
-</code></pre><p>　XN(アドレスが0x000Fの行)に487の大体の平方根22(0x0016)が格納されていますね．
+それ以外の方は自前でビルドして下さい．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git clone https://github.com/Kenta11/micro1
+</span></span><span class=line><span class=cl>$ <span class=nb>cd</span> micro1
+</span></span><span class=line><span class=cl>$ gcc m1sim.c -o m1sim
+</span></span></code></pre></div><p>　MICRO-1のマイクロプログラムをアセンブルします．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class=p>|</span> iconv -f sjis -t utf8 <span class=p>|</span> tr -d <span class=s2>&#34;\32&#34;</span> &gt; MICROONE
+</span></span><span class=line><span class=cl>$ rm1masm MICROONE -o MICROONE.o
+</span></span></code></pre></div><p>　続いて機械語プログラムをアセンブルします．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ cat sqrt
+</span></span><span class=line><span class=cl><span class=p>;</span> This program is distributed under MIT LICENSE.
+</span></span><span class=line><span class=cl><span class=p>;</span> Copyright <span class=o>(</span>c<span class=o>)</span> <span class=m>2022</span> Kenta Arai
+</span></span><span class=line><span class=cl><span class=p>;</span> 平方根を求めるプログラム
+</span></span><span class=line><span class=cl><span class=p>;</span> アルゴリズムは<span class=s2>&#34;バビロニア人の方法&#34;</span>である
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>TITLE SQRT
+</span></span><span class=line><span class=cl>         L   1, X0
+</span></span><span class=line><span class=cl>         L   3, ERROR
+</span></span><span class=line><span class=cl><span class=p>;</span> X<span class=o>(</span>n+1<span class=o>)</span>を計算
+</span></span><span class=line><span class=cl>HEAD:    LEA 2, <span class=o>(</span>1<span class=o>)</span>
+</span></span><span class=line><span class=cl>         LC  0, <span class=m>0</span>
+</span></span><span class=line><span class=cl>         L   1, S
+</span></span><span class=line><span class=cl>         BSR CALCXN1
+</span></span><span class=line><span class=cl><span class=p>;</span> <span class=p>|</span>X<span class=o>(</span>n+1<span class=o>)</span> - X<span class=o>(</span>n<span class=o>)</span><span class=p>|</span> &lt; ERROR の場合は計算を終了する
+</span></span><span class=line><span class=cl>         SUB 2, <span class=o>(</span>1<span class=o>)</span>   <span class=p>;</span> X<span class=o>(</span>n<span class=o>)</span> - X<span class=o>(</span>n+1<span class=o>)</span>
+</span></span><span class=line><span class=cl>         BSR ABS      <span class=p>;</span> <span class=p>|</span>X<span class=o>(</span>n+1<span class=o>)</span> - X<span class=o>(</span>n<span class=o>)</span><span class=p>|</span>
+</span></span><span class=line><span class=cl>         SUB 2, <span class=o>(</span>3<span class=o>)</span>   <span class=p>;</span> <span class=p>|</span>X<span class=o>(</span>n+1<span class=o>)</span> - X<span class=o>(</span>n<span class=o>)</span><span class=p>|</span> - ERROR
+</span></span><span class=line><span class=cl>         BNM HEAD
+</span></span><span class=line><span class=cl><span class=p>;</span> 解を保存し，プログラムを終了
+</span></span><span class=line><span class=cl>         ST  1, XN
+</span></span><span class=line><span class=cl>         HLT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>S:       DC  <span class=m>487</span>      <span class=p>;</span> 入力
+</span></span><span class=line><span class=cl>X0:      DC  <span class=m>20</span>       <span class=p>;</span> 初期値X<span class=o>(</span>0<span class=o>)</span>
+</span></span><span class=line><span class=cl>ERROR:   DC  <span class=m>5</span>        <span class=p>;</span> エラー
+</span></span><span class=line><span class=cl>XN:      DS  <span class=m>1</span>        <span class=p>;</span> 解X<span class=o>(</span>n<span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>;</span> X<span class=o>(</span>n+1<span class=o>)</span>を計算する関数
+</span></span><span class=line><span class=cl><span class=p>;</span> 入力: <span class=o>{</span>r0: 0, r1: S, r2: X<span class=o>(</span>n<span class=o>)}</span>
+</span></span><span class=line><span class=cl><span class=p>;</span> 出力: <span class=o>{</span>r1: X<span class=o>(</span>n+1<span class=o>)</span>, r2: X<span class=o>(</span>n<span class=o>)}</span>
+</span></span><span class=line><span class=cl>CALCXN1: DIV 0, <span class=o>(</span>2<span class=o>)</span>   <span class=p>;</span> S/X<span class=o>(</span>n<span class=o>)</span>
+</span></span><span class=line><span class=cl>         ADD 1, <span class=o>(</span>2<span class=o>)</span>   <span class=p>;</span> S/X<span class=o>(</span>n<span class=o>)</span> + X<span class=o>(</span>n<span class=o>)</span>
+</span></span><span class=line><span class=cl>         SA  1, -1    <span class=p>;</span> <span class=o>(</span>S/X<span class=o>(</span>n<span class=o>)</span> + X<span class=o>(</span>n<span class=o>))</span> / <span class=nv>2</span> <span class=o>=</span> X<span class=o>(</span>n+1<span class=o>)</span>
+</span></span><span class=line><span class=cl>         RET
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>;</span> 絶対値を計算する関数
+</span></span><span class=line><span class=cl><span class=p>;</span> 入力: <span class=o>{</span>r2: 整数<span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=p>;</span> 出力: <span class=o>{</span>r2: 絶対値<span class=o>}</span>
+</span></span><span class=line><span class=cl>ABS:     CMP 2, <span class=m>0</span>
+</span></span><span class=line><span class=cl>         BNM ABS0
+</span></span><span class=line><span class=cl>         XOR 2, X<span class=s2>&#34;FFFF
+</span></span></span><span class=line><span class=cl><span class=s2>         ADD 2, 1
+</span></span></span><span class=line><span class=cl><span class=s2>ABS0:    RET 
+</span></span></span><span class=line><span class=cl><span class=s2>END
+</span></span></span><span class=line><span class=cl><span class=s2></span>$<span class=s2> rm1asm sqrt -o sqrt.b
+</span></span></span></code></pre></div><p>　プログラムを実行してみましょう．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ ./m1sim
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>   *** MICRO-1 SIMULATOR <span class=o>(</span>C-Ver. 1.0d<span class=o>)</span> <span class=o>[</span>Sep <span class=m>23</span> 2022<span class=o>]</span> ***
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>&gt;&gt; load
+</span></span><span class=line><span class=cl>LOAD
+</span></span><span class=line><span class=cl>  FILE <span class=nv>NAME</span><span class=o>=</span>?MICROONE.o
+</span></span><span class=line><span class=cl>  LOADING <span class=s1>&#39;MICROONE.o&#39;</span>
+</span></span><span class=line><span class=cl> LOADED TO CM
+</span></span><span class=line><span class=cl>&gt;&gt; load       
+</span></span><span class=line><span class=cl>LOAD
+</span></span><span class=line><span class=cl>  FILE <span class=nv>NAME</span><span class=o>=</span>?sqrt.b
+</span></span><span class=line><span class=cl>  LOADING <span class=s1>&#39;sqrt.b&#39;</span>
+</span></span><span class=line><span class=cl> LOADED TO MM
+</span></span><span class=line><span class=cl>&gt;&gt; trace
+</span></span><span class=line><span class=cl>TRACE
+</span></span><span class=line><span class=cl>  T?device
+</span></span><span class=line><span class=cl>   TD?set
+</span></span><span class=line><span class=cl>   DEVICE ?pc
+</span></span><span class=line><span class=cl>   DEVICE ?ir
+</span></span><span class=line><span class=cl>   DEVICE ?flag
+</span></span><span class=line><span class=cl>   DEVICE ?r0
+</span></span><span class=line><span class=cl>   DEVICE ?r1
+</span></span><span class=line><span class=cl>   DEVICE ?r2
+</span></span><span class=line><span class=cl>   DEVICE ?r3
+</span></span><span class=line><span class=cl>   DEVICE ?lbus
+</span></span><span class=line><span class=cl>   DEVICE ?rbus
+</span></span><span class=line><span class=cl>   DEVICE ?abus
+</span></span><span class=line><span class=cl>   DEVICE ?sbus
+</span></span><span class=line><span class=cl>   DEVICE ?.
+</span></span><span class=line><span class=cl>   TD?.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  T?go
+</span></span><span class=line><span class=cl> <span class=nv>CMAR</span><span class=o>=</span>?101
+</span></span><span class=line><span class=cl> MAX <span class=nv>STEP</span><span class=o>=</span>?300
+</span></span><span class=line><span class=cl>CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
+</span></span><span class=line><span class=cl><span class=m>102</span>  <span class=m>0000</span> <span class=m>0000</span> <span class=m>000010</span> <span class=m>0000</span> <span class=m>0000</span> <span class=m>0000</span> <span class=m>0000</span> <span class=m>0000</span> <span class=m>0040</span> <span class=m>0040</span> <span class=m>0040</span> 
+</span></span><span class=line><span class=cl>～中略～
+</span></span><span class=line><span class=cl>CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
+</span></span><span class=line><span class=cl>0FD  000C EF00 <span class=m>000010</span> <span class=m>0007</span> <span class=m>0016</span> FFFD <span class=m>0005</span> <span class=m>0000</span> <span class=m>0000</span> <span class=m>0000</span> <span class=m>0000</span> 
+</span></span><span class=line><span class=cl> CPU HALTED !
+</span></span><span class=line><span class=cl>  <span class=m>259</span> STEPS USED
+</span></span><span class=line><span class=cl>  T?.
+</span></span><span class=line><span class=cl>&gt;&gt; dump
+</span></span><span class=line><span class=cl>DUMP
+</span></span><span class=line><span class=cl>  D?mm
+</span></span><span class=line><span class=cl>    START ADRS ?000C
+</span></span><span class=line><span class=cl>    END   ADRS ?000F
+</span></span><span class=line><span class=cl>000C:01E7
+</span></span><span class=line><span class=cl>000D:0014
+</span></span><span class=line><span class=cl>000E:0005
+</span></span><span class=line><span class=cl>000F:0016
+</span></span><span class=line><span class=cl>  D?.
+</span></span><span class=line><span class=cl>&gt;&gt; end
+</span></span><span class=line><span class=cl>&gt;&gt;   MICRO-1 TERMINATED
+</span></span></code></pre></div><p>　XN(アドレスが0x000Fの行)に487の大体の平方根22(0x0016)が格納されていますね．
 大大大成功です．</p><h2 id=おわりに>おわりに<a href=#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>　Rust製の言語処理系ライブラリ（logosとchumsky）で遊んでいたら，いつの間にかアセンブラを書いていた．
 何を言っているのか わからねーと思うが（以下略）</p><p>　MICRO-1が書かれた書籍は絶版だし，このまま授業も無くなってしまったら悲しいですね．
 アセンブラはGitHubに置いておけばしばらくは残ると思うので，歴史的なアレコレとして誰か活用して下さい．</p><p>　P.S. サンプルプログラムのライセンスが不明なので，本家からダウンロードできなくなったらどうしよう&mldr;</p><p>おしまい</p></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#はじめに>はじめに</a></li><li><a href=#アセンブラ>アセンブラ</a><ul><li><a href=#一覧>一覧</a></li><li><a href=#特徴>特徴</a></li></ul></li><li><a href=#遊び方>遊び方</a></li><li><a href=#おわりに>おわりに</a></li></ul></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2022-12-19-classic-engei/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>これまでに観た古典芸能の演目</span>

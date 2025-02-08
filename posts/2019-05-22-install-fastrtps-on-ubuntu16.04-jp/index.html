@@ -1,677 +1,677 @@
 <!doctype html><html lang=en-us><head><meta charset=UTF-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=robots content="index, follow"><meta name=author content><meta name=description content><link rel=author type=text/plain href=/humans.txt><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon href=/favicon.ico type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta name=msapplication-TileImage content="/mstile-144x144.png"><meta name=theme-color content="#494f5c"><meta name=msapplication-TileColor content="#494f5c"><link rel=mask-icon href=/safari-pinned-tab.svg color=#494f5c><meta itemprop=name content="Ubuntu 16.04にFast-RTPSをインストールする"><meta itemprop=description content="はじめに Ubuntu 16.04 LTSにFast-RTPSをインストールする． fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．"><meta itemprop=datePublished content="2019-05-22T19:00:00+09:00"><meta itemprop=dateModified content="2019-05-22T19:00:00+09:00"><meta itemprop=wordCount content="3826"><meta itemprop=keywords content="Fast-RTPS"><meta property="og:url" content="https://Kenta11.github.io/posts/2019-05-22-install-fastrtps-on-ubuntu16.04-jp/"><meta property="og:site_name" content="Kenta Arai Webpage"><meta property="og:title" content="Ubuntu 16.04にFast-RTPSをインストールする"><meta property="og:description" content="はじめに Ubuntu 16.04 LTSにFast-RTPSをインストールする． fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-05-22T19:00:00+09:00"><meta property="article:modified_time" content="2019-05-22T19:00:00+09:00"><meta property="article:tag" content="Fast-RTPS"><meta name=twitter:card content="summary"><meta name=twitter:title content="Ubuntu 16.04にFast-RTPSをインストールする"><meta name=twitter:description content="はじめに Ubuntu 16.04 LTSにFast-RTPSをインストールする． fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ubuntu 16.04にFast-RTPSをインストールする","name":"Ubuntu 16.04にFast-RTPSをインストールする","description":"はじめに Ubuntu 16.04 LTSにFast-RTPSをインストールする． fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．\n","keywords":["Fast-RTPS"],"articleBody":"はじめに Ubuntu 16.04 LTSにFast-RTPSをインストールする． fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．\ncmakeする Fast RTPS Installationによると，cmakeとmakeでFast-RTPSとfastrtpsgenをビルドするようだ． cmakeを実行すると，以下のログが表示された．\n$ git clone https://github.com/eProsima/Fast-RTPS $ cd Fast-RTPS $ mkdir build; cd build $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. -- Setting build type to 'Release' as none was specified. (中略) CMake Error at /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148 (message): Could NOT find Java (missing: Java_JAVA_EXECUTABLE Runtime) (Required is at least version \"1.6\") Call Stack (most recent call first): /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:388 (_FPHSA_FAILURE_MESSAGE) /usr/share/cmake-3.5/Modules/FindJava.cmake:244 (find_package_handle_standard_args) cmake/dev/java_support.cmake:16 (find_package) CMakeLists.txt:263 (gradle_build) -- Configuring incomplete, errors occurred! See also \"/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log\". See also \"/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log\". Javaが無いと言われた． ドキュメントにはJava is required to use our built-in code generation tool - fastrtpsgen. Java JDK 8 is recommended.とあるので，openjdkのバージョン8をインストールする．\n$ sudo apt install openjdk-8-jdk $ rm -rf * $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. -- Configuring Fast RTPS -- Version: 1.8.0 -- To change the version modify the file configure.ac -- fastcdr thirdparty is being updated... -- Configuring Fast CDR -- Version: 1.0.9 -- To change the version modify the file configure.ac -- fastcdr library found... -- Found Java: /usr/bin/java (found suitable version \"1.8.0.212\", minimum required is \"1.6\") found components: Runtime CMake Error at cmake/dev/java_support.cmake:30 (message): gradle is needed to build the java application. Please install it correctly Call Stack (most recent call first): CMakeLists.txt:263 (gradle_build) -- Configuring incomplete, errors occurred! See also \"/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log\". See also \"/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log\". 今度はgradleが必要だと言われた．インストールし，再度ビルドする．\n$ sudo apt install gradle $ rm -rf * $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. # エラーなく終了！ ビルドしてインストールする $ make -j8 # エラーなく終了！ $ sudo checkinstall checkinstall 1.6.2, Copyright 2009 Felipe Eduardo Sanchez Diaz Duran このソフトウェアはGNU GPLの下でリリースしています。 The package documentation directory ./doc-pak does not exist. Should I create a default set of package docs? [y]: y パッケージのドキュメンテーションを準備..OK *** No known documentation files were found. The new package *** won't include a documentation directory. このパッケージの説明を書いてください 説明の末尾は空行かEOFにしてください。 \u003e\u003e Fast-RTPS and fastrtpsgen \u003e\u003e ***************************************** **** Debian package creation selected *** ***************************************** (中略) このパッケージは以下の内容で構成されます: 0 - Maintainer: [ kenta@xxxx ] 1 - Summary: [ Fast-RTPS and fastrtpsgen ] 2 - Name: [ fastrtps ] 3 - Version: [ 20190522 ] 4 - Release: [ 1 ] 5 - License: [ GPL ] 6 - Group: [ checkinstall ] 7 - Architecture: [ amd64 ] 8 - Source location: [ build ] 9 - Alternate source location: [ ] 10 - Requires: [ ] 11 - Provides: [ build ] 12 - Conflicts: [ ] 13 - Replaces: [ ] 変更するものの番号を入力してください。Enterで続行します: Installing with make install... ========================= インストールの結果 =========================== [ 1%] Updating Git module idl [ 1%] Built target git_submodule_update_idl [ 2%] Updating Git module fastcdr [ 2%] Built target git_submodule_update_fastcdr [ 3%] Generating Java application FAILURE: Build failed with an exception. * Where: Build file '/home/kenta/git/Fast-RTPS/fastrtpsgen/build.gradle' line: 78 * What went wrong: Could not resolve all dependencies for configuration ':compile'. \u003e Could not resolve junit:junit:4.+. Required by: :fastrtpsgen:unspecified \u003e Could not resolve junit:junit:4.+. \u003e Failed to list versions for junit:junit. \u003e Unable to load Maven meta-data from https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml. \u003e Could not GET 'https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml'. \u003e 接続がタイムアウトしました (Connection timed out) * Try: Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. BUILD FAILED Total time: 2 mins 8.884 secs CMakeFiles/java.dir/build.make:57: ターゲット 'CMakeFiles/java' のレシピで失敗しました make[2]: *** [CMakeFiles/java] エラー 1 CMakeFiles/Makefile2:356: ターゲット 'CMakeFiles/java.dir/all' のレシピで失敗しました make[1]: *** [CMakeFiles/java.dir/all] エラー 2 Makefile:160: ターゲット 'all' のレシピで失敗しました make: *** [all] エラー 2 **** インストールは失敗しました。パッケージの作成を中断します 上書きしたファイルをバックアップから復元..OK クリーンアップ..OK Bye. 接続がタイムアウトしたと表示されており，インストールが完了しない． プロキシ環境にあるこのマシンでは，どうもsudo checkinstallの中で実行されるgradleがコケるようだ．\nそこでrootにgradleのプロキシ設定を反映させて，インストールをする．\n$ sudo cp ~/.gradle/gradle.properties /root/.gradle/ # 自分のgradleの設定をrootにも反映 $ sudo checkinstall checkinstall 1.6.2, Copyright 2009 Felipe Eduardo Sanchez Diaz Duran このソフトウェアはGNU GPLの下でリリースしています。 The package documentation directory ./doc-pak does not exist. Should I create a default set of package docs? [y]: パッケージのドキュメンテーションを準備..OK *** No known documentation files were found. The new package *** won't include a documentation directory. ***************************************** **** Debian package creation selected *** ***************************************** (中略) このパッケージは以下の内容で構成されます: 0 - Maintainer: [ kenta@xxxxx ] 1 - Summary: [ Fast-RTPS and fastrtpsgen ] 2 - Name: [ fastrtps ] 3 - Version: [ 20190522 ] 4 - Release: [ 1 ] 5 - License: [ GPL ] 6 - Group: [ checkinstall ] 7 - Architecture: [ amd64 ] 8 - Source location: [ build ] 9 - Alternate source location: [ ] 10 - Requires: [ ] 11 - Provides: [ build ] 12 - Conflicts: [ ] 13 - Replaces: [ ] 変更するものの番号を入力してください。Enterで続行します: Installing with make install... ========================= インストールの結果 =========================== [ 1%] Updating Git module idl [ 1%] Built target git_submodule_update_idl [ 2%] Updating Git module fastcdr [ 2%] Built target git_submodule_update_fastcdr [ 3%] Generating Java application :buildIDLParser Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.pom Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.jar Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.pom Download https://repo1.maven.org/maven2/org/antlr/antlr4-master/4.2.2/antlr4-master-4.2.2.pom Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.pom Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.pom Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.pom Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.pom Download https://repo1.maven.org/maven2/org/antlr/antlr-master/3.5.2/antlr-master-3.5.2.pom Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/9/oss-parent-9.pom Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.pom Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.pom Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.jar Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.jar Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.jar Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.jar Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar :idl:clean :idl:antlr4 :idl:compileJava 警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません 注意:/home/kenta/git/Fast-RTPS/thirdparty/idl/src/main/java/com/eprosima/idl/generator/manager/TemplateUtil.javaの操作は、未チェックまたは安全ではありません。 注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。 :idl:processResources :idl:classes :idl:jar :idl:assemble :idl:compileTestJava UP-TO-DATE :idl:processTestResources UP-TO-DATE :idl:testClasses UP-TO-DATE :idl:test UP-TO-DATE :idl:check UP-TO-DATE :idl:build :compileJava 警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません 注意:入力ファイルの操作のうち、未チェックまたは安全ではないものがあります。 注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。 :processResources UP-TO-DATE :classes :jar :assemble :compileTestJava UP-TO-DATE :processTestResources UP-TO-DATE :testClasses UP-TO-DATE :test UP-TO-DATE :check UP-TO-DATE :build BUILD SUCCESSFUL Total time: 11.629 secs This build could be faster, please consider using the Gradle Daemon: https://docs.gradle.org/2.10/userguide/gradle_daemon.html [ 3%] Built target java [ 8%] Built target fastcdr [100%] Built target fastrtps Install the project... -- Install configuration: \"Release\" -- Installing: /usr/local/share/fastrtps/LICENSE -- Installing: /usr/local/share/fastrtps/fastrtpsgen.jar -- Installing: /usr/local/bin/fastrtpsgen -- Installing: /usr/local/share/fastrtps/LICENSE -- Installing: /usr/local/include/fastcdr -- Installing: /usr/local/include/fastcdr/exceptions -- Installing: /usr/local/include/fastcdr/exceptions/NotEnoughMemoryException.h -- Installing: /usr/local/include/fastcdr/exceptions/Exception.h -- Installing: /usr/local/include/fastcdr/exceptions/BadParamException.h -- Installing: /usr/local/include/fastcdr/FastBuffer.h -- Installing: /usr/local/include/fastcdr/FastCdr.h -- Installing: /usr/local/include/fastcdr/fastcdr_dll.h -- Installing: /usr/local/include/fastcdr/eProsima_auto_link.h -- Installing: /usr/local/include/fastcdr/Cdr.h -- Installing: /usr/local/include/fastcdr/config.h -- Installing: /usr/local/lib/libfastcdr.so.1.0.8 -- Installing: /usr/local/lib/libfastcdr.so.1 -- Installing: /usr/local/lib/libfastcdr.so -- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets.cmake -- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets-release.cmake -- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config.cmake -- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config-version.cmake -- Installing: /usr/local/include/fastrtps -- Installing: /usr/local/include/fastrtps/xmlparser -- Installing: /usr/local/include/fastrtps/xmlparser/XMLEndpointParser.h -- Installing: /usr/local/include/fastrtps/xmlparser/XMLParser.h -- Installing: /usr/local/include/fastrtps/xmlparser/XMLProfileManager.h -- Installing: /usr/local/include/fastrtps/xmlparser/XMLTree.h -- Installing: /usr/local/include/fastrtps/xmlparser/XMLParserCommon.h -- Installing: /usr/local/include/fastrtps/qos -- Installing: /usr/local/include/fastrtps/qos/ParameterList.h -- Installing: /usr/local/include/fastrtps/qos/WriterQos.h -- Installing: /usr/local/include/fastrtps/qos/ReaderQos.h -- Installing: /usr/local/include/fastrtps/qos/ParameterTypes.h -- Installing: /usr/local/include/fastrtps/qos/QosPolicies.h -- Installing: /usr/local/include/fastrtps/log -- Installing: /usr/local/include/fastrtps/log/Colors.h -- Installing: /usr/local/include/fastrtps/log/StdoutConsumer.h -- Installing: /usr/local/include/fastrtps/log/Log.h -- Installing: /usr/local/include/fastrtps/fastrtps_dll.h -- Installing: /usr/local/include/fastrtps/subscriber -- Installing: /usr/local/include/fastrtps/subscriber/SubscriberHistory.h -- Installing: /usr/local/include/fastrtps/subscriber/Subscriber.h -- Installing: /usr/local/include/fastrtps/subscriber/SampleInfo.h -- Installing: /usr/local/include/fastrtps/subscriber/SubscriberListener.h -- Installing: /usr/local/include/fastrtps/participant -- Installing: /usr/local/include/fastrtps/participant/ParticipantListener.h -- Installing: /usr/local/include/fastrtps/participant/Participant.h -- Installing: /usr/local/include/fastrtps/fastrtps_fwd.h -- Installing: /usr/local/include/fastrtps/fastrtps_all.h -- Installing: /usr/local/include/fastrtps/publisher -- Installing: /usr/local/include/fastrtps/publisher/PublisherListener.h -- Installing: /usr/local/include/fastrtps/publisher/Publisher.h -- Installing: /usr/local/include/fastrtps/publisher/PublisherHistory.h -- Installing: /usr/local/include/fastrtps/TopicDataType.h -- Installing: /usr/local/include/fastrtps/types -- Installing: /usr/local/include/fastrtps/types/AnnotationParameterValue.h -- Installing: /usr/local/include/fastrtps/types/DynamicDataFactory.h -- Installing: /usr/local/include/fastrtps/types/AnnotationDescriptor.h -- Installing: /usr/local/include/fastrtps/types/TypesBase.h -- Installing: /usr/local/include/fastrtps/types/TypeObjectHashId.h -- Installing: /usr/local/include/fastrtps/types/DynamicType.h -- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderFactory.h -- Installing: /usr/local/include/fastrtps/types/DynamicPubSubType.h -- Installing: /usr/local/include/fastrtps/types/TypeIdentifier.h -- Installing: /usr/local/include/fastrtps/types/MemberDescriptor.h -- Installing: /usr/local/include/fastrtps/types/DynamicTypePtr.h -- Installing: /usr/local/include/fastrtps/types/DynamicData.h -- Installing: /usr/local/include/fastrtps/types/TypeIdentifierTypes.h -- Installing: /usr/local/include/fastrtps/types/TypeDescriptor.h -- Installing: /usr/local/include/fastrtps/types/DynamicTypeMember.h -- Installing: /usr/local/include/fastrtps/types/TypeObject.h -- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilder.h -- Installing: /usr/local/include/fastrtps/types/TypeObjectFactory.h -- Installing: /usr/local/include/fastrtps/types/DynamicDataPtr.h -- Installing: /usr/local/include/fastrtps/types/TypeNamesGenerator.h -- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderPtr.h -- Installing: /usr/local/include/fastrtps/Domain.h -- Installing: /usr/local/include/fastrtps/attributes -- Installing: /usr/local/include/fastrtps/attributes/TopicAttributes.h -- Installing: /usr/local/include/fastrtps/attributes/all_attributes.h -- Installing: /usr/local/include/fastrtps/attributes/ParticipantAttributes.h -- Installing: /usr/local/include/fastrtps/attributes/SubscriberAttributes.h -- Installing: /usr/local/include/fastrtps/attributes/PublisherAttributes.h -- Installing: /usr/local/include/fastrtps/config -- Installing: /usr/local/include/fastrtps/config/doxygen_modules.h -- Installing: /usr/local/include/fastrtps/rtps -- Installing: /usr/local/include/fastrtps/rtps/writer -- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent -- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/PeriodicHeartbeat.h -- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackSupressionDuration.h -- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackResponseDelay.h -- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessWriter.h -- Installing: /usr/local/include/fastrtps/rtps/writer/WriterDiscoveryInfo.h -- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulWriter.h -- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulPersistentWriter.h -- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderLocator.h -- Installing: /usr/local/include/fastrtps/rtps/writer/WriterListener.h -- Installing: /usr/local/include/fastrtps/rtps/writer/PersistentWriter.h -- Installing: /usr/local/include/fastrtps/rtps/writer/RTPSWriter.h -- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessPersistentWriter.h -- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderProxy.h -- Installing: /usr/local/include/fastrtps/rtps/exceptions -- Installing: /usr/local/include/fastrtps/rtps/exceptions/Exception.h -- Installing: /usr/local/include/fastrtps/rtps/RTPSDomain.h -- Installing: /usr/local/include/fastrtps/rtps/network -- Installing: /usr/local/include/fastrtps/rtps/network/NetworkFactory.h -- Installing: /usr/local/include/fastrtps/rtps/network/SenderResource.h -- Installing: /usr/local/include/fastrtps/rtps/network/ReceiverResource.h -- Installing: /usr/local/include/fastrtps/rtps/flowcontrol -- Installing: /usr/local/include/fastrtps/rtps/flowcontrol/ThroughputControllerDescriptor.h -- Installing: /usr/local/include/fastrtps/rtps/Endpoint.h -- Installing: /usr/local/include/fastrtps/rtps/participant -- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipantListener.h -- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipant.h -- Installing: /usr/local/include/fastrtps/rtps/participant/ParticipantDiscoveryInfo.h -- Installing: /usr/local/include/fastrtps/rtps/history -- Installing: /usr/local/include/fastrtps/rtps/history/History.h -- Installing: /usr/local/include/fastrtps/rtps/history/CacheChangePool.h -- Installing: /usr/local/include/fastrtps/rtps/history/ReaderHistory.h -- Installing: /usr/local/include/fastrtps/rtps/history/WriterHistory.h -- Installing: /usr/local/include/fastrtps/rtps/builtin -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/ResendParticipantProxyDataPeriod.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/RemoteParticipantLeaseDuration.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimpleListener.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimple.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDP.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPSimple.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPStatic.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness -- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent -- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent/WLivelinessPeriodicAssertion.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLP.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLPListener.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/data -- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ParticipantProxyData.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/data/WriterProxyData.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ReaderProxyData.h -- Installing: /usr/local/include/fastrtps/rtps/builtin/BuiltinProtocols.h -- Installing: /usr/local/include/fastrtps/rtps/reader -- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderDiscoveryInfo.h -- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent -- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/HeartbeatResponseDelay.h -- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/WriterProxyLiveliness.h -- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/InitialAckNack.h -- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessReader.h -- Installing: /usr/local/include/fastrtps/rtps/reader/WriterProxy.h -- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessPersistentReader.h -- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulReader.h -- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderListener.h -- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulPersistentReader.h -- Installing: /usr/local/include/fastrtps/rtps/reader/RTPSReader.h -- Installing: /usr/local/include/fastrtps/rtps/attributes -- Installing: /usr/local/include/fastrtps/rtps/attributes/EndpointAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/attributes/ReaderAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/attributes/HistoryAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/attributes/PropertyPolicy.h -- Installing: /usr/local/include/fastrtps/rtps/attributes/RTPSParticipantAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/attributes/WriterAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/common -- Installing: /usr/local/include/fastrtps/rtps/common/PortParameters.h -- Installing: /usr/local/include/fastrtps/rtps/common/Token.h -- Installing: /usr/local/include/fastrtps/rtps/common/WriteParams.h -- Installing: /usr/local/include/fastrtps/rtps/common/all_common.h -- Installing: /usr/local/include/fastrtps/rtps/common/Property.h -- Installing: /usr/local/include/fastrtps/rtps/common/MatchingInfo.h -- Installing: /usr/local/include/fastrtps/rtps/common/BinaryProperty.h -- Installing: /usr/local/include/fastrtps/rtps/common/Types.h -- Installing: /usr/local/include/fastrtps/rtps/common/SequenceNumber.h -- Installing: /usr/local/include/fastrtps/rtps/common/Locator.h -- Installing: /usr/local/include/fastrtps/rtps/common/CacheChange.h -- Installing: /usr/local/include/fastrtps/rtps/common/SerializedPayload.h -- Installing: /usr/local/include/fastrtps/rtps/common/InstanceHandle.h -- Installing: /usr/local/include/fastrtps/rtps/common/FragmentNumber.h -- Installing: /usr/local/include/fastrtps/rtps/common/Time_t.h -- Installing: /usr/local/include/fastrtps/rtps/common/SampleIdentity.h -- Installing: /usr/local/include/fastrtps/rtps/common/CDRMessage_t.h -- Installing: /usr/local/include/fastrtps/rtps/common/Guid.h -- Installing: /usr/local/include/fastrtps/rtps/rtps_fwd.h -- Installing: /usr/local/include/fastrtps/rtps/messages -- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.h -- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessagePool.h -- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageCreator.h -- Installing: /usr/local/include/fastrtps/rtps/messages/RTPS_messages.h -- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.hpp -- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageGroup.h -- Installing: /usr/local/include/fastrtps/rtps/messages/MessageReceiver.h -- Installing: /usr/local/include/fastrtps/rtps/security -- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol -- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/EndpointSecurityAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/ParticipantSecurityAttributes.h -- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/SecurityMaskUtilities.h -- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/AccessControl.h -- Installing: /usr/local/include/fastrtps/rtps/security/exceptions -- Installing: /usr/local/include/fastrtps/rtps/security/exceptions/SecurityException.h -- Installing: /usr/local/include/fastrtps/rtps/security/cryptography -- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/Cryptography.h -- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyFactory.h -- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTypes.h -- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyExchange.h -- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTransform.h -- Installing: /usr/local/include/fastrtps/rtps/security/authentication -- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Handshake.h -- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Authentication.h -- Installing: /usr/local/include/fastrtps/rtps/security/common -- Installing: /usr/local/include/fastrtps/rtps/security/common/ParticipantGenericMessage.h -- Installing: /usr/local/include/fastrtps/rtps/security/common/Handle.h -- Installing: /usr/local/include/fastrtps/rtps/security/common/SharedSecretHandle.h -- Installing: /usr/local/include/fastrtps/rtps/resources -- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceManagement.h -- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncInterestTree.h -- Installing: /usr/local/include/fastrtps/rtps/resources/TimedEvent.h -- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceEvent.h -- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncWriterThread.h -- Installing: /usr/local/include/fastrtps/rtps/rtps_all.h -- Installing: /usr/local/include/fastrtps/eProsima_auto_link.h -- Installing: /usr/local/include/fastrtps/transport -- Installing: /usr/local/include/fastrtps/transport/TransportReceiverInterface.h -- Installing: /usr/local/include/fastrtps/transport/timedevent -- Installing: /usr/local/include/fastrtps/transport/timedevent/CleanTCPSocketsEvent.h -- Installing: /usr/local/include/fastrtps/transport/test_UDPv4Transport.h -- Installing: /usr/local/include/fastrtps/transport/UDPv4Transport.h -- Installing: /usr/local/include/fastrtps/transport/UDPv4TransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/UDPTransportInterface.h -- Installing: /usr/local/include/fastrtps/transport/SocketTransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/TCPv6Transport.h -- Installing: /usr/local/include/fastrtps/transport/TCPTransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/UDPChannelResource.h -- Installing: /usr/local/include/fastrtps/transport/TCPv4Transport.h -- Installing: /usr/local/include/fastrtps/transport/TransportInterface.h -- Installing: /usr/local/include/fastrtps/transport/tcp -- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPHeader.h -- Installing: /usr/local/include/fastrtps/transport/tcp/TCPControlMessage.h -- Installing: /usr/local/include/fastrtps/transport/tcp/test_RTCPMessageManager.h -- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPMessageManager.h -- Installing: /usr/local/include/fastrtps/transport/TCPTransportInterface.h -- Installing: /usr/local/include/fastrtps/transport/UDPv6TransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/test_UDPv4TransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/test_TCPv4Transport.h -- Installing: /usr/local/include/fastrtps/transport/UDPTransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/test_TCPv4TransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/TransportDescriptorInterface.h -- Installing: /usr/local/include/fastrtps/transport/TCPChannelResource.h -- Installing: /usr/local/include/fastrtps/transport/UDPv6Transport.h -- Installing: /usr/local/include/fastrtps/transport/ChannelResource.h -- Installing: /usr/local/include/fastrtps/transport/TCPv6TransportDescriptor.h -- Installing: /usr/local/include/fastrtps/transport/TCPv4TransportDescriptor.h -- Installing: /usr/local/include/fastrtps/utils -- Installing: /usr/local/include/fastrtps/utils/IPFinder.h -- Installing: /usr/local/include/fastrtps/utils/ObjectPool.h -- Installing: /usr/local/include/fastrtps/utils/System.h -- Installing: /usr/local/include/fastrtps/utils/IPLocator.h -- Installing: /usr/local/include/fastrtps/utils/md5.h -- Installing: /usr/local/include/fastrtps/utils/Semaphore.h -- Installing: /usr/local/include/fastrtps/utils/eClock.h -- Installing: /usr/local/include/fastrtps/utils/TimeConversion.h -- Installing: /usr/local/include/fastrtps/utils/DBQueue.h -- Installing: /usr/local/include/fastrtps/utils/StringMatching.h -- Installing: /usr/local/include/fastrtps/config.h -- Installing: /usr/local/lib/libfastrtps.so.1.7.0 -- Installing: /usr/local/lib/libfastrtps.so.1 -- Installing: /usr/local/lib/libfastrtps.so -- Set runtime path of \"/usr/local/lib/libfastrtps.so.1.7.0\" to \"\" -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets.cmake -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets-release.cmake -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config.cmake -- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config-version.cmake ======================== インストールに成功しました ========================== Some of the files created by the installation are inside the home directory: /home You probably don't want them to be included in the package. それらを表示しますか？ [n]: それらをパッケージから除外しますか？(yesと答えることをおすすめします) [n]: Some of the files created by the installation are inside the build directory: /home/kenta/git/Fast-RTPS/build You probably don't want them to be included in the package, especially if they are inside your home directory. Do you want me to list them? [n]: それらをパッケージから除外しますか？(yesと答えることをおすすめします) [y]: tempディレクトリにファイルをコピー..OK Stripping ELF binaries and libraries...OK manページを圧縮..OK ファイルリストを作成..OK Debianパッケージを作成..OK Debianパッケージをインストール..OK tempファイルを削除..OK バックアップパッケージを書き込み..OK OK temp dirを削除..OK ********************************************************************** Done. The new package has been installed and saved to /home/kenta/git/Fast-RTPS/build/fastrtps_20190522-1_amd64.deb You can remove it from your system anytime using: dpkg -r fastrtps ********************************************************************** $ dpkg --get-selections | grep fastrtps fastrtps install $ which fastrtpsgen /usr/local/bin/fastrtpsgen これでインストールが完了した！\nサンプルプログラムを動かす fastrtpsgenを使ってサンプルプログラムを作成する． プログラムの作成はFASTRTPSGEN v1.0.4 USER MANUALの4 HelloWorld exampleを参考にした．\n$ mkdir fastrtps-HelloWorld; cd fastrtps-HelloWorld $ vim HelloWorld.idl # メッセージを定義 $ cat HelloWorld.idl struct sample { @Key long id; string message; }; $ fastrtpsgen HelloWorld.idl -example CMake openjdk version \"1.8.0_212\" OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03) OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode) Loading templates... Processing the file HelloWorld.idl... HelloWorld.idl:2:16: error: Illegal identifier: id is already defined (Annotation: id) Exception in thread \"main\" java.lang.NullPointerException at com.eprosima.fastrtps.fastrtpsgen.execute(fastrtpsgen.java:323) at com.eprosima.fastrtps.fastrtpsgen.main(fastrtpsgen.java:1188) サンプルコードが動かない． idは定義済みだそうだ． 別の名前を付けて再度挑戦してみる．\n$ vim HelloWorld.idl $ cat HelloWorld.idl struct HelloWorld { @Key long index; string message; }; $ fastrtpsgen HelloWorld.idl -example CMake openjdk version \"1.8.0_212\" OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03) OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode) Loading templates... Processing the file HelloWorld.idl... Generating Type definition files... Generating TopicDataTypes files... Generating Publisher files... Generating Subscriber files... Generating main file... Adding project: HelloWorld.idl Generating solution for arch CMake... Generating CMakeLists solution $ ls CMakeLists.txt HelloWorldPubSubMain.cxx HelloWorldPublisher.h HelloWorld.cxx HelloWorldPubSubTypes.cxx HelloWorldSubscriber.cxx HelloWorld.h HelloWorldPubSubTypes.h HelloWorldSubscriber.h HelloWorld.idl HelloWorldPublisher.cxx ファイルが生成された．これをビルドする．\n$ mkdir build; cd build $ cmake ../ -- The C compiler identification is GNU 5.4.0 -- The CXX compiler identification is GNU 5.4.0 -- Check for working C compiler: /usr/bin/cc -- Check for working C compiler: /usr/bin/cc -- works -- Detecting C compiler ABI info -- Detecting C compiler ABI info - done -- Detecting C compile features -- Detecting C compile features - done -- Check for working CXX compiler: /usr/bin/c++ -- Check for working CXX compiler: /usr/bin/c++ -- works -- Detecting CXX compiler ABI info -- Detecting CXX compiler ABI info - done -- Detecting CXX compile features -- Detecting CXX compile features - done -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libssl.so;/usr/lib/x86_64-linux-gnu/libcrypto.so (found version \"1.0.2g\") -- Configuring HelloWorld... -- Configuring done -- Generating done -- Build files have been written to: /home/kenta/prog/c++/fastrtps-HelloWorld/build $ make Scanning dependencies of target HelloWorld_lib [ 14%] Building CXX object CMakeFiles/HelloWorld_lib.dir/HelloWorld.cxx.o [ 28%] Linking CXX static library libHelloWorld_lib.a [ 28%] Built target HelloWorld_lib Scanning dependencies of target HelloWorld [ 42%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubTypes.cxx.o [ 57%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubMain.cxx.o [ 85%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPublisher.cxx.o [ 85%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldSubscriber.cxx.o [100%] Linking CXX executable HelloWorld [100%] Built target HelloWorld $ ls $ ls CMakeCache.txt CMakeFiles HelloWorld Makefile cmake_install.cmake libHelloWorld_lib.a $ ./HelloWorld Error: Incorrect arguments. Usage: ./HelloWorld publisher|subscriber ターミナルを二つ用意し，それぞれで./HelloWorld publisherと./HelloWorld subscriberを実行する．\n$ ./HelloWorld publisher Starting Publisher created, waiting for Subscribers. Publisher matched Sending sample, count=1, send another sample?(y-yes,n-stop): n Stopping execution $ ./HelloWorld subscriber Starting Waiting for Data, press Enter to stop the Subscriber. Subscriber matched Sample received, count=1 Subscriber unmatched Fast-RTPSを使って通信ができた．\n","wordCount":"3826","inLanguage":"en","datePublished":"2019-05-22T19:00:00+09:00","dateModified":"2019-05-22T19:00:00+09:00","author":{"@type":"Person","name":null},"mainEntityOfPage":{"@type":"WebPage","@id":"https://Kenta11.github.io/posts/2019-05-22-install-fastrtps-on-ubuntu16.04-jp/"},"publisher":{"@type":"Organization","name":"Kenta Arai Webpage","description":"","logo":{"@type":"ImageObject","url":"https://Kenta11.github.io/favicon.ico"}}}</script><title>Ubuntu 16.04にFast-RTPSをインストールする</title>
 <link rel="stylesheet dns-prefetch preconnect preload prefetch" as=style href=https://Kenta11.github.io/css/style.min.d3facc2d5fe42af72ee5a80584900a45ffee6035df0ef582bd8696c2fe0c9da5.css integrity="sha256-0/rMLV/kKvcu5agFhJAKRf/uYDXfDvWCvYaWwv4MnaU=" crossorigin=anonymous></head><body id=page><header id=site-header class="animated slideInUp"><div class="hdr-wrapper section-inner"><div class=hdr-left><div class=site-branding><a href=https://Kenta11.github.io/>Kenta Arai Webpage</a></div><nav class="site-nav hide-in-mobile"><a href=https://Kenta11.github.io/posts/>Posts</a><a href=https://Kenta11.github.io/about/>About</a><a href=https://Kenta11.github.io/projects/>Projects</a></nav></div><div class="hdr-right hdr-icons"><button id=toc-btn class="hdr-btn desktop-only-ib" title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/isKenta14 target=_blank rel="noopener me" title=Twitter><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://github.com/Kenta11 target=_blank rel="noopener me" title=Github><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://gitlab.com/Kenta111 target=_blank rel="noopener me" title=Gitlab><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.65 14.39 12 22.13 1.35 14.39a.84.84.0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42.0 014.82 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42.0 0118.6 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.51L23 13.45a.84.84.0 01-.35.94z"/></svg></a><a href=https://qiita.com/Kenta11 target=_blank rel="noopener me" title=Qiita><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a><a href=https://speakerdeck.com/kenta11 target=_blank rel="noopener me" title=Speakerdeck><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a></span><button id=menu-btn class=hdr-btn title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div></header><div id=mobile-menu class="animated fast"><ul><li><a href=https://Kenta11.github.io/posts/>Posts</a></li><li><a href=https://Kenta11.github.io/about/>About</a></li><li><a href=https://Kenta11.github.io/projects/>Projects</a></li></ul></div><main class="site-main section-inner animated fadeIn faster"><article class=thin><header class=post-header><div class=post-date><span>May 22, 2019</span></div><h1>Ubuntu 16.04にFast-RTPSをインストールする</h1></header><div class=post-description><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://Kenta11.github.io/tags/fast-rtps>Fast-RTPS</a></span></p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>3826&nbspWords</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2019-05-22 10:00 +0000</p></div><hr class=post-end><div class=content><h2 id=はじめに>はじめに<a href=#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>Ubuntu 16.04 LTSにFast-RTPSをインストールする．
 fastrtpsgenも一緒にインストールしたいので，自分の環境にインストールしてみる．</p><h2 id=cmakeする>cmakeする<a href=#cmake%e3%81%99%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p><a href=https://dev.px4.io/en/setup/fast-rtps-installation.html>Fast RTPS Installation</a>によると，cmakeとmakeでFast-RTPSとfastrtpsgenをビルドするようだ．
-cmakeを実行すると，以下のログが表示された．</p><pre tabindex=0><code>$ git clone https://github.com/eProsima/Fast-RTPS
-$ cd Fast-RTPS
-$ mkdir build; cd build
-$ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
--- Setting build type to &#39;Release&#39; as none was specified.
-
-(中略)
-
-CMake Error at /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148 (message):
-  Could NOT find Java (missing: Java_JAVA_EXECUTABLE Runtime) (Required is at
-  least version &#34;1.6&#34;)
-Call Stack (most recent call first):
-  /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:388 (_FPHSA_FAILURE_MESSAGE)
-  /usr/share/cmake-3.5/Modules/FindJava.cmake:244 (find_package_handle_standard_args)
-  cmake/dev/java_support.cmake:16 (find_package)
-  CMakeLists.txt:263 (gradle_build)
-
-
--- Configuring incomplete, errors occurred!
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;.
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;.
-</code></pre><p>Javaが無いと言われた．
-ドキュメントには<code>Java is required to use our built-in code generation tool - fastrtpsgen. Java JDK 8 is recommended.</code>とあるので，openjdkのバージョン8をインストールする．</p><pre tabindex=0><code>$ sudo apt install openjdk-8-jdk
-$ rm -rf *
-$ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
--- Configuring Fast RTPS
--- Version: 1.8.0
--- To change the version modify the file configure.ac
--- fastcdr thirdparty is being updated...
--- Configuring Fast CDR
--- Version: 1.0.9
--- To change the version modify the file configure.ac
--- fastcdr library found...
--- Found Java: /usr/bin/java (found suitable version &#34;1.8.0.212&#34;, minimum required is &#34;1.6&#34;) found components:  Runtime 
-CMake Error at cmake/dev/java_support.cmake:30 (message):
-  gradle is needed to build the java application.  Please install it
-  correctly
-Call Stack (most recent call first):
-  CMakeLists.txt:263 (gradle_build)
-
-
--- Configuring incomplete, errors occurred!
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;.
-See also &#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;.
-</code></pre><p>今度はgradleが必要だと言われた．インストールし，再度ビルドする．</p><pre tabindex=0><code>$ sudo apt install gradle
-$ rm -rf *
-$ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. # エラーなく終了！
-</code></pre><h2 id=ビルドしてインストールする>ビルドしてインストールする<a href=#%e3%83%93%e3%83%ab%e3%83%89%e3%81%97%e3%81%a6%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%81%99%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><pre tabindex=0><code>$ make -j8 # エラーなく終了！
-$ sudo checkinstall
-
-checkinstall 1.6.2, Copyright 2009 Felipe Eduardo Sanchez Diaz Duran
-           このソフトウェアはGNU GPLの下でリリースしています。
-
-
-The package documentation directory ./doc-pak does not exist. 
-Should I create a default set of package docs?  [y]: y
-
-パッケージのドキュメンテーションを準備..OK
-
-*** No known documentation files were found. The new package 
-*** won&#39;t include a documentation directory.
-
-このパッケージの説明を書いてください
-説明の末尾は空行かEOFにしてください。
-&gt;&gt; Fast-RTPS and fastrtpsgen
-&gt;&gt; 
-
-*****************************************
-**** Debian package creation selected ***
-*****************************************
-
-(中略)
-
-このパッケージは以下の内容で構成されます: 
-
-0 -  Maintainer: [ kenta@xxxx ]
-1 -  Summary: [ Fast-RTPS and fastrtpsgen ]
-2 -  Name:    [ fastrtps ]
-3 -  Version: [ 20190522 ]
-4 -  Release: [ 1 ]
-5 -  License: [ GPL ]
-6 -  Group:   [ checkinstall ]
-7 -  Architecture: [ amd64 ]
-8 -  Source location: [ build ]
-9 -  Alternate source location: [  ]
-10 - Requires: [  ]
-11 - Provides: [ build ]
-12 - Conflicts: [  ]
-13 - Replaces: [  ]
-
-変更するものの番号を入力してください。Enterで続行します: 
-
-Installing with make install...
-========================= インストールの結果 ===========================
-[  1%] Updating Git module idl
-[  1%] Built target git_submodule_update_idl
-[  2%] Updating Git module fastcdr
-[  2%] Built target git_submodule_update_fastcdr
-[  3%] Generating Java application
-
-FAILURE: Build failed with an exception.
-
-* Where:
-Build file &#39;/home/kenta/git/Fast-RTPS/fastrtpsgen/build.gradle&#39; line: 78
-
-* What went wrong:
-Could not resolve all dependencies for configuration &#39;:compile&#39;.
-&gt; Could not resolve junit:junit:4.+.
-  Required by:
-      :fastrtpsgen:unspecified
-   &gt; Could not resolve junit:junit:4.+.
-      &gt; Failed to list versions for junit:junit.
-         &gt; Unable to load Maven meta-data from https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml.
-            &gt; Could not GET &#39;https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml&#39;.
-               &gt; 接続がタイムアウトしました (Connection timed out)
-
-* Try:
-Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
-
-BUILD FAILED
-
-Total time: 2 mins 8.884 secs
-CMakeFiles/java.dir/build.make:57: ターゲット &#39;CMakeFiles/java&#39; のレシピで失敗しました
-make[2]: *** [CMakeFiles/java] エラー 1
-CMakeFiles/Makefile2:356: ターゲット &#39;CMakeFiles/java.dir/all&#39; のレシピで失敗しました
-make[1]: *** [CMakeFiles/java.dir/all] エラー 2
-Makefile:160: ターゲット &#39;all&#39; のレシピで失敗しました
-make: *** [all] エラー 2
-
-****  インストールは失敗しました。パッケージの作成を中断します
-
-上書きしたファイルをバックアップから復元..OK
-
-クリーンアップ..OK
-
-Bye.
-</code></pre><p>接続がタイムアウトしたと表示されており，インストールが完了しない．
-プロキシ環境にあるこのマシンでは，どうも<code>sudo checkinstall</code>の中で実行されるgradleがコケるようだ．</p><p>そこでrootにgradleのプロキシ設定を反映させて，インストールをする．</p><pre tabindex=0><code>$ sudo cp ~/.gradle/gradle.properties /root/.gradle/ # 自分のgradleの設定をrootにも反映
-$ sudo checkinstall
-
-checkinstall 1.6.2, Copyright 2009 Felipe Eduardo Sanchez Diaz Duran
-           このソフトウェアはGNU GPLの下でリリースしています。
-
-
-The package documentation directory ./doc-pak does not exist. 
-Should I create a default set of package docs?  [y]: 
-
-パッケージのドキュメンテーションを準備..OK
-
-*** No known documentation files were found. The new package 
-*** won&#39;t include a documentation directory.
-
-*****************************************
-**** Debian package creation selected ***
-*****************************************
-(中略)
-
-このパッケージは以下の内容で構成されます: 
-
-0 -  Maintainer: [ kenta@xxxxx ]
-1 -  Summary: [ Fast-RTPS and fastrtpsgen ]
-2 -  Name:    [ fastrtps ]
-3 -  Version: [ 20190522 ]
-4 -  Release: [ 1 ]
-5 -  License: [ GPL ]
-6 -  Group:   [ checkinstall ]
-7 -  Architecture: [ amd64 ]
-8 -  Source location: [ build ]
-9 -  Alternate source location: [  ]
-10 - Requires: [  ]
-11 - Provides: [ build ]
-12 - Conflicts: [  ]
-13 - Replaces: [  ]
-
-変更するものの番号を入力してください。Enterで続行します: 
-
-Installing with make install...
-
-========================= インストールの結果 ===========================
-[  1%] Updating Git module idl
-[  1%] Built target git_submodule_update_idl
-[  2%] Updating Git module fastcdr
-[  2%] Built target git_submodule_update_fastcdr
-[  3%] Generating Java application
-:buildIDLParser
-Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.pom
-Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.jar
-Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.pom
-Download https://repo1.maven.org/maven2/org/antlr/antlr4-master/4.2.2/antlr4-master-4.2.2.pom
-Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom
-Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.pom
-Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.pom
-Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.pom
-Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.pom
-Download https://repo1.maven.org/maven2/org/antlr/antlr-master/3.5.2/antlr-master-3.5.2.pom
-Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/9/oss-parent-9.pom
-Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.pom
-Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom
-Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.pom
-Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.jar
-Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar
-Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.jar
-Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.jar
-Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar
-Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.jar
-Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar
-Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar
-:idl:clean
-:idl:antlr4
-:idl:compileJava
-警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
-注意:/home/kenta/git/Fast-RTPS/thirdparty/idl/src/main/java/com/eprosima/idl/generator/manager/TemplateUtil.javaの操作は、未チェックまたは安全ではありません。
-注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
-:idl:processResources
-:idl:classes
-:idl:jar
-:idl:assemble
-:idl:compileTestJava UP-TO-DATE
-:idl:processTestResources UP-TO-DATE
-:idl:testClasses UP-TO-DATE
-:idl:test UP-TO-DATE
-:idl:check UP-TO-DATE
-:idl:build
-:compileJava
-警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
-注意:入力ファイルの操作のうち、未チェックまたは安全ではないものがあります。
-注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
-:processResources UP-TO-DATE
-:classes
-:jar
-:assemble
-:compileTestJava UP-TO-DATE
-:processTestResources UP-TO-DATE
-:testClasses UP-TO-DATE
-:test UP-TO-DATE
-:check UP-TO-DATE
-:build
-
-BUILD SUCCESSFUL
-
-Total time: 11.629 secs
-
-This build could be faster, please consider using the Gradle Daemon: https://docs.gradle.org/2.10/userguide/gradle_daemon.html
-[  3%] Built target java
-[  8%] Built target fastcdr
-[100%] Built target fastrtps
-Install the project...
--- Install configuration: &#34;Release&#34;
--- Installing: /usr/local/share/fastrtps/LICENSE
--- Installing: /usr/local/share/fastrtps/fastrtpsgen.jar
--- Installing: /usr/local/bin/fastrtpsgen
--- Installing: /usr/local/share/fastrtps/LICENSE
--- Installing: /usr/local/include/fastcdr
--- Installing: /usr/local/include/fastcdr/exceptions
--- Installing: /usr/local/include/fastcdr/exceptions/NotEnoughMemoryException.h
--- Installing: /usr/local/include/fastcdr/exceptions/Exception.h
--- Installing: /usr/local/include/fastcdr/exceptions/BadParamException.h
--- Installing: /usr/local/include/fastcdr/FastBuffer.h
--- Installing: /usr/local/include/fastcdr/FastCdr.h
--- Installing: /usr/local/include/fastcdr/fastcdr_dll.h
--- Installing: /usr/local/include/fastcdr/eProsima_auto_link.h
--- Installing: /usr/local/include/fastcdr/Cdr.h
--- Installing: /usr/local/include/fastcdr/config.h
--- Installing: /usr/local/lib/libfastcdr.so.1.0.8
--- Installing: /usr/local/lib/libfastcdr.so.1
--- Installing: /usr/local/lib/libfastcdr.so
--- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets.cmake
--- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets-release.cmake
--- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config.cmake
--- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config-version.cmake
--- Installing: /usr/local/include/fastrtps
--- Installing: /usr/local/include/fastrtps/xmlparser
--- Installing: /usr/local/include/fastrtps/xmlparser/XMLEndpointParser.h
--- Installing: /usr/local/include/fastrtps/xmlparser/XMLParser.h
--- Installing: /usr/local/include/fastrtps/xmlparser/XMLProfileManager.h
--- Installing: /usr/local/include/fastrtps/xmlparser/XMLTree.h
--- Installing: /usr/local/include/fastrtps/xmlparser/XMLParserCommon.h
--- Installing: /usr/local/include/fastrtps/qos
--- Installing: /usr/local/include/fastrtps/qos/ParameterList.h
--- Installing: /usr/local/include/fastrtps/qos/WriterQos.h
--- Installing: /usr/local/include/fastrtps/qos/ReaderQos.h
--- Installing: /usr/local/include/fastrtps/qos/ParameterTypes.h
--- Installing: /usr/local/include/fastrtps/qos/QosPolicies.h
--- Installing: /usr/local/include/fastrtps/log
--- Installing: /usr/local/include/fastrtps/log/Colors.h
--- Installing: /usr/local/include/fastrtps/log/StdoutConsumer.h
--- Installing: /usr/local/include/fastrtps/log/Log.h
--- Installing: /usr/local/include/fastrtps/fastrtps_dll.h
--- Installing: /usr/local/include/fastrtps/subscriber
--- Installing: /usr/local/include/fastrtps/subscriber/SubscriberHistory.h
--- Installing: /usr/local/include/fastrtps/subscriber/Subscriber.h
--- Installing: /usr/local/include/fastrtps/subscriber/SampleInfo.h
--- Installing: /usr/local/include/fastrtps/subscriber/SubscriberListener.h
--- Installing: /usr/local/include/fastrtps/participant
--- Installing: /usr/local/include/fastrtps/participant/ParticipantListener.h
--- Installing: /usr/local/include/fastrtps/participant/Participant.h
--- Installing: /usr/local/include/fastrtps/fastrtps_fwd.h
--- Installing: /usr/local/include/fastrtps/fastrtps_all.h
--- Installing: /usr/local/include/fastrtps/publisher
--- Installing: /usr/local/include/fastrtps/publisher/PublisherListener.h
--- Installing: /usr/local/include/fastrtps/publisher/Publisher.h
--- Installing: /usr/local/include/fastrtps/publisher/PublisherHistory.h
--- Installing: /usr/local/include/fastrtps/TopicDataType.h
--- Installing: /usr/local/include/fastrtps/types
--- Installing: /usr/local/include/fastrtps/types/AnnotationParameterValue.h
--- Installing: /usr/local/include/fastrtps/types/DynamicDataFactory.h
--- Installing: /usr/local/include/fastrtps/types/AnnotationDescriptor.h
--- Installing: /usr/local/include/fastrtps/types/TypesBase.h
--- Installing: /usr/local/include/fastrtps/types/TypeObjectHashId.h
--- Installing: /usr/local/include/fastrtps/types/DynamicType.h
--- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderFactory.h
--- Installing: /usr/local/include/fastrtps/types/DynamicPubSubType.h
--- Installing: /usr/local/include/fastrtps/types/TypeIdentifier.h
--- Installing: /usr/local/include/fastrtps/types/MemberDescriptor.h
--- Installing: /usr/local/include/fastrtps/types/DynamicTypePtr.h
--- Installing: /usr/local/include/fastrtps/types/DynamicData.h
--- Installing: /usr/local/include/fastrtps/types/TypeIdentifierTypes.h
--- Installing: /usr/local/include/fastrtps/types/TypeDescriptor.h
--- Installing: /usr/local/include/fastrtps/types/DynamicTypeMember.h
--- Installing: /usr/local/include/fastrtps/types/TypeObject.h
--- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilder.h
--- Installing: /usr/local/include/fastrtps/types/TypeObjectFactory.h
--- Installing: /usr/local/include/fastrtps/types/DynamicDataPtr.h
--- Installing: /usr/local/include/fastrtps/types/TypeNamesGenerator.h
--- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderPtr.h
--- Installing: /usr/local/include/fastrtps/Domain.h
--- Installing: /usr/local/include/fastrtps/attributes
--- Installing: /usr/local/include/fastrtps/attributes/TopicAttributes.h
--- Installing: /usr/local/include/fastrtps/attributes/all_attributes.h
--- Installing: /usr/local/include/fastrtps/attributes/ParticipantAttributes.h
--- Installing: /usr/local/include/fastrtps/attributes/SubscriberAttributes.h
--- Installing: /usr/local/include/fastrtps/attributes/PublisherAttributes.h
--- Installing: /usr/local/include/fastrtps/config
--- Installing: /usr/local/include/fastrtps/config/doxygen_modules.h
--- Installing: /usr/local/include/fastrtps/rtps
--- Installing: /usr/local/include/fastrtps/rtps/writer
--- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent
--- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/PeriodicHeartbeat.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackSupressionDuration.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackResponseDelay.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessWriter.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/WriterDiscoveryInfo.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulWriter.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulPersistentWriter.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderLocator.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/WriterListener.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/PersistentWriter.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/RTPSWriter.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessPersistentWriter.h
--- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderProxy.h
--- Installing: /usr/local/include/fastrtps/rtps/exceptions
--- Installing: /usr/local/include/fastrtps/rtps/exceptions/Exception.h
--- Installing: /usr/local/include/fastrtps/rtps/RTPSDomain.h
--- Installing: /usr/local/include/fastrtps/rtps/network
--- Installing: /usr/local/include/fastrtps/rtps/network/NetworkFactory.h
--- Installing: /usr/local/include/fastrtps/rtps/network/SenderResource.h
--- Installing: /usr/local/include/fastrtps/rtps/network/ReceiverResource.h
--- Installing: /usr/local/include/fastrtps/rtps/flowcontrol
--- Installing: /usr/local/include/fastrtps/rtps/flowcontrol/ThroughputControllerDescriptor.h
--- Installing: /usr/local/include/fastrtps/rtps/Endpoint.h
--- Installing: /usr/local/include/fastrtps/rtps/participant
--- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipantListener.h
--- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipant.h
--- Installing: /usr/local/include/fastrtps/rtps/participant/ParticipantDiscoveryInfo.h
--- Installing: /usr/local/include/fastrtps/rtps/history
--- Installing: /usr/local/include/fastrtps/rtps/history/History.h
--- Installing: /usr/local/include/fastrtps/rtps/history/CacheChangePool.h
--- Installing: /usr/local/include/fastrtps/rtps/history/ReaderHistory.h
--- Installing: /usr/local/include/fastrtps/rtps/history/WriterHistory.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/ResendParticipantProxyDataPeriod.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/RemoteParticipantLeaseDuration.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimpleListener.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimple.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDP.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPSimple.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPStatic.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness
--- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent
--- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent/WLivelinessPeriodicAssertion.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLP.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLPListener.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/data
--- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ParticipantProxyData.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/data/WriterProxyData.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ReaderProxyData.h
--- Installing: /usr/local/include/fastrtps/rtps/builtin/BuiltinProtocols.h
--- Installing: /usr/local/include/fastrtps/rtps/reader
--- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderDiscoveryInfo.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent
--- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/HeartbeatResponseDelay.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/WriterProxyLiveliness.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/InitialAckNack.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessReader.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/WriterProxy.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessPersistentReader.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulReader.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderListener.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulPersistentReader.h
--- Installing: /usr/local/include/fastrtps/rtps/reader/RTPSReader.h
--- Installing: /usr/local/include/fastrtps/rtps/attributes
--- Installing: /usr/local/include/fastrtps/rtps/attributes/EndpointAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/attributes/ReaderAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/attributes/HistoryAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/attributes/PropertyPolicy.h
--- Installing: /usr/local/include/fastrtps/rtps/attributes/RTPSParticipantAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/attributes/WriterAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/common
--- Installing: /usr/local/include/fastrtps/rtps/common/PortParameters.h
--- Installing: /usr/local/include/fastrtps/rtps/common/Token.h
--- Installing: /usr/local/include/fastrtps/rtps/common/WriteParams.h
--- Installing: /usr/local/include/fastrtps/rtps/common/all_common.h
--- Installing: /usr/local/include/fastrtps/rtps/common/Property.h
--- Installing: /usr/local/include/fastrtps/rtps/common/MatchingInfo.h
--- Installing: /usr/local/include/fastrtps/rtps/common/BinaryProperty.h
--- Installing: /usr/local/include/fastrtps/rtps/common/Types.h
--- Installing: /usr/local/include/fastrtps/rtps/common/SequenceNumber.h
--- Installing: /usr/local/include/fastrtps/rtps/common/Locator.h
--- Installing: /usr/local/include/fastrtps/rtps/common/CacheChange.h
--- Installing: /usr/local/include/fastrtps/rtps/common/SerializedPayload.h
--- Installing: /usr/local/include/fastrtps/rtps/common/InstanceHandle.h
--- Installing: /usr/local/include/fastrtps/rtps/common/FragmentNumber.h
--- Installing: /usr/local/include/fastrtps/rtps/common/Time_t.h
--- Installing: /usr/local/include/fastrtps/rtps/common/SampleIdentity.h
--- Installing: /usr/local/include/fastrtps/rtps/common/CDRMessage_t.h
--- Installing: /usr/local/include/fastrtps/rtps/common/Guid.h
--- Installing: /usr/local/include/fastrtps/rtps/rtps_fwd.h
--- Installing: /usr/local/include/fastrtps/rtps/messages
--- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.h
--- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessagePool.h
--- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageCreator.h
--- Installing: /usr/local/include/fastrtps/rtps/messages/RTPS_messages.h
--- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.hpp
--- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageGroup.h
--- Installing: /usr/local/include/fastrtps/rtps/messages/MessageReceiver.h
--- Installing: /usr/local/include/fastrtps/rtps/security
--- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol
--- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/EndpointSecurityAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/ParticipantSecurityAttributes.h
--- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/SecurityMaskUtilities.h
--- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/AccessControl.h
--- Installing: /usr/local/include/fastrtps/rtps/security/exceptions
--- Installing: /usr/local/include/fastrtps/rtps/security/exceptions/SecurityException.h
--- Installing: /usr/local/include/fastrtps/rtps/security/cryptography
--- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/Cryptography.h
--- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyFactory.h
--- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTypes.h
--- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyExchange.h
--- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTransform.h
--- Installing: /usr/local/include/fastrtps/rtps/security/authentication
--- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Handshake.h
--- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Authentication.h
--- Installing: /usr/local/include/fastrtps/rtps/security/common
--- Installing: /usr/local/include/fastrtps/rtps/security/common/ParticipantGenericMessage.h
--- Installing: /usr/local/include/fastrtps/rtps/security/common/Handle.h
--- Installing: /usr/local/include/fastrtps/rtps/security/common/SharedSecretHandle.h
--- Installing: /usr/local/include/fastrtps/rtps/resources
--- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceManagement.h
--- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncInterestTree.h
--- Installing: /usr/local/include/fastrtps/rtps/resources/TimedEvent.h
--- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceEvent.h
--- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncWriterThread.h
--- Installing: /usr/local/include/fastrtps/rtps/rtps_all.h
--- Installing: /usr/local/include/fastrtps/eProsima_auto_link.h
--- Installing: /usr/local/include/fastrtps/transport
--- Installing: /usr/local/include/fastrtps/transport/TransportReceiverInterface.h
--- Installing: /usr/local/include/fastrtps/transport/timedevent
--- Installing: /usr/local/include/fastrtps/transport/timedevent/CleanTCPSocketsEvent.h
--- Installing: /usr/local/include/fastrtps/transport/test_UDPv4Transport.h
--- Installing: /usr/local/include/fastrtps/transport/UDPv4Transport.h
--- Installing: /usr/local/include/fastrtps/transport/UDPv4TransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/UDPTransportInterface.h
--- Installing: /usr/local/include/fastrtps/transport/SocketTransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/TCPv6Transport.h
--- Installing: /usr/local/include/fastrtps/transport/TCPTransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/UDPChannelResource.h
--- Installing: /usr/local/include/fastrtps/transport/TCPv4Transport.h
--- Installing: /usr/local/include/fastrtps/transport/TransportInterface.h
--- Installing: /usr/local/include/fastrtps/transport/tcp
--- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPHeader.h
--- Installing: /usr/local/include/fastrtps/transport/tcp/TCPControlMessage.h
--- Installing: /usr/local/include/fastrtps/transport/tcp/test_RTCPMessageManager.h
--- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPMessageManager.h
--- Installing: /usr/local/include/fastrtps/transport/TCPTransportInterface.h
--- Installing: /usr/local/include/fastrtps/transport/UDPv6TransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/test_UDPv4TransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/test_TCPv4Transport.h
--- Installing: /usr/local/include/fastrtps/transport/UDPTransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/test_TCPv4TransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/TransportDescriptorInterface.h
--- Installing: /usr/local/include/fastrtps/transport/TCPChannelResource.h
--- Installing: /usr/local/include/fastrtps/transport/UDPv6Transport.h
--- Installing: /usr/local/include/fastrtps/transport/ChannelResource.h
--- Installing: /usr/local/include/fastrtps/transport/TCPv6TransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/transport/TCPv4TransportDescriptor.h
--- Installing: /usr/local/include/fastrtps/utils
--- Installing: /usr/local/include/fastrtps/utils/IPFinder.h
--- Installing: /usr/local/include/fastrtps/utils/ObjectPool.h
--- Installing: /usr/local/include/fastrtps/utils/System.h
--- Installing: /usr/local/include/fastrtps/utils/IPLocator.h
--- Installing: /usr/local/include/fastrtps/utils/md5.h
--- Installing: /usr/local/include/fastrtps/utils/Semaphore.h
--- Installing: /usr/local/include/fastrtps/utils/eClock.h
--- Installing: /usr/local/include/fastrtps/utils/TimeConversion.h
--- Installing: /usr/local/include/fastrtps/utils/DBQueue.h
--- Installing: /usr/local/include/fastrtps/utils/StringMatching.h
--- Installing: /usr/local/include/fastrtps/config.h
--- Installing: /usr/local/lib/libfastrtps.so.1.7.0
--- Installing: /usr/local/lib/libfastrtps.so.1
--- Installing: /usr/local/lib/libfastrtps.so
--- Set runtime path of &#34;/usr/local/lib/libfastrtps.so.1.7.0&#34; to &#34;&#34;
--- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets.cmake
--- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets-release.cmake
--- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config.cmake
--- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config-version.cmake
-
-======================== インストールに成功しました ==========================
-
-Some of the files created by the installation are inside the home directory: /home
-
-You probably don&#39;t want them to be included in the package.
-それらを表示しますか？ [n]: 
-それらをパッケージから除外しますか？(yesと答えることをおすすめします) [n]: 
-
-Some of the files created by the installation are inside the build
-directory: /home/kenta/git/Fast-RTPS/build
-
-You probably don&#39;t want them to be included in the package,
-especially if they are inside your home directory.
-Do you want me to list them?  [n]: 
-それらをパッケージから除外しますか？(yesと答えることをおすすめします) [y]: 
-
-tempディレクトリにファイルをコピー..OK
-
-Stripping ELF binaries and libraries...OK
-
-manページを圧縮..OK
-
-ファイルリストを作成..OK
-
-Debianパッケージを作成..OK
-
-Debianパッケージをインストール..OK
-
-tempファイルを削除..OK
-
-バックアップパッケージを書き込み..OK
-OK
-
-temp dirを削除..OK
-
-
-**********************************************************************
-
- Done. The new package has been installed and saved to
-
- /home/kenta/git/Fast-RTPS/build/fastrtps_20190522-1_amd64.deb
-
- You can remove it from your system anytime using: 
-
-      dpkg -r fastrtps
-
-**********************************************************************
-
-$ dpkg --get-selections | grep fastrtps
-fastrtps                                        install
-$ which fastrtpsgen
-/usr/local/bin/fastrtpsgen
-</code></pre><p>これでインストールが完了した！</p><h2 id=サンプルプログラムを動かす>サンプルプログラムを動かす<a href=#%e3%82%b5%e3%83%b3%e3%83%97%e3%83%ab%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%82%92%e5%8b%95%e3%81%8b%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>fastrtpsgenを使ってサンプルプログラムを作成する．
-プログラムの作成は<a href=https://eprosima.com/docs/fast-rtps/1.0.4/pdf/FASTRTPSGEN_User_Manual.pdf>FASTRTPSGEN v1.0.4 USER MANUAL</a>の<code>4 HelloWorld example</code>を参考にした．</p><pre tabindex=0><code>$ mkdir fastrtps-HelloWorld; cd fastrtps-HelloWorld
-$ vim HelloWorld.idl # メッセージを定義
-$ cat HelloWorld.idl
-struct sample {
-    @Key long id;
-    string message;
-};
-$ fastrtpsgen HelloWorld.idl -example CMake
-openjdk version &#34;1.8.0_212&#34;
-OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03)
-OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
-Loading templates...
-Processing the file HelloWorld.idl...
-HelloWorld.idl:2:16: error: Illegal identifier: id is already defined (Annotation: id)
-Exception in thread &#34;main&#34; java.lang.NullPointerException
-        at com.eprosima.fastrtps.fastrtpsgen.execute(fastrtpsgen.java:323)
-        at com.eprosima.fastrtps.fastrtpsgen.main(fastrtpsgen.java:1188)
-</code></pre><p>サンプルコードが動かない．
+cmakeを実行すると，以下のログが表示された．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ git clone https://github.com/eProsima/Fast-RTPS
+</span></span><span class=line><span class=cl>$ <span class=nb>cd</span> Fast-RTPS
+</span></span><span class=line><span class=cl>$ mkdir build<span class=p>;</span> <span class=nb>cd</span> build
+</span></span><span class=line><span class=cl>$ cmake -DTHIRDPARTY<span class=o>=</span>ON -DBUILD_JAVA<span class=o>=</span>ON ..
+</span></span><span class=line><span class=cl>-- Setting build <span class=nb>type</span> to <span class=s1>&#39;Release&#39;</span> as none was specified.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>(</span>中略<span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>CMake Error at /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:148 <span class=o>(</span>message<span class=o>)</span>:
+</span></span><span class=line><span class=cl>  Could NOT find Java <span class=o>(</span>missing: Java_JAVA_EXECUTABLE Runtime<span class=o>)</span> <span class=o>(</span>Required is at
+</span></span><span class=line><span class=cl>  least version <span class=s2>&#34;1.6&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>Call Stack <span class=o>(</span>most recent call first<span class=o>)</span>:
+</span></span><span class=line><span class=cl>  /usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake:388 <span class=o>(</span>_FPHSA_FAILURE_MESSAGE<span class=o>)</span>
+</span></span><span class=line><span class=cl>  /usr/share/cmake-3.5/Modules/FindJava.cmake:244 <span class=o>(</span>find_package_handle_standard_args<span class=o>)</span>
+</span></span><span class=line><span class=cl>  cmake/dev/java_support.cmake:16 <span class=o>(</span>find_package<span class=o>)</span>
+</span></span><span class=line><span class=cl>  CMakeLists.txt:263 <span class=o>(</span>gradle_build<span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>-- Configuring incomplete, errors occurred!
+</span></span><span class=line><span class=cl>See also <span class=s2>&#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;</span>.
+</span></span><span class=line><span class=cl>See also <span class=s2>&#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;</span>.
+</span></span></code></pre></div><p>Javaが無いと言われた．
+ドキュメントには<code>Java is required to use our built-in code generation tool - fastrtpsgen. Java JDK 8 is recommended.</code>とあるので，openjdkのバージョン8をインストールする．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ sudo apt install openjdk-8-jdk
+</span></span><span class=line><span class=cl>$ rm -rf *
+</span></span><span class=line><span class=cl>$ cmake -DTHIRDPARTY<span class=o>=</span>ON -DBUILD_JAVA<span class=o>=</span>ON ..
+</span></span><span class=line><span class=cl>-- Configuring Fast RTPS
+</span></span><span class=line><span class=cl>-- Version: 1.8.0
+</span></span><span class=line><span class=cl>-- To change the version modify the file configure.ac
+</span></span><span class=line><span class=cl>-- fastcdr thirdparty is being updated...
+</span></span><span class=line><span class=cl>-- Configuring Fast CDR
+</span></span><span class=line><span class=cl>-- Version: 1.0.9
+</span></span><span class=line><span class=cl>-- To change the version modify the file configure.ac
+</span></span><span class=line><span class=cl>-- fastcdr library found...
+</span></span><span class=line><span class=cl>-- Found Java: /usr/bin/java <span class=o>(</span>found suitable version <span class=s2>&#34;1.8.0.212&#34;</span>, minimum required is <span class=s2>&#34;1.6&#34;</span><span class=o>)</span> found components:  Runtime 
+</span></span><span class=line><span class=cl>CMake Error at cmake/dev/java_support.cmake:30 <span class=o>(</span>message<span class=o>)</span>:
+</span></span><span class=line><span class=cl>  gradle is needed to build the java application.  Please install it
+</span></span><span class=line><span class=cl>  correctly
+</span></span><span class=line><span class=cl>Call Stack <span class=o>(</span>most recent call first<span class=o>)</span>:
+</span></span><span class=line><span class=cl>  CMakeLists.txt:263 <span class=o>(</span>gradle_build<span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>-- Configuring incomplete, errors occurred!
+</span></span><span class=line><span class=cl>See also <span class=s2>&#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeOutput.log&#34;</span>.
+</span></span><span class=line><span class=cl>See also <span class=s2>&#34;/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log&#34;</span>.
+</span></span></code></pre></div><p>今度はgradleが必要だと言われた．インストールし，再度ビルドする．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ sudo apt install gradle
+</span></span><span class=line><span class=cl>$ rm -rf *
+</span></span><span class=line><span class=cl>$ cmake -DTHIRDPARTY<span class=o>=</span>ON -DBUILD_JAVA<span class=o>=</span>ON .. <span class=c1># エラーなく終了！</span>
+</span></span></code></pre></div><h2 id=ビルドしてインストールする>ビルドしてインストールする<a href=#%e3%83%93%e3%83%ab%e3%83%89%e3%81%97%e3%81%a6%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab%e3%81%99%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ make -j8 <span class=c1># エラーなく終了！</span>
+</span></span><span class=line><span class=cl>$ sudo checkinstall
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>checkinstall 1.6.2, Copyright <span class=m>2009</span> Felipe Eduardo Sanchez Diaz Duran
+</span></span><span class=line><span class=cl>           このソフトウェアはGNU GPLの下でリリースしています。
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>The package documentation directory ./doc-pak does not exist. 
+</span></span><span class=line><span class=cl>Should I create a default <span class=nb>set</span> of package docs?  <span class=o>[</span>y<span class=o>]</span>: y
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>パッケージのドキュメンテーションを準備..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>*** No known documentation files were found. The new package 
+</span></span><span class=line><span class=cl>*** won<span class=s1>&#39;t include a documentation directory.
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>このパッケージの説明を書いてください
+</span></span></span><span class=line><span class=cl><span class=s1>説明の末尾は空行かEOFにしてください。
+</span></span></span><span class=line><span class=cl><span class=s1>&gt;&gt; Fast-RTPS and fastrtpsgen
+</span></span></span><span class=line><span class=cl><span class=s1>&gt;&gt; 
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>*****************************************
+</span></span></span><span class=line><span class=cl><span class=s1>**** Debian package creation selected ***
+</span></span></span><span class=line><span class=cl><span class=s1>*****************************************
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>(中略)
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>このパッケージは以下の内容で構成されます: 
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>0 -  Maintainer: [ kenta@xxxx ]
+</span></span></span><span class=line><span class=cl><span class=s1>1 -  Summary: [ Fast-RTPS and fastrtpsgen ]
+</span></span></span><span class=line><span class=cl><span class=s1>2 -  Name:    [ fastrtps ]
+</span></span></span><span class=line><span class=cl><span class=s1>3 -  Version: [ 20190522 ]
+</span></span></span><span class=line><span class=cl><span class=s1>4 -  Release: [ 1 ]
+</span></span></span><span class=line><span class=cl><span class=s1>5 -  License: [ GPL ]
+</span></span></span><span class=line><span class=cl><span class=s1>6 -  Group:   [ checkinstall ]
+</span></span></span><span class=line><span class=cl><span class=s1>7 -  Architecture: [ amd64 ]
+</span></span></span><span class=line><span class=cl><span class=s1>8 -  Source location: [ build ]
+</span></span></span><span class=line><span class=cl><span class=s1>9 -  Alternate source location: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>10 - Requires: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>11 - Provides: [ build ]
+</span></span></span><span class=line><span class=cl><span class=s1>12 - Conflicts: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>13 - Replaces: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>変更するものの番号を入力してください。Enterで続行します: 
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>Installing with make install...
+</span></span></span><span class=line><span class=cl><span class=s1>========================= インストールの結果 ===========================
+</span></span></span><span class=line><span class=cl><span class=s1>[  1%] Updating Git module idl
+</span></span></span><span class=line><span class=cl><span class=s1>[  1%] Built target git_submodule_update_idl
+</span></span></span><span class=line><span class=cl><span class=s1>[  2%] Updating Git module fastcdr
+</span></span></span><span class=line><span class=cl><span class=s1>[  2%] Built target git_submodule_update_fastcdr
+</span></span></span><span class=line><span class=cl><span class=s1>[  3%] Generating Java application
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>FAILURE: Build failed with an exception.
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>* Where:
+</span></span></span><span class=line><span class=cl><span class=s1>Build file &#39;</span>/home/kenta/git/Fast-RTPS/fastrtpsgen/build.gradle<span class=s1>&#39; line: 78
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>* What went wrong:
+</span></span></span><span class=line><span class=cl><span class=s1>Could not resolve all dependencies for configuration &#39;</span>:compile<span class=s1>&#39;.
+</span></span></span><span class=line><span class=cl><span class=s1>&gt; Could not resolve junit:junit:4.+.
+</span></span></span><span class=line><span class=cl><span class=s1>  Required by:
+</span></span></span><span class=line><span class=cl><span class=s1>      :fastrtpsgen:unspecified
+</span></span></span><span class=line><span class=cl><span class=s1>   &gt; Could not resolve junit:junit:4.+.
+</span></span></span><span class=line><span class=cl><span class=s1>      &gt; Failed to list versions for junit:junit.
+</span></span></span><span class=line><span class=cl><span class=s1>         &gt; Unable to load Maven meta-data from https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml.
+</span></span></span><span class=line><span class=cl><span class=s1>            &gt; Could not GET &#39;</span>https://repo1.maven.org/maven2/junit/junit/maven-metadata.xml<span class=s1>&#39;.
+</span></span></span><span class=line><span class=cl><span class=s1>               &gt; 接続がタイムアウトしました (Connection timed out)
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>* Try:
+</span></span></span><span class=line><span class=cl><span class=s1>Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>BUILD FAILED
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>Total time: 2 mins 8.884 secs
+</span></span></span><span class=line><span class=cl><span class=s1>CMakeFiles/java.dir/build.make:57: ターゲット &#39;</span>CMakeFiles/java<span class=s1>&#39; のレシピで失敗しました
+</span></span></span><span class=line><span class=cl><span class=s1>make[2]: *** [CMakeFiles/java] エラー 1
+</span></span></span><span class=line><span class=cl><span class=s1>CMakeFiles/Makefile2:356: ターゲット &#39;</span>CMakeFiles/java.dir/all<span class=s1>&#39; のレシピで失敗しました
+</span></span></span><span class=line><span class=cl><span class=s1>make[1]: *** [CMakeFiles/java.dir/all] エラー 2
+</span></span></span><span class=line><span class=cl><span class=s1>Makefile:160: ターゲット &#39;</span>all<span class=err>&#39;</span> のレシピで失敗しました
+</span></span><span class=line><span class=cl>make: *** <span class=o>[</span>all<span class=o>]</span> エラー <span class=m>2</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>****  インストールは失敗しました。パッケージの作成を中断します
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>上書きしたファイルをバックアップから復元..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>クリーンアップ..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Bye.
+</span></span></code></pre></div><p>接続がタイムアウトしたと表示されており，インストールが完了しない．
+プロキシ環境にあるこのマシンでは，どうも<code>sudo checkinstall</code>の中で実行されるgradleがコケるようだ．</p><p>そこでrootにgradleのプロキシ設定を反映させて，インストールをする．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ sudo cp ~/.gradle/gradle.properties /root/.gradle/ <span class=c1># 自分のgradleの設定をrootにも反映</span>
+</span></span><span class=line><span class=cl>$ sudo checkinstall
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>checkinstall 1.6.2, Copyright <span class=m>2009</span> Felipe Eduardo Sanchez Diaz Duran
+</span></span><span class=line><span class=cl>           このソフトウェアはGNU GPLの下でリリースしています。
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>The package documentation directory ./doc-pak does not exist. 
+</span></span><span class=line><span class=cl>Should I create a default <span class=nb>set</span> of package docs?  <span class=o>[</span>y<span class=o>]</span>: 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>パッケージのドキュメンテーションを準備..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>*** No known documentation files were found. The new package 
+</span></span><span class=line><span class=cl>*** won<span class=s1>&#39;t include a documentation directory.
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>*****************************************
+</span></span></span><span class=line><span class=cl><span class=s1>**** Debian package creation selected ***
+</span></span></span><span class=line><span class=cl><span class=s1>*****************************************
+</span></span></span><span class=line><span class=cl><span class=s1>(中略)
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>このパッケージは以下の内容で構成されます: 
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>0 -  Maintainer: [ kenta@xxxxx ]
+</span></span></span><span class=line><span class=cl><span class=s1>1 -  Summary: [ Fast-RTPS and fastrtpsgen ]
+</span></span></span><span class=line><span class=cl><span class=s1>2 -  Name:    [ fastrtps ]
+</span></span></span><span class=line><span class=cl><span class=s1>3 -  Version: [ 20190522 ]
+</span></span></span><span class=line><span class=cl><span class=s1>4 -  Release: [ 1 ]
+</span></span></span><span class=line><span class=cl><span class=s1>5 -  License: [ GPL ]
+</span></span></span><span class=line><span class=cl><span class=s1>6 -  Group:   [ checkinstall ]
+</span></span></span><span class=line><span class=cl><span class=s1>7 -  Architecture: [ amd64 ]
+</span></span></span><span class=line><span class=cl><span class=s1>8 -  Source location: [ build ]
+</span></span></span><span class=line><span class=cl><span class=s1>9 -  Alternate source location: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>10 - Requires: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>11 - Provides: [ build ]
+</span></span></span><span class=line><span class=cl><span class=s1>12 - Conflicts: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>13 - Replaces: [  ]
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>変更するものの番号を入力してください。Enterで続行します: 
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>Installing with make install...
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>========================= インストールの結果 ===========================
+</span></span></span><span class=line><span class=cl><span class=s1>[  1%] Updating Git module idl
+</span></span></span><span class=line><span class=cl><span class=s1>[  1%] Built target git_submodule_update_idl
+</span></span></span><span class=line><span class=cl><span class=s1>[  2%] Updating Git module fastcdr
+</span></span></span><span class=line><span class=cl><span class=s1>[  2%] Built target git_submodule_update_fastcdr
+</span></span></span><span class=line><span class=cl><span class=s1>[  3%] Generating Java application
+</span></span></span><span class=line><span class=cl><span class=s1>:buildIDLParser
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://plugins.gradle.org/m2/me/champeau/gradle/antlr4-gradle-plugin/0.1/antlr4-gradle-plugin-0.1.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4-master/4.2.2/antlr4-master-4.2.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr-master/3.5.2/antlr-master-3.5.2.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/sonatype/oss/oss-parent/9/oss-parent-9.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.pom
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4/4.2.2/antlr4-4.2.2.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/stringtemplate/3.2/stringtemplate-3.2.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4-runtime/4.2.2/antlr4-runtime-4.2.2.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr4-annotations/4.2.2/antlr4-annotations-4.2.2.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.jar
+</span></span></span><span class=line><span class=cl><span class=s1>Download https://repo1.maven.org/maven2/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:clean
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:antlr4
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:compileJava
+</span></span></span><span class=line><span class=cl><span class=s1>警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
+</span></span></span><span class=line><span class=cl><span class=s1>注意:/home/kenta/git/Fast-RTPS/thirdparty/idl/src/main/java/com/eprosima/idl/generator/manager/TemplateUtil.javaの操作は、未チェックまたは安全ではありません。
+</span></span></span><span class=line><span class=cl><span class=s1>注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:processResources
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:classes
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:jar
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:assemble
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:compileTestJava UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:processTestResources UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:testClasses UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:test UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:check UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:idl:build
+</span></span></span><span class=line><span class=cl><span class=s1>:compileJava
+</span></span></span><span class=line><span class=cl><span class=s1>警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
+</span></span></span><span class=line><span class=cl><span class=s1>注意:入力ファイルの操作のうち、未チェックまたは安全ではないものがあります。
+</span></span></span><span class=line><span class=cl><span class=s1>注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
+</span></span></span><span class=line><span class=cl><span class=s1>:processResources UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:classes
+</span></span></span><span class=line><span class=cl><span class=s1>:jar
+</span></span></span><span class=line><span class=cl><span class=s1>:assemble
+</span></span></span><span class=line><span class=cl><span class=s1>:compileTestJava UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:processTestResources UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:testClasses UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:test UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:check UP-TO-DATE
+</span></span></span><span class=line><span class=cl><span class=s1>:build
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>BUILD SUCCESSFUL
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>Total time: 11.629 secs
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>This build could be faster, please consider using the Gradle Daemon: https://docs.gradle.org/2.10/userguide/gradle_daemon.html
+</span></span></span><span class=line><span class=cl><span class=s1>[  3%] Built target java
+</span></span></span><span class=line><span class=cl><span class=s1>[  8%] Built target fastcdr
+</span></span></span><span class=line><span class=cl><span class=s1>[100%] Built target fastrtps
+</span></span></span><span class=line><span class=cl><span class=s1>Install the project...
+</span></span></span><span class=line><span class=cl><span class=s1>-- Install configuration: &#34;Release&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/LICENSE
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/fastrtpsgen.jar
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/bin/fastrtpsgen
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/LICENSE
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/exceptions
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/exceptions/NotEnoughMemoryException.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/exceptions/Exception.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/exceptions/BadParamException.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/FastBuffer.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/FastCdr.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/fastcdr_dll.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/eProsima_auto_link.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/Cdr.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastcdr/config.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/lib/libfastcdr.so.1.0.8
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/lib/libfastcdr.so.1
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/lib/libfastcdr.so
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-targets-release.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastcdr/cmake/fastcdr-config-version.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/xmlparser
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/xmlparser/XMLEndpointParser.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/xmlparser/XMLParser.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/xmlparser/XMLProfileManager.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/xmlparser/XMLTree.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/xmlparser/XMLParserCommon.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/qos
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/qos/ParameterList.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/qos/WriterQos.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/qos/ReaderQos.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/qos/ParameterTypes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/qos/QosPolicies.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/log
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/log/Colors.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/log/StdoutConsumer.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/log/Log.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/fastrtps_dll.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/subscriber
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/subscriber/SubscriberHistory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/subscriber/Subscriber.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/subscriber/SampleInfo.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/subscriber/SubscriberListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/participant
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/participant/ParticipantListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/participant/Participant.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/fastrtps_fwd.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/fastrtps_all.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/publisher
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/publisher/PublisherListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/publisher/Publisher.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/publisher/PublisherHistory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/TopicDataType.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/AnnotationParameterValue.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicDataFactory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/AnnotationDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypesBase.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeObjectHashId.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicType.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderFactory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicPubSubType.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeIdentifier.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/MemberDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicTypePtr.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicData.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeIdentifierTypes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicTypeMember.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeObject.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilder.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeObjectFactory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicDataPtr.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/TypeNamesGenerator.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/types/DynamicTypeBuilderPtr.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/Domain.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/attributes
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/attributes/TopicAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/attributes/all_attributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/attributes/ParticipantAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/attributes/SubscriberAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/attributes/PublisherAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/config
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/config/doxygen_modules.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/PeriodicHeartbeat.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackSupressionDuration.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/timedevent/NackResponseDelay.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessWriter.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/WriterDiscoveryInfo.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulWriter.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/StatefulPersistentWriter.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderLocator.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/WriterListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/PersistentWriter.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/RTPSWriter.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/StatelessPersistentWriter.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/writer/ReaderProxy.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/exceptions
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/exceptions/Exception.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/RTPSDomain.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/network
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/network/NetworkFactory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/network/SenderResource.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/network/ReceiverResource.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/flowcontrol
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/flowcontrol/ThroughputControllerDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/Endpoint.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/participant
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipantListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/participant/RTPSParticipant.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/participant/ParticipantDiscoveryInfo.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/history
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/history/History.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/history/CacheChangePool.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/history/ReaderHistory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/history/WriterHistory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/ResendParticipantProxyDataPeriod.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/timedevent/RemoteParticipantLeaseDuration.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimpleListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/participant/PDPSimple.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDP.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPSimple.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/discovery/endpoint/EDPStatic.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/timedevent/WLivelinessPeriodicAssertion.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLP.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/liveliness/WLPListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/data
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ParticipantProxyData.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/data/WriterProxyData.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/data/ReaderProxyData.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/builtin/BuiltinProtocols.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderDiscoveryInfo.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/HeartbeatResponseDelay.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/WriterProxyLiveliness.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/timedevent/InitialAckNack.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessReader.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/WriterProxy.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/StatelessPersistentReader.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulReader.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/ReaderListener.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/StatefulPersistentReader.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/reader/RTPSReader.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes/EndpointAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes/ReaderAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes/HistoryAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes/PropertyPolicy.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes/RTPSParticipantAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/attributes/WriterAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/PortParameters.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/Token.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/WriteParams.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/all_common.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/Property.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/MatchingInfo.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/BinaryProperty.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/Types.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/SequenceNumber.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/Locator.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/CacheChange.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/SerializedPayload.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/InstanceHandle.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/FragmentNumber.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/Time_t.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/SampleIdentity.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/CDRMessage_t.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/common/Guid.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/rtps_fwd.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessagePool.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageCreator.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/RTPS_messages.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/CDRMessage.hpp
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/RTPSMessageGroup.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/messages/MessageReceiver.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/EndpointSecurityAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/ParticipantSecurityAttributes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/SecurityMaskUtilities.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/accesscontrol/AccessControl.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/exceptions
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/exceptions/SecurityException.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/Cryptography.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyFactory.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTypes.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoKeyExchange.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/cryptography/CryptoTransform.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/authentication
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Handshake.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/authentication/Authentication.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/common
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/common/ParticipantGenericMessage.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/common/Handle.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/security/common/SharedSecretHandle.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/resources
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceManagement.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncInterestTree.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/resources/TimedEvent.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/resources/ResourceEvent.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/resources/AsyncWriterThread.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/rtps/rtps_all.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/eProsima_auto_link.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TransportReceiverInterface.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/timedevent
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/timedevent/CleanTCPSocketsEvent.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/test_UDPv4Transport.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPv4Transport.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPv4TransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPTransportInterface.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/SocketTransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPv6Transport.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPTransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPChannelResource.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPv4Transport.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TransportInterface.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/tcp
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPHeader.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/tcp/TCPControlMessage.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/tcp/test_RTCPMessageManager.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/tcp/RTCPMessageManager.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPTransportInterface.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPv6TransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/test_UDPv4TransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/test_TCPv4Transport.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPTransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/test_TCPv4TransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TransportDescriptorInterface.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPChannelResource.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/UDPv6Transport.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/ChannelResource.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPv6TransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/transport/TCPv4TransportDescriptor.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/IPFinder.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/ObjectPool.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/System.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/IPLocator.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/md5.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/Semaphore.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/eClock.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/TimeConversion.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/DBQueue.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/utils/StringMatching.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/include/fastrtps/config.h
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/lib/libfastrtps.so.1.7.0
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/lib/libfastrtps.so.1
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/lib/libfastrtps.so
+</span></span></span><span class=line><span class=cl><span class=s1>-- Set runtime path of &#34;/usr/local/lib/libfastrtps.so.1.7.0&#34; to &#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-targets-release.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>-- Installing: /usr/local/share/fastrtps/cmake/fastrtps-config-version.cmake
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>======================== インストールに成功しました ==========================
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>Some of the files created by the installation are inside the home directory: /home
+</span></span></span><span class=line><span class=cl><span class=s1>
+</span></span></span><span class=line><span class=cl><span class=s1>You probably don&#39;</span>t want them to be included in the package.
+</span></span><span class=line><span class=cl>それらを表示しますか？ <span class=o>[</span>n<span class=o>]</span>: 
+</span></span><span class=line><span class=cl>それらをパッケージから除外しますか？<span class=o>(</span>yesと答えることをおすすめします<span class=o>)</span> <span class=o>[</span>n<span class=o>]</span>: 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Some of the files created by the installation are inside the build
+</span></span><span class=line><span class=cl>directory: /home/kenta/git/Fast-RTPS/build
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>You probably don<span class=err>&#39;</span>t want them to be included in the package,
+</span></span><span class=line><span class=cl>especially <span class=k>if</span> they are inside your home directory.
+</span></span><span class=line><span class=cl>Do you want me to list them?  <span class=o>[</span>n<span class=o>]</span>: 
+</span></span><span class=line><span class=cl>それらをパッケージから除外しますか？<span class=o>(</span>yesと答えることをおすすめします<span class=o>)</span> <span class=o>[</span>y<span class=o>]</span>: 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>tempディレクトリにファイルをコピー..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Stripping ELF binaries and libraries...OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>manページを圧縮..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ファイルリストを作成..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Debianパッケージを作成..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Debianパッケージをインストール..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>tempファイルを削除..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>バックアップパッケージを書き込み..OK
+</span></span><span class=line><span class=cl>OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>temp dirを削除..OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>**********************************************************************
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> Done. The new package has been installed and saved to
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> /home/kenta/git/Fast-RTPS/build/fastrtps_20190522-1_amd64.deb
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl> You can remove it from your system anytime using: 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>      dpkg -r fastrtps
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>**********************************************************************
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>$ dpkg --get-selections <span class=p>|</span> grep fastrtps
+</span></span><span class=line><span class=cl>fastrtps                                        install
+</span></span><span class=line><span class=cl>$ which fastrtpsgen
+</span></span><span class=line><span class=cl>/usr/local/bin/fastrtpsgen
+</span></span></code></pre></div><p>これでインストールが完了した！</p><h2 id=サンプルプログラムを動かす>サンプルプログラムを動かす<a href=#%e3%82%b5%e3%83%b3%e3%83%97%e3%83%ab%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%82%92%e5%8b%95%e3%81%8b%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>fastrtpsgenを使ってサンプルプログラムを作成する．
+プログラムの作成は<a href=https://eprosima.com/docs/fast-rtps/1.0.4/pdf/FASTRTPSGEN_User_Manual.pdf>FASTRTPSGEN v1.0.4 USER MANUAL</a>の<code>4 HelloWorld example</code>を参考にした．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ mkdir fastrtps-HelloWorld<span class=p>;</span> <span class=nb>cd</span> fastrtps-HelloWorld
+</span></span><span class=line><span class=cl>$ vim HelloWorld.idl <span class=c1># メッセージを定義</span>
+</span></span><span class=line><span class=cl>$ cat HelloWorld.idl
+</span></span><span class=line><span class=cl>struct sample <span class=o>{</span>
+</span></span><span class=line><span class=cl>    @Key long id<span class=p>;</span>
+</span></span><span class=line><span class=cl>    string message<span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>$ fastrtpsgen HelloWorld.idl -example CMake
+</span></span><span class=line><span class=cl>openjdk version <span class=s2>&#34;1.8.0_212&#34;</span>
+</span></span><span class=line><span class=cl>OpenJDK Runtime Environment <span class=o>(</span>build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03<span class=o>)</span>
+</span></span><span class=line><span class=cl>OpenJDK 64-Bit Server VM <span class=o>(</span>build 25.212-b03, mixed mode<span class=o>)</span>
+</span></span><span class=line><span class=cl>Loading templates...
+</span></span><span class=line><span class=cl>Processing the file HelloWorld.idl...
+</span></span><span class=line><span class=cl>HelloWorld.idl:2:16: error: Illegal identifier: id is already defined <span class=o>(</span>Annotation: id<span class=o>)</span>
+</span></span><span class=line><span class=cl>Exception in thread <span class=s2>&#34;main&#34;</span> java.lang.NullPointerException
+</span></span><span class=line><span class=cl>        at com.eprosima.fastrtps.fastrtpsgen.execute<span class=o>(</span>fastrtpsgen.java:323<span class=o>)</span>
+</span></span><span class=line><span class=cl>        at com.eprosima.fastrtps.fastrtpsgen.main<span class=o>(</span>fastrtpsgen.java:1188<span class=o>)</span>
+</span></span></code></pre></div><p>サンプルコードが動かない．
 idは定義済みだそうだ．
-別の名前を付けて再度挑戦してみる．</p><pre tabindex=0><code>$ vim HelloWorld.idl 
-$ cat HelloWorld.idl 
-struct HelloWorld {
-    @Key long index;
-    string message;
-};
-$ fastrtpsgen HelloWorld.idl -example CMake
-openjdk version &#34;1.8.0_212&#34;
-OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03)
-OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
-Loading templates...
-Processing the file HelloWorld.idl...
-Generating Type definition files...
-Generating TopicDataTypes files...
-Generating Publisher files...
-Generating Subscriber files...
-Generating main file...
-Adding project: HelloWorld.idl
-Generating solution for arch CMake...
-Generating CMakeLists solution
-$ ls 
-CMakeLists.txt  HelloWorldPubSubMain.cxx   HelloWorldPublisher.h
-HelloWorld.cxx  HelloWorldPubSubTypes.cxx  HelloWorldSubscriber.cxx
-HelloWorld.h    HelloWorldPubSubTypes.h    HelloWorldSubscriber.h
-HelloWorld.idl  HelloWorldPublisher.cxx
-</code></pre><p>ファイルが生成された．これをビルドする．</p><pre tabindex=0><code>$ mkdir build; cd build
-$ cmake ../
--- The C compiler identification is GNU 5.4.0
--- The CXX compiler identification is GNU 5.4.0
--- Check for working C compiler: /usr/bin/cc
--- Check for working C compiler: /usr/bin/cc -- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Check for working CXX compiler: /usr/bin/c++
--- Check for working CXX compiler: /usr/bin/c++ -- works
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libssl.so;/usr/lib/x86_64-linux-gnu/libcrypto.so (found version &#34;1.0.2g&#34;) 
--- Configuring HelloWorld...
--- Configuring done
--- Generating done
--- Build files have been written to: /home/kenta/prog/c++/fastrtps-HelloWorld/build
-$ make
-Scanning dependencies of target HelloWorld_lib
-[ 14%] Building CXX object CMakeFiles/HelloWorld_lib.dir/HelloWorld.cxx.o
-[ 28%] Linking CXX static library libHelloWorld_lib.a
-[ 28%] Built target HelloWorld_lib
-Scanning dependencies of target HelloWorld
-[ 42%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubTypes.cxx.o
-[ 57%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubMain.cxx.o
-[ 85%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPublisher.cxx.o
-[ 85%] Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldSubscriber.cxx.o
-[100%] Linking CXX executable HelloWorld
-[100%] Built target HelloWorld
-$ ls
-$ ls
-CMakeCache.txt  CMakeFiles  HelloWorld  Makefile  cmake_install.cmake  libHelloWorld_lib.a
-$ ./HelloWorld 
-Error: Incorrect arguments.
-Usage: 
-
-./HelloWorld publisher|subscriber
-</code></pre><p>ターミナルを二つ用意し，それぞれで<code>./HelloWorld publisher</code>と<code>./HelloWorld subscriber</code>を実行する．</p><pre tabindex=0><code>$ ./HelloWorld publisher
-Starting 
-Publisher created, waiting for Subscribers.
-Publisher matched
-Sending sample, count=1, send another sample?(y-yes,n-stop): n
-Stopping execution
-</code></pre><pre tabindex=0><code>$ ./HelloWorld subscriber
-Starting 
-Waiting for Data, press Enter to stop the Subscriber. 
-Subscriber matched
-Sample received, count=1
-Subscriber unmatched
-</code></pre><p>Fast-RTPSを使って通信ができた．</p></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#はじめに>はじめに</a></li><li><a href=#cmakeする>cmakeする</a></li><li><a href=#ビルドしてインストールする>ビルドしてインストールする</a></li><li><a href=#サンプルプログラムを動かす>サンプルプログラムを動かす</a></li></ul></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project_v3-jp/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>vivado_hls_create_project ver.3.0.0へのアップデート</span>
+別の名前を付けて再度挑戦してみる．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ vim HelloWorld.idl 
+</span></span><span class=line><span class=cl>$ cat HelloWorld.idl 
+</span></span><span class=line><span class=cl>struct HelloWorld <span class=o>{</span>
+</span></span><span class=line><span class=cl>    @Key long index<span class=p>;</span>
+</span></span><span class=line><span class=cl>    string message<span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>$ fastrtpsgen HelloWorld.idl -example CMake
+</span></span><span class=line><span class=cl>openjdk version <span class=s2>&#34;1.8.0_212&#34;</span>
+</span></span><span class=line><span class=cl>OpenJDK Runtime Environment <span class=o>(</span>build 1.8.0_212-8u212-b03-0ubuntu1.16.04.1-b03<span class=o>)</span>
+</span></span><span class=line><span class=cl>OpenJDK 64-Bit Server VM <span class=o>(</span>build 25.212-b03, mixed mode<span class=o>)</span>
+</span></span><span class=line><span class=cl>Loading templates...
+</span></span><span class=line><span class=cl>Processing the file HelloWorld.idl...
+</span></span><span class=line><span class=cl>Generating Type definition files...
+</span></span><span class=line><span class=cl>Generating TopicDataTypes files...
+</span></span><span class=line><span class=cl>Generating Publisher files...
+</span></span><span class=line><span class=cl>Generating Subscriber files...
+</span></span><span class=line><span class=cl>Generating main file...
+</span></span><span class=line><span class=cl>Adding project: HelloWorld.idl
+</span></span><span class=line><span class=cl>Generating solution <span class=k>for</span> arch CMake...
+</span></span><span class=line><span class=cl>Generating CMakeLists solution
+</span></span><span class=line><span class=cl>$ ls 
+</span></span><span class=line><span class=cl>CMakeLists.txt  HelloWorldPubSubMain.cxx   HelloWorldPublisher.h
+</span></span><span class=line><span class=cl>HelloWorld.cxx  HelloWorldPubSubTypes.cxx  HelloWorldSubscriber.cxx
+</span></span><span class=line><span class=cl>HelloWorld.h    HelloWorldPubSubTypes.h    HelloWorldSubscriber.h
+</span></span><span class=line><span class=cl>HelloWorld.idl  HelloWorldPublisher.cxx
+</span></span></code></pre></div><p>ファイルが生成された．これをビルドする．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ mkdir build<span class=p>;</span> <span class=nb>cd</span> build
+</span></span><span class=line><span class=cl>$ cmake ../
+</span></span><span class=line><span class=cl>-- The C compiler identification is GNU 5.4.0
+</span></span><span class=line><span class=cl>-- The CXX compiler identification is GNU 5.4.0
+</span></span><span class=line><span class=cl>-- Check <span class=k>for</span> working C compiler: /usr/bin/cc
+</span></span><span class=line><span class=cl>-- Check <span class=k>for</span> working C compiler: /usr/bin/cc -- works
+</span></span><span class=line><span class=cl>-- Detecting C compiler ABI info
+</span></span><span class=line><span class=cl>-- Detecting C compiler ABI info - <span class=k>done</span>
+</span></span><span class=line><span class=cl>-- Detecting C compile features
+</span></span><span class=line><span class=cl>-- Detecting C compile features - <span class=k>done</span>
+</span></span><span class=line><span class=cl>-- Check <span class=k>for</span> working CXX compiler: /usr/bin/c++
+</span></span><span class=line><span class=cl>-- Check <span class=k>for</span> working CXX compiler: /usr/bin/c++ -- works
+</span></span><span class=line><span class=cl>-- Detecting CXX compiler ABI info
+</span></span><span class=line><span class=cl>-- Detecting CXX compiler ABI info - <span class=k>done</span>
+</span></span><span class=line><span class=cl>-- Detecting CXX compile features
+</span></span><span class=line><span class=cl>-- Detecting CXX compile features - <span class=k>done</span>
+</span></span><span class=line><span class=cl>-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libssl.so<span class=p>;</span>/usr/lib/x86_64-linux-gnu/libcrypto.so <span class=o>(</span>found version <span class=s2>&#34;1.0.2g&#34;</span><span class=o>)</span> 
+</span></span><span class=line><span class=cl>-- Configuring HelloWorld...
+</span></span><span class=line><span class=cl>-- Configuring <span class=k>done</span>
+</span></span><span class=line><span class=cl>-- Generating <span class=k>done</span>
+</span></span><span class=line><span class=cl>-- Build files have been written to: /home/kenta/prog/c++/fastrtps-HelloWorld/build
+</span></span><span class=line><span class=cl>$ make
+</span></span><span class=line><span class=cl>Scanning dependencies of target HelloWorld_lib
+</span></span><span class=line><span class=cl><span class=o>[</span> 14%<span class=o>]</span> Building CXX object CMakeFiles/HelloWorld_lib.dir/HelloWorld.cxx.o
+</span></span><span class=line><span class=cl><span class=o>[</span> 28%<span class=o>]</span> Linking CXX static library libHelloWorld_lib.a
+</span></span><span class=line><span class=cl><span class=o>[</span> 28%<span class=o>]</span> Built target HelloWorld_lib
+</span></span><span class=line><span class=cl>Scanning dependencies of target HelloWorld
+</span></span><span class=line><span class=cl><span class=o>[</span> 42%<span class=o>]</span> Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubTypes.cxx.o
+</span></span><span class=line><span class=cl><span class=o>[</span> 57%<span class=o>]</span> Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPubSubMain.cxx.o
+</span></span><span class=line><span class=cl><span class=o>[</span> 85%<span class=o>]</span> Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldPublisher.cxx.o
+</span></span><span class=line><span class=cl><span class=o>[</span> 85%<span class=o>]</span> Building CXX object CMakeFiles/HelloWorld.dir/HelloWorldSubscriber.cxx.o
+</span></span><span class=line><span class=cl><span class=o>[</span>100%<span class=o>]</span> Linking CXX executable HelloWorld
+</span></span><span class=line><span class=cl><span class=o>[</span>100%<span class=o>]</span> Built target HelloWorld
+</span></span><span class=line><span class=cl>$ ls
+</span></span><span class=line><span class=cl>$ ls
+</span></span><span class=line><span class=cl>CMakeCache.txt  CMakeFiles  HelloWorld  Makefile  cmake_install.cmake  libHelloWorld_lib.a
+</span></span><span class=line><span class=cl>$ ./HelloWorld 
+</span></span><span class=line><span class=cl>Error: Incorrect arguments.
+</span></span><span class=line><span class=cl>Usage: 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>./HelloWorld publisher<span class=p>|</span>subscriber
+</span></span></code></pre></div><p>ターミナルを二つ用意し，それぞれで<code>./HelloWorld publisher</code>と<code>./HelloWorld subscriber</code>を実行する．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ ./HelloWorld publisher
+</span></span><span class=line><span class=cl>Starting 
+</span></span><span class=line><span class=cl>Publisher created, waiting <span class=k>for</span> Subscribers.
+</span></span><span class=line><span class=cl>Publisher matched
+</span></span><span class=line><span class=cl>Sending sample, <span class=nv>count</span><span class=o>=</span>1, send another sample?<span class=o>(</span>y-yes,n-stop<span class=o>)</span>: n
+</span></span><span class=line><span class=cl>Stopping execution
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ ./HelloWorld subscriber
+</span></span><span class=line><span class=cl>Starting 
+</span></span><span class=line><span class=cl>Waiting <span class=k>for</span> Data, press Enter to stop the Subscriber. 
+</span></span><span class=line><span class=cl>Subscriber matched
+</span></span><span class=line><span class=cl>Sample received, <span class=nv>count</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>Subscriber unmatched
+</span></span></code></pre></div><p>Fast-RTPSを使って通信ができた．</p></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#はじめに>はじめに</a></li><li><a href=#cmakeする>cmakeする</a></li><li><a href=#ビルドしてインストールする>ビルドしてインストールする</a></li><li><a href=#サンプルプログラムを動かす>サンプルプログラムを動かす</a></li></ul></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2019-06-23-vivado_hls_create_project_v3-jp/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>vivado_hls_create_project ver.3.0.0へのアップデート</span>
 </a><a class=prev-post href=https://Kenta11.github.io/posts/2019-05-19-update-mirrorlist-jp/><span class=post-nav-label>Older&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>manjaro linuxのミラーサーバを更新する</span></a></div><div id=comments class=thin></div></main><footer id=site-footer class="section-inner thin animated fadeIn faster"><p>&copy; 2025 <a href=https://Kenta11.github.io/>Kenta Arai Webpage</a>
 &#183; &#183; Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>
 &#183; Theme <a href=https://github.com/1bl4z3r/hermit-V2 target=_blank rel=noopener>Hermit-V2</a></p></footer><script async src=https://Kenta11.github.io/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin=anonymous></script></body></html>

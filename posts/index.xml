@@ -26,34 +26,34 @@
 <code>apt install</code> でいくつかパッケージをインストールする．
 これらのパッケージは CSIM で必要になる．
 また，環境変数<code>LIBRARY_PATH</code>を定義しているが，これも CSIM で必要になる．</p>
-<pre tabindex="0"><code>FROM ubuntu:22.04
-LABEL maintainer &#34;Kenta Arai &lt;&gt;&#34;
-
-RUN apt update -y \
-  &amp;&amp; apt dist-upgrade -y \
-  &amp;&amp; apt autoremove -y \
-  &amp;&amp; apt install build-essential gcc-multilib git language-pack-en libc6-dev libtinfo5 -y \
-  &amp;&amp; echo &#34;export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu&#34; &gt;&gt; ~/.bashrc
-</code></pre><p>次に Docker イメージを作成し，コンテナを生成する．
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> ubuntu:22.04</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">LABEL</span> maintainer <span class="s2">&#34;Kenta Arai &lt;&gt;&#34;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">RUN</span> apt update -y <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="o">&amp;&amp;</span> apt dist-upgrade -y <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="o">&amp;&amp;</span> apt autoremove -y <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="o">&amp;&amp;</span> apt install build-essential gcc-multilib git language-pack-en libc6-dev libtinfo5 -y <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;export LIBRARY_PATH=/usr/lib/x86_64-linux-gnu&#34;</span> &gt;&gt; ~/.bashrc<span class="err">
+</span></span></span></code></pre></div><p>次に Docker イメージを作成し，コンテナを生成する．
 <code>/opt</code> 下に Vitis をインストールしたディレクトリをマウントする．</p>
-<pre tabindex="0"><code>$ ls
-Dockerfile
-$ sudo docker buildx build -t ubuntu_22.04_for_vitis .
-$ sudo docker run -it --name ubuntu_22.04_for_vitis \
---mount type=bind,src=https://Kenta11.github.io/opt/Xilinx/2022.2,dst=/opt/Xilinx/2022.2,readonly \
-ubuntu_22.04_for_vitis /bin/bash
-</code></pre><h2 id="ubuntu-上で-vitis-hls-を動作させる">Ubuntu 上で Vitis HLS を動作させる<a href="#ubuntu-%e4%b8%8a%e3%81%a7-vitis-hls-%e3%82%92%e5%8b%95%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ls
+</span></span><span class="line"><span class="cl">Dockerfile
+</span></span><span class="line"><span class="cl">$ sudo docker buildx build -t ubuntu_22.04_for_vitis .
+</span></span><span class="line"><span class="cl">$ sudo docker run -it --name ubuntu_22.04_for_vitis <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--mount <span class="nv">type</span><span class="o">=</span>bind,src<span class="o">=</span>/opt/Xilinx/2022.2,dst<span class="o">=</span>/opt/Xilinx/2022.2,readonly <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>ubuntu_22.04_for_vitis /bin/bash
+</span></span></code></pre></div><h2 id="ubuntu-上で-vitis-hls-を動作させる">Ubuntu 上で Vitis HLS を動作させる<a href="#ubuntu-%e4%b8%8a%e3%81%a7-vitis-hls-%e3%82%92%e5%8b%95%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
 <p>Vitis HLS のサンプルプログラムをダウンロードし，<code>vitis_hls</code>で論理合成，CSIM，COSIM を開始する．</p>
-<pre tabindex="0"><code># cd ~
-# git clone https://github.com/Kenta11/Vitis-HLS-Introductory-Examples
-# cd Vitis-HLS-Introductory-Examples/Modeling/using_vectors/
-# source /opt/Xilinx/2022.2/Vivado/2022.2/settings64.sh
-# vitis_hls -f run_hls.tcl
-</code></pre><p>論理合成と CSIM を無事に完了することができた．
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># cd ~</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># git clone https://github.com/Kenta11/Vitis-HLS-Introductory-Examples</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># cd Vitis-HLS-Introductory-Examples/Modeling/using_vectors/</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># source /opt/Xilinx/2022.2/Vivado/2022.2/settings64.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># vitis_hls -f run_hls.tcl</span>
+</span></span></code></pre></div><p>論理合成と CSIM を無事に完了することができた．
 ただし COSIM は途中で終了してしまった．
 以下は COSIM のログである．</p>
 <pre tabindex="0"><code>****** xsim v2022.2 (64-bit)
@@ -143,231 +143,231 @@ INFO: [Common 17-206] Exiting vitis_hls at Fri Apr 28 12:31:04 2023...
    </svg></a></h3>
 <p><a href="../2022-09-23-micro1">以前の記事</a>で紹介したツールをインストールしたマシンで回路合成します．
 <a href="https://github.com/Kenta11/micro-alpha">MICRO-alpha</a>のリポジトリをクローンして，そのディレクトリ内にて<a href="https://github.com/Kenta11/micro-alpha/releases/tag/v1.0.0">リリースのページ</a>で公開している Vivado プロジェクト (micro-alpha-arty-a7-100.tar.gz) を解凍します．</p>
-<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/micro-alpha
-$ cd micro-alpha
-$ wget https://github.com/Kenta11/micro-alpha/releases/download/v1.0.0/micro-alpha-arty-a7-100.tar.gz
-$ tar zxvf micro-alpha-arty-a7-100.tar.gz
-$ tree -L 1
-.
-├── LICENSE
-├── Makefile
-├── README.md
-├── micro-alpha-arty-a7-100.tar.gz
-├── run.py
-├── micro-alpha
-├── script
-├── src
-├── tb
-</code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
-<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
-$ rm1masm MICROONE -o MICROONE.o
-$ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
-</code></pre><p>続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
-<pre tabindex="0"><code>$ cat calculator 
-; This program is distributed under MIT LICENSE.
-; Copyright (c) 2023 Kenta Arai
-
-; 逆ポーランド記法電卓プログラム
-; 
-; 実行例（(3+4)*(4-2)）
-; (CALCULATOR)&gt;&gt; 3 4 + 4 2 - *
-; 14
-TITLE CALCULATOR
-             ORG  140
-CALCULATOR0: LA   1, PROMPT
-             BSR  PRINT
-             LA   1, INPUT
-             BSR  RWLINE
-             LA   0, INPUT
-             BSR  INTERPRET
-             BSR  PUTINT
-             B    CALCULATOR0
-             HLT
-
-; データ領域
-PROMPT:      DC   &#39; (
-             DC   &#39; c
-             DC   &#39; a
-             DC   &#39; l
-             DC   &#39; c
-             DC   &#39; )
-             DC   &#39; &gt;
-             DC   &#39; &gt;
-             DC   &#39;  
-             DC   0
-INPUT:       DS   32
-
-; 文字列を出力装置に書き込む関数
-; 入力: {r1: 文字列の先頭アドレス}
-; 出力: なし
-PRINT0:      WIO  LPT
-             LEA  1, 1(1)
-PRINT:       LX   0, (1)
-             OR   0, (0)
-             BNZ  PRINT0
-             RET
-
-; 入力装置から行を読む関数
-; 入力: {r1: 行の書込み先アドレス}
-; 出力: なし
-; NOTE: 読んだ文字は都度出力装置に書き込む
-RWLINE0:     STX  0, (1)
-             LEA  1, 1(1)
-RWLINE:      BSR  READWORD
-             WIO  LPT
-             LC   2, X&#34;0D
-             CMP  0, (2)
-             BNZ  RWLINE0
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             LC   0, 0
-             STX  0, (1)
-             RET
-
-; 入力式を計算する
-; 入力: {r0: 入力文字列}
-; 出力: {r1: 計算結果}
-INTERPRET:   LX   1, (0)
-             CMP  1, 0       ; NULL
-             BZ   INTERPRET5
-             CMP  1, X&#34;20    ; SP
-             BZ   INTERPRET4
-             CMP  1, X&#34;2B    ; +
-             BNZ  INTERPRET0
-             POP  3, 2
-             ADD  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET0:  CMP  1, X&#34;2D    ; -
-             BNZ  INTERPRET1
-             POP  3, 2
-             SUB  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET1:  CMP  1, X&#34;2A    ; *
-             BNZ  INTERPRET2
-             POP  3, 1
-             POP  1, 1
-             MULT 1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET2:  CMP  1, X&#34;2F    ; /
-             BNZ  INTERPRET3
-             POP  3, 2
-             LC   1, 0
-             DIV  1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
-             CMP  1, 0
-             BZ   INTERPRET6
-             BSR  ATOI
-             PUSH 1, 1
-INTERPRET4:  ADD  0, 1
-             B    INTERPRET
-INTERPRET5:  POP  1, 1
-INTERPRET6:  RET
-
-; 整数を出力装置に書き込む関数
-; 入力: {r1: 数値}
-; 出力: なし
-PUTINT:      LC   0, X&#34;30
-             WIO  LPT
-             LC   0, X&#34;78
-             WIO  LPT
-             LEA  2, (1)    ; r1[15:12] を出���
-             SC   2, 4
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[11:8] を出力
-             SC   2, 8
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[7:4] を出力
-             SC   2, 12
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[3:0] を出力
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LC   0, X&#34;0D
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             RET
-DIGIT:       DC   X&#34;30
-             DC   X&#34;31
-             DC   X&#34;32
-             DC   X&#34;33
-             DC   X&#34;34
-             DC   X&#34;35
-             DC   X&#34;36
-             DC   X&#34;37
-             DC   X&#34;38
-             DC   X&#34;39
-             DC   X&#34;41
-             DC   X&#34;42
-             DC   X&#34;43
-             DC   X&#34;44
-             DC   X&#34;45
-             DC   X&#34;46
-
-; 入力装置から文字を読む関数
-; 入力: なし
-; 出力: {r0: 読んだ文字}
-; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
-;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
-READWORD:    RIO  CR
-             OR   0, (0)
-             BZ   READWORD
-             RET
-
-; 入力文字列を数値に変換する
-; 入力: {r0: 入力文字列}
-; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
-ATOI:        LC   1, 0
-ATOI0:       PUSH 1, 1
-             LX   1, (0)
-             BSR  ISDIGIT
-             CMP  1, 0
-             POP  1, 1
-             BNZ  ATOI1
-             RET
-ATOI1:       MULT 1, 10
-             LX   1, (0)
-             SUB  1, X&#34;30
-             ADD  1, (2)
-             ADD  0, 1
-             B    ATOI0
-
-; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
-; 入力: {r1: 入力文字}
-; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
-ISDIGIT:     CMP  1, X&#34;30
-             BM   ISDIGIT0
-             CMP  1, X&#34;39
-             BP   ISDIGIT0
-             LC   1, 1
-             RET
-ISDIGIT0:    LC   1, 0
-             RET
-END
-$ rm1asm calculator -o calculator.b
-$ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/ip/main_memory/machine_program.coe
-</code></pre><h3 id="vivado-プロジェクトを作成v114-以降">Vivado プロジェクトを作成（v1.1.4 以降）<a href="#vivado-%e3%83%97%e3%83%ad%e3%82%b8%e3%82%a7%e3%82%af%e3%83%88%e3%82%92%e4%bd%9c%e6%88%90v114-%e4%bb%a5%e9%99%8d" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ git clone https://github.com/Kenta11/micro-alpha
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> micro-alpha
+</span></span><span class="line"><span class="cl">$ wget https://github.com/Kenta11/micro-alpha/releases/download/v1.0.0/micro-alpha-arty-a7-100.tar.gz
+</span></span><span class="line"><span class="cl">$ tar zxvf micro-alpha-arty-a7-100.tar.gz
+</span></span><span class="line"><span class="cl">$ tree -L <span class="m">1</span>
+</span></span><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── LICENSE
+</span></span><span class="line"><span class="cl">├── Makefile
+</span></span><span class="line"><span class="cl">├── README.md
+</span></span><span class="line"><span class="cl">├── micro-alpha-arty-a7-100.tar.gz
+</span></span><span class="line"><span class="cl">├── run.py
+</span></span><span class="line"><span class="cl">├── micro-alpha
+</span></span><span class="line"><span class="cl">├── script
+</span></span><span class="line"><span class="cl">├── src
+</span></span><span class="line"><span class="cl">├── tb
+</span></span></code></pre></div><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class="p">|</span> iconv -f sjis -t utf8 <span class="p">|</span> tr -d <span class="s2">&#34;\32&#34;</span> &gt; MICROONE
+</span></span><span class="line"><span class="cl">$ rm1masm MICROONE -o MICROONE.o
+</span></span><span class="line"><span class="cl">$ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
+</span></span></code></pre></div><p>続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cat calculator 
+</span></span><span class="line"><span class="cl"><span class="p">;</span> This program is distributed under MIT LICENSE.
+</span></span><span class="line"><span class="cl"><span class="p">;</span> Copyright <span class="o">(</span>c<span class="o">)</span> <span class="m">2023</span> Kenta Arai
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 逆ポーランド記法電卓プログラム
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 実行例（<span class="o">(</span>3+4<span class="o">)</span>*<span class="o">(</span>4-2<span class="o">)</span>）
+</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="o">(</span>CALCULATOR<span class="o">)</span>&gt;&gt; <span class="m">3</span> <span class="m">4</span> + <span class="m">4</span> <span class="m">2</span> - *
+</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="m">14</span>
+</span></span><span class="line"><span class="cl">TITLE CALCULATOR
+</span></span><span class="line"><span class="cl">             ORG  <span class="m">140</span>
+</span></span><span class="line"><span class="cl">CALCULATOR0: LA   1, PROMPT
+</span></span><span class="line"><span class="cl">             BSR  PRINT
+</span></span><span class="line"><span class="cl">             LA   1, INPUT
+</span></span><span class="line"><span class="cl">             BSR  RWLINE
+</span></span><span class="line"><span class="cl">             LA   0, INPUT
+</span></span><span class="line"><span class="cl">             BSR  INTERPRET
+</span></span><span class="line"><span class="cl">             BSR  PUTINT
+</span></span><span class="line"><span class="cl">             B    CALCULATOR0
+</span></span><span class="line"><span class="cl">             HLT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> データ領域
+</span></span><span class="line"><span class="cl">PROMPT:      DC   <span class="s1">&#39; (
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> c
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39; a
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> l
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39; c
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> <span class="o">)</span>
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39; &gt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> &gt;
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39;  
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   0
+</span></span></span><span class="line"><span class="cl"><span class="s1">INPUT:       DS   32
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 文字列を出力装置に書き込む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r1: 文字列の先頭アドレス}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">PRINT0:      WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  1, 1(1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">PRINT:       LX   0, (1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             OR   0, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  PRINT0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力装置から行を読む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r1: 行の書込み先アドレス}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">; NOTE: 読んだ文字は都度出力装置に書き込む
+</span></span></span><span class="line"><span class="cl"><span class="s1">RWLINE0:     STX  0, (1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  1, 1(1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">RWLINE:      BSR  READWORD
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   2, X&#34;0D
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  RWLINE0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;0A
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             STX  0, (1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力式を計算する
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r0: 入力文字列}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: {r1: 計算結果}
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET:   LX   1, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, 0       ; NULL
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   INTERPRET5
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, X&#34;20    ; SP
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, X&#34;2B    ; +
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET0:  CMP  1, X&#34;2D    ; -
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SUB  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET1:  CMP  1, X&#34;2A    ; *
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             MULT 1, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET2:  CMP  1, X&#34;2F    ; /
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET3
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DIV  1, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET3:  BSR  ISDIGIT    ; &#39;</span>0<span class="s1">&#39;-&#39;</span>9<span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   INTERPRET6
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BSR  ATOI
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET4:  ADD  0, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET5:  POP  1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET6:  RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 整数を出力装置に書き込む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r1: 数値}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">PUTINT:      LC   0, X&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;78
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[15:12] を出���
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SC   2, 4
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[11:8] を出力
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SC   2, 8
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[7:4] を出力
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SC   2, 12
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[3:0] を出力
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;0D
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;0A
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">DIGIT:       DC   X&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;31
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;32
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;33
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;34
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;35
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;36
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;37
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;38
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;39
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;41
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;42
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;43
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;44
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;45
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;46
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力装置から文字を読む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: {r0: 読んだ文字}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
+</span></span></span><span class="line"><span class="cl"><span class="s1">;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
+</span></span></span><span class="line"><span class="cl"><span class="s1">READWORD:    RIO  CR
+</span></span></span><span class="line"><span class="cl"><span class="s1">             OR   0, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   READWORD
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力文字列を数値に変換する
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r0: 入力文字列}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
+</span></span></span><span class="line"><span class="cl"><span class="s1">ATOI:        LC   1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">ATOI0:       PUSH 1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   1, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BSR  ISDIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  ATOI1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">ATOI1:       MULT 1, 10
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   1, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SUB  1, X&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  1, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  0, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    ATOI0
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力文字が数字(&#39;</span>0<span class="s1">&#39;-&#39;</span>9<span class="err">&#39;</span><span class="o">)</span>であるかを判定する
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 入力: <span class="o">{</span>r1: 入力文字<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 出力: <span class="o">{</span>r1: 判定結果<span class="o">(</span>1: 数字である，0: 数字でない<span class="o">)}</span>
+</span></span><span class="line"><span class="cl">ISDIGIT:     CMP  1, X<span class="s2">&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s2">             BM   ISDIGIT0
+</span></span></span><span class="line"><span class="cl"><span class="s2">             CMP  1, X&#34;</span><span class="m">39</span>
+</span></span><span class="line"><span class="cl">             BP   ISDIGIT0
+</span></span><span class="line"><span class="cl">             LC   1, <span class="m">1</span>
+</span></span><span class="line"><span class="cl">             RET
+</span></span><span class="line"><span class="cl">ISDIGIT0:    LC   1, <span class="m">0</span>
+</span></span><span class="line"><span class="cl">             RET
+</span></span><span class="line"><span class="cl">END
+</span></span><span class="line"><span class="cl">$ rm1asm calculator -o calculator.b
+</span></span><span class="line"><span class="cl">$ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/ip/main_memory/machine_program.coe
+</span></span></code></pre></div><h3 id="vivado-プロジェクトを作成v114-以降">Vivado プロジェクトを作成（v1.1.4 以降）<a href="#vivado-%e3%83%97%e3%83%ad%e3%82%b8%e3%82%a7%e3%82%af%e3%83%88%e3%82%92%e4%bd%9c%e6%88%90v114-%e4%bb%a5%e9%99%8d" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -382,253 +382,253 @@ $ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/i
 </ul>
 <p><a href="../2022-09-23-micro1">以前の記事</a>で紹介したツールをインストールしたマシンで回路合成します．
 <a href="https://github.com/Kenta11/micro-alpha">MICRO-alpha</a>のリポジトリをクローンしてください．</p>
-<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/micro-alpha
-$ cd micro-alpha
-$ tree -L 1
-.
-├── LICENSE
-├── Makefile
-├── README.md
-├── fpga
-├── script
-├── src
-└── tb
-
-5 directories, 3 files
-</code></pre><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
-<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
-$ rm1masm MICROONE -o MICROONE.o
-$ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_program.coe
-</code></pre><p>続いて，機械語プログラムを主記憶に書き込むための COE ファイルを作成します．</p>
-<pre tabindex="0"><code>$ cat calculator 
-; This program is distributed under MIT LICENSE.
-; Copyright (c) 2023 Kenta Arai
-
-; 逆ポーランド記法電卓プログラム
-; 
-; 実行例（(3+4)*(4-2)）
-; (CALCULATOR)&gt;&gt; 3 4 + 4 2 - *
-; 14
-TITLE CALCULATOR
-             ORG  140
-CALCULATOR0: LA   1, PROMPT
-             BSR  PRINT
-             LA   1, INPUT
-             BSR  RWLINE
-             LA   0, INPUT
-             BSR  INTERPRET
-             BSR  PUTINT
-             B    CALCULATOR0
-             HLT
-
-; データ領域
-PROMPT:      DC   &#39; (
-             DC   &#39; c
-             DC   &#39; a
-             DC   &#39; l
-             DC   &#39; c
-             DC   &#39; )
-             DC   &#39; &gt;
-             DC   &#39; &gt;
-             DC   &#39;  
-             DC   0
-INPUT:       DS   32
-
-; 文字列を出力装置に書き込む関数
-; 入力: {r1: 文字列の先頭アドレス}
-; 出力: なし
-PRINT0:      WIO  LPT
-             LEA  1, 1(1)
-PRINT:       LX   0, (1)
-             OR   0, (0)
-             BNZ  PRINT0
-             RET
-
-; 入力装置から行を読む関数
-; 入力: {r1: 行の書込み先アドレス}
-; 出力: なし
-; NOTE: 読んだ文字は都度出力装置に書き込む
-RWLINE0:     STX  0, (1)
-             LEA  1, 1(1)
-RWLINE:      BSR  READWORD
-             WIO  LPT
-             LC   2, X&#34;0D
-             CMP  0, (2)
-             BNZ  RWLINE0
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             LC   0, 0
-             STX  0, (1)
-             RET
-
-; 入力式を計算する
-; 入力: {r0: 入力文字列}
-; 出力: {r1: 計算結果}
-INTERPRET:   LX   1, (0)
-             CMP  1, 0       ; NULL
-             BZ   INTERPRET5
-             CMP  1, X&#34;20    ; SP
-             BZ   INTERPRET4
-             CMP  1, X&#34;2B    ; +
-             BNZ  INTERPRET0
-             POP  3, 2
-             ADD  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET0:  CMP  1, X&#34;2D    ; -
-             BNZ  INTERPRET1
-             POP  3, 2
-             SUB  2, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET1:  CMP  1, X&#34;2A    ; *
-             BNZ  INTERPRET2
-             POP  3, 1
-             POP  1, 1
-             MULT 1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET2:  CMP  1, X&#34;2F    ; /
-             BNZ  INTERPRET3
-             POP  3, 2
-             LC   1, 0
-             DIV  1, (3)
-             PUSH 2, 1
-             B    INTERPRET4
-INTERPRET3:  BSR  ISDIGIT    ; &#39;0&#39;-&#39;9&#39;
-             CMP  1, 0
-             BZ   INTERPRET6
-             BSR  ATOI
-             PUSH 1, 1
-INTERPRET4:  ADD  0, 1
-             B    INTERPRET
-INTERPRET5:  POP  1, 1
-INTERPRET6:  RET
-
-; 整数を出力装置に書き込む関数
-; 入力: {r1: 数値}
-; 出力: なし
-PUTINT:      LC   0, X&#34;30
-             WIO  LPT
-             LC   0, X&#34;78
-             WIO  LPT
-             LEA  2, (1)    ; r1[15:12] を出���
-             SC   2, 4
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[11:8] を出力
-             SC   2, 8
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[7:4] を出力
-             SC   2, 12
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LEA  2, (1)    ; r1[3:0] を出力
-             AND  2, X&#34;F
-             LA   3, DIGIT
-             ADD  2, (3)
-             LX   0, (2)
-             WIO  LPT
-             LC   0, X&#34;0D
-             WIO  LPT
-             LC   0, X&#34;0A
-             WIO  LPT
-             RET
-DIGIT:       DC   X&#34;30
-             DC   X&#34;31
-             DC   X&#34;32
-             DC   X&#34;33
-             DC   X&#34;34
-             DC   X&#34;35
-             DC   X&#34;36
-             DC   X&#34;37
-             DC   X&#34;38
-             DC   X&#34;39
-             DC   X&#34;41
-             DC   X&#34;42
-             DC   X&#34;43
-             DC   X&#34;44
-             DC   X&#34;45
-             DC   X&#34;46
-
-; 入力装置から文字を読む関数
-; 入力: なし
-; 出力: {r0: 読んだ文字}
-; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
-;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
-READWORD:    RIO  CR
-             OR   0, (0)
-             BZ   READWORD
-             RET
-
-; 入力文字列を数値に変換する
-; 入力: {r0: 入力文字列}
-; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
-ATOI:        LC   1, 0
-ATOI0:       PUSH 1, 1
-             LX   1, (0)
-             BSR  ISDIGIT
-             CMP  1, 0
-             POP  1, 1
-             BNZ  ATOI1
-             RET
-ATOI1:       MULT 1, 10
-             LX   1, (0)
-             SUB  1, X&#34;30
-             ADD  1, (2)
-             ADD  0, 1
-             B    ATOI0
-
-; 入力文字が数字(&#39;0&#39;-&#39;9&#39;)であるかを判定する
-; 入力: {r1: 入力文字}
-; 出力: {r1: 判定結果(1: 数字である，0: 数字でない)}
-ISDIGIT:     CMP  1, X&#34;30
-             BM   ISDIGIT0
-             CMP  1, X&#34;39
-             BP   ISDIGIT0
-             LC   1, 1
-             RET
-ISDIGIT0:    LC   1, 0
-             RET
-END
-$ rm1asm calculator -o calculator.b
-$ python script/obj2coe.py arty-a7-100 calculator.b fpga/arty-a7-100/machine_program.coe
-</code></pre><p>make コマンドを実行すると，Vivado のプロジェクトが作成されます．</p>
-<pre tabindex="0"><code>$ make all
-$ tree -L 2 vivado
-vivado
-└── arty-a7-100
-    ├── arty-a7-100.cache
-    ├── arty-a7-100.gen
-    ├── arty-a7-100.hw
-    ├── arty-a7-100.ip_user_files
-    ├── arty-a7-100.srcs
-    └── arty-a7-100.xpr
-
-7 directories, 1 file
-</code></pre><h3 id="fpga-上で逆ポーランド記法プログラムを動作させる">FPGA 上で逆ポーランド記法プログラムを動作させる<a href="#fpga-%e4%b8%8a%e3%81%a7%e9%80%86%e3%83%9d%e3%83%bc%e3%83%a9%e3%83%b3%e3%83%89%e8%a8%98%e6%b3%95%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%82%92%e5%8b%95%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ git clone https://github.com/Kenta11/micro-alpha
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> micro-alpha
+</span></span><span class="line"><span class="cl">$ tree -L <span class="m">1</span>
+</span></span><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── LICENSE
+</span></span><span class="line"><span class="cl">├── Makefile
+</span></span><span class="line"><span class="cl">├── README.md
+</span></span><span class="line"><span class="cl">├── fpga
+</span></span><span class="line"><span class="cl">├── script
+</span></span><span class="line"><span class="cl">├── src
+</span></span><span class="line"><span class="cl">└── tb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">5</span> directories, <span class="m">3</span> files
+</span></span></code></pre></div><p>マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class="p">|</span> iconv -f sjis -t utf8 <span class="p">|</span> tr -d <span class="s2">&#34;\32&#34;</span> &gt; MICROONE
+</span></span><span class="line"><span class="cl">$ rm1masm MICROONE -o MICROONE.o
+</span></span><span class="line"><span class="cl">$ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_program.coe
+</span></span></code></pre></div><p>続いて，機械語プログラムを主記憶に書き込むための COE ファイルを作成します．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cat calculator 
+</span></span><span class="line"><span class="cl"><span class="p">;</span> This program is distributed under MIT LICENSE.
+</span></span><span class="line"><span class="cl"><span class="p">;</span> Copyright <span class="o">(</span>c<span class="o">)</span> <span class="m">2023</span> Kenta Arai
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 逆ポーランド記法電卓プログラム
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 実行例（<span class="o">(</span>3+4<span class="o">)</span>*<span class="o">(</span>4-2<span class="o">)</span>）
+</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="o">(</span>CALCULATOR<span class="o">)</span>&gt;&gt; <span class="m">3</span> <span class="m">4</span> + <span class="m">4</span> <span class="m">2</span> - *
+</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="m">14</span>
+</span></span><span class="line"><span class="cl">TITLE CALCULATOR
+</span></span><span class="line"><span class="cl">             ORG  <span class="m">140</span>
+</span></span><span class="line"><span class="cl">CALCULATOR0: LA   1, PROMPT
+</span></span><span class="line"><span class="cl">             BSR  PRINT
+</span></span><span class="line"><span class="cl">             LA   1, INPUT
+</span></span><span class="line"><span class="cl">             BSR  RWLINE
+</span></span><span class="line"><span class="cl">             LA   0, INPUT
+</span></span><span class="line"><span class="cl">             BSR  INTERPRET
+</span></span><span class="line"><span class="cl">             BSR  PUTINT
+</span></span><span class="line"><span class="cl">             B    CALCULATOR0
+</span></span><span class="line"><span class="cl">             HLT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> データ領域
+</span></span><span class="line"><span class="cl">PROMPT:      DC   <span class="s1">&#39; (
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> c
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39; a
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> l
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39; c
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> <span class="o">)</span>
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39; &gt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   &#39;</span> &gt;
+</span></span><span class="line"><span class="cl">             DC   <span class="s1">&#39;  
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   0
+</span></span></span><span class="line"><span class="cl"><span class="s1">INPUT:       DS   32
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 文字列を出力装置に書き込む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r1: 文字列の先頭アドレス}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">PRINT0:      WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  1, 1(1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">PRINT:       LX   0, (1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             OR   0, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  PRINT0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力装置から行を読む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r1: 行の書込み先アドレス}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">; NOTE: 読んだ文字は都度出力装置に書き込む
+</span></span></span><span class="line"><span class="cl"><span class="s1">RWLINE0:     STX  0, (1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  1, 1(1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">RWLINE:      BSR  READWORD
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   2, X&#34;0D
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  RWLINE0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;0A
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             STX  0, (1)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力式を計算する
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r0: 入力文字列}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: {r1: 計算結果}
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET:   LX   1, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, 0       ; NULL
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   INTERPRET5
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, X&#34;20    ; SP
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, X&#34;2B    ; +
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET0:  CMP  1, X&#34;2D    ; -
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SUB  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET1:  CMP  1, X&#34;2A    ; *
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             MULT 1, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET2:  CMP  1, X&#34;2F    ; /
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  INTERPRET3
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  3, 2
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DIV  1, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET4
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET3:  BSR  ISDIGIT    ; &#39;</span>0<span class="s1">&#39;-&#39;</span>9<span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   INTERPRET6
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BSR  ATOI
+</span></span></span><span class="line"><span class="cl"><span class="s1">             PUSH 1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET4:  ADD  0, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    INTERPRET
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET5:  POP  1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">INTERPRET6:  RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 整数を出力装置に書き込む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r1: 数値}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">PUTINT:      LC   0, X&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;78
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[15:12] を出���
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SC   2, 4
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[11:8] を出力
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SC   2, 8
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[7:4] を出力
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SC   2, 12
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LEA  2, (1)    ; r1[3:0] を出力
+</span></span></span><span class="line"><span class="cl"><span class="s1">             AND  2, X&#34;F
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LA   3, DIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  2, (3)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   0, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;0D
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LC   0, X&#34;0A
+</span></span></span><span class="line"><span class="cl"><span class="s1">             WIO  LPT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">DIGIT:       DC   X&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;31
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;32
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;33
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;34
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;35
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;36
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;37
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;38
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;39
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;41
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;42
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;43
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;44
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;45
+</span></span></span><span class="line"><span class="cl"><span class="s1">             DC   X&#34;46
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力装置から文字を読む関数
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: なし
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: {r0: 読んだ文字}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; NOTE: MICRO-alpha は入力が無い場合にヌル文字を読んだ扱いとする
+</span></span></span><span class="line"><span class="cl"><span class="s1">;       この関数はヌル文字以外を読むまで，入力装置から文字を読み続ける
+</span></span></span><span class="line"><span class="cl"><span class="s1">READWORD:    RIO  CR
+</span></span></span><span class="line"><span class="cl"><span class="s1">             OR   0, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BZ   READWORD
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力文字列を数値に変換する
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力: {r0: 入力文字列}
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 出力: {r0: 入力文字列(読み進めたアドレス), r1: 変換後の数値}
+</span></span></span><span class="line"><span class="cl"><span class="s1">ATOI:        LC   1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">ATOI0:       PUSH 1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   1, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BSR  ISDIGIT
+</span></span></span><span class="line"><span class="cl"><span class="s1">             CMP  1, 0
+</span></span></span><span class="line"><span class="cl"><span class="s1">             POP  1, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             BNZ  ATOI1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             RET
+</span></span></span><span class="line"><span class="cl"><span class="s1">ATOI1:       MULT 1, 10
+</span></span></span><span class="line"><span class="cl"><span class="s1">             LX   1, (0)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             SUB  1, X&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  1, (2)
+</span></span></span><span class="line"><span class="cl"><span class="s1">             ADD  0, 1
+</span></span></span><span class="line"><span class="cl"><span class="s1">             B    ATOI0
+</span></span></span><span class="line"><span class="cl"><span class="s1">
+</span></span></span><span class="line"><span class="cl"><span class="s1">; 入力文字が数字(&#39;</span>0<span class="s1">&#39;-&#39;</span>9<span class="err">&#39;</span><span class="o">)</span>であるかを判定する
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 入力: <span class="o">{</span>r1: 入力文字<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 出力: <span class="o">{</span>r1: 判定結果<span class="o">(</span>1: 数字である，0: 数字でない<span class="o">)}</span>
+</span></span><span class="line"><span class="cl">ISDIGIT:     CMP  1, X<span class="s2">&#34;30
+</span></span></span><span class="line"><span class="cl"><span class="s2">             BM   ISDIGIT0
+</span></span></span><span class="line"><span class="cl"><span class="s2">             CMP  1, X&#34;</span><span class="m">39</span>
+</span></span><span class="line"><span class="cl">             BP   ISDIGIT0
+</span></span><span class="line"><span class="cl">             LC   1, <span class="m">1</span>
+</span></span><span class="line"><span class="cl">             RET
+</span></span><span class="line"><span class="cl">ISDIGIT0:    LC   1, <span class="m">0</span>
+</span></span><span class="line"><span class="cl">             RET
+</span></span><span class="line"><span class="cl">END
+</span></span><span class="line"><span class="cl">$ rm1asm calculator -o calculator.b
+</span></span><span class="line"><span class="cl">$ python script/obj2coe.py arty-a7-100 calculator.b fpga/arty-a7-100/machine_program.coe
+</span></span></code></pre></div><p>make コマンドを実行すると，Vivado のプロジェクトが作成されます．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make all
+</span></span><span class="line"><span class="cl">$ tree -L <span class="m">2</span> vivado
+</span></span><span class="line"><span class="cl">vivado
+</span></span><span class="line"><span class="cl">└── arty-a7-100
+</span></span><span class="line"><span class="cl">    ├── arty-a7-100.cache
+</span></span><span class="line"><span class="cl">    ├── arty-a7-100.gen
+</span></span><span class="line"><span class="cl">    ├── arty-a7-100.hw
+</span></span><span class="line"><span class="cl">    ├── arty-a7-100.ip_user_files
+</span></span><span class="line"><span class="cl">    ├── arty-a7-100.srcs
+</span></span><span class="line"><span class="cl">    └── arty-a7-100.xpr
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="m">7</span> directories, <span class="m">1</span> file
+</span></span></code></pre></div><h3 id="fpga-上で逆ポーランド記法プログラムを動作させる">FPGA 上で逆ポーランド記法プログラムを動作させる<a href="#fpga-%e4%b8%8a%e3%81%a7%e9%80%86%e3%83%9d%e3%83%bc%e3%83%a9%e3%83%b3%e3%83%89%e8%a8%98%e6%b3%95%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%82%92%e5%8b%95%e4%bd%9c%e3%81%95%e3%81%9b%e3%82%8b" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h3>
 <p>Vivado で回路を合成し，Arty A7-100 に書き込みましょう．
 シリアル通信で Arty A7-100 にキーボード入力をしましょう．</p>
-<pre tabindex="0"><code>$ sudo screen /dev/ttyUSB1 115200
-(calc)&gt;&gt; 3 4 + 4 2 - *
-0x000E
-(calc)&gt;&gt; 
-</code></pre><p>逆ポーランド記法の電卓で計算ができました！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ sudo screen /dev/ttyUSB1 <span class="m">115200</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>calc<span class="o">)</span>&gt;&gt; <span class="m">3</span> <span class="m">4</span> + <span class="m">4</span> <span class="m">2</span> - *
+</span></span><span class="line"><span class="cl">0x000E
+</span></span><span class="line"><span class="cl"><span class="o">(</span>calc<span class="o">)</span>&gt;&gt; 
+</span></span></code></pre></div><p>逆ポーランド記法の電卓で計算ができました！</p>
 <h2 id="おわりに">おわりに<a href="#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
@@ -736,29 +736,29 @@ vivado
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
-<pre tabindex="0"><code>$ make
-
-Compiling kernel ELF - rpi3
-   Compiling mingo v0.5.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/05_drivers_gpio_uart)
-   Compiling tock-registers v0.8.1
-   Compiling aarch64-cpu v9.0.0
-    Finished release [optimized] target(s) in 1.83s
-
-Generating stripped binary
-        Name kernel8.img
-        Size 10 KiB
-$ sudo make qemu
-[sudo] kenta のパスワード:
-
-Launching QEMU
-[0] mingo version 0.5.0
-[1] Booting on: Raspberry Pi 3
-[2] Drivers loaded:
-      1. BCM PL011 UART
-      2. BCM GPIO
-[3] Chars written: 117
-[4] Echoing input now
-</code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h1 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Compiling kernel ELF - rpi3
+</span></span><span class="line"><span class="cl">   Compiling mingo v0.5.0 <span class="o">(</span>/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/05_drivers_gpio_uart<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Compiling tock-registers v0.8.1
+</span></span><span class="line"><span class="cl">   Compiling aarch64-cpu v9.0.0
+</span></span><span class="line"><span class="cl">    Finished release <span class="o">[</span>optimized<span class="o">]</span> target<span class="o">(</span>s<span class="o">)</span> in 1.83s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Generating stripped binary
+</span></span><span class="line"><span class="cl">        Name kernel8.img
+</span></span><span class="line"><span class="cl">        Size <span class="m">10</span> KiB
+</span></span><span class="line"><span class="cl">$ sudo make qemu
+</span></span><span class="line"><span class="cl"><span class="o">[</span>sudo<span class="o">]</span> kenta のパスワード:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl"><span class="o">[</span>0<span class="o">]</span> mingo version 0.5.0
+</span></span><span class="line"><span class="cl"><span class="o">[</span>1<span class="o">]</span> Booting on: Raspberry Pi <span class="m">3</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2<span class="o">]</span> Drivers loaded:
+</span></span><span class="line"><span class="cl">      1. BCM PL011 UART
+</span></span><span class="line"><span class="cl">      2. BCM GPIO
+</span></span><span class="line"><span class="cl"><span class="o">[</span>3<span class="o">]</span> Chars written: <span class="m">117</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>4<span class="o">]</span> Echoing input now
+</span></span></code></pre></div>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h1 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -790,43 +790,43 @@ Launching QEMU
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
-<pre tabindex="0"><code>$ make
-
-Compiling kernel ELF - rpi3
-   Compiling mingo v0.4.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/04_safe_globals)
-   Compiling tock-registers v0.8.1
-   Compiling aarch64-cpu v9.0.0
-    Finished release [optimized] target(s) in 6.09s
-
-Generating stripped binary
-        Name kernel8.img
-        Size 7 KiB
-$ sudo make test
-[sudo] kenta のパスワード:
-
-Boot test - rpi3
-         -------------------------------------------------------------------
-         🦀 Running 1 console I/O tests
-         -------------------------------------------------------------------
-
-           1. Checking for the string: &#39;Stopping here&#39;..................[ok]
-         
-         Console log:
-           [0] Hello from Rust!
-           [1] Chars written: 22
-           [2] Stopping here
-
-         -------------------------------------------------------------------
-         ✅ Success: Boot test
-         -------------------------------------------------------------------
-
-$ sudo make qemu
-
-Launching QEMU
-[0] Hello from Rust!
-[1] Chars written: 22
-[2] Stopping here.
-</code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h1 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Compiling kernel ELF - rpi3
+</span></span><span class="line"><span class="cl">   Compiling mingo v0.4.0 <span class="o">(</span>/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/04_safe_globals<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Compiling tock-registers v0.8.1
+</span></span><span class="line"><span class="cl">   Compiling aarch64-cpu v9.0.0
+</span></span><span class="line"><span class="cl">    Finished release <span class="o">[</span>optimized<span class="o">]</span> target<span class="o">(</span>s<span class="o">)</span> in 6.09s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Generating stripped binary
+</span></span><span class="line"><span class="cl">        Name kernel8.img
+</span></span><span class="line"><span class="cl">        Size <span class="m">7</span> KiB
+</span></span><span class="line"><span class="cl">$ sudo make <span class="nb">test</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>sudo<span class="o">]</span> kenta のパスワード:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Boot <span class="nb">test</span> - rpi3
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">         🦀 Running <span class="m">1</span> console I/O tests
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           1. Checking <span class="k">for</span> the string: <span class="s1">&#39;Stopping here&#39;</span>..................<span class="o">[</span>ok<span class="o">]</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">         Console log:
+</span></span><span class="line"><span class="cl">           <span class="o">[</span>0<span class="o">]</span> Hello from Rust!
+</span></span><span class="line"><span class="cl">           <span class="o">[</span>1<span class="o">]</span> Chars written: <span class="m">22</span>
+</span></span><span class="line"><span class="cl">           <span class="o">[</span>2<span class="o">]</span> Stopping here
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">         ✅ Success: Boot <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl"><span class="o">[</span>0<span class="o">]</span> Hello from Rust!
+</span></span><span class="line"><span class="cl"><span class="o">[</span>1<span class="o">]</span> Chars written: <span class="m">22</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>2<span class="o">]</span> Stopping here.
+</span></span></code></pre></div>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h1 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -859,58 +859,58 @@ Launching QEMU
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
-<pre tabindex="0"><code>$ make
-
-Compiling kernel ELF - rpi3
-   Compiling tock-registers v0.8.1
-   Compiling mingo v0.3.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/03_hacky_hello_world)
-   Compiling aarch64-cpu v9.0.0
-    Finished release [optimized] target(s) in 3.88s
-
-Generating stripped binary
-        Name kernel8.img
-        Size 6 KiB
-$ make test
-
-Boot test - rpi3
-docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;: dial unix /var/run/docker.sock: connect: permission denied.
-See &#39;docker run --help&#39;.
-make: *** [Makefile:216: test_boot] エラー 126
-$ sudo make test
-[sudo] kenta のパスワード:
-
-Boot test - rpi3
-         -------------------------------------------------------------------
-         🦀 Running 1 console I/O tests
-         -------------------------------------------------------------------
-
-           1. Checking for the string: &#39;Stopping here&#39;..................[ok]
-         
-         Console log:
-           Hello from Rust!
-           Kernel panic!
-           
-           Panic location:
-                 File &#39;src/main.rs&#39;, line 129, column 5
-           
-           Stopping here
-
-         -------------------------------------------------------------------
-         ✅ Success: Boot test
-         -------------------------------------------------------------------
-
-
-$ sudo make qemu
-
-Launching QEMU
-Hello from Rust!
-Kernel panic!
-
-Panic location:
-      File &#39;src/main.rs&#39;, line 129, column 5
-
-Stopping here.
-</code></pre>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h1 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Compiling kernel ELF - rpi3
+</span></span><span class="line"><span class="cl">   Compiling tock-registers v0.8.1
+</span></span><span class="line"><span class="cl">   Compiling mingo v0.3.0 <span class="o">(</span>/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/03_hacky_hello_world<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Compiling aarch64-cpu v9.0.0
+</span></span><span class="line"><span class="cl">    Finished release <span class="o">[</span>optimized<span class="o">]</span> target<span class="o">(</span>s<span class="o">)</span> in 3.88s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Generating stripped binary
+</span></span><span class="line"><span class="cl">        Name kernel8.img
+</span></span><span class="line"><span class="cl">        Size <span class="m">6</span> KiB
+</span></span><span class="line"><span class="cl">$ make <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Boot <span class="nb">test</span> - rpi3
+</span></span><span class="line"><span class="cl">docker: Got permission denied <span class="k">while</span> trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post <span class="s2">&#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;</span>: dial unix /var/run/docker.sock: connect: permission denied.
+</span></span><span class="line"><span class="cl">See <span class="s1">&#39;docker run --help&#39;</span>.
+</span></span><span class="line"><span class="cl">make: *** <span class="o">[</span>Makefile:216: test_boot<span class="o">]</span> エラー <span class="m">126</span>
+</span></span><span class="line"><span class="cl">$ sudo make <span class="nb">test</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>sudo<span class="o">]</span> kenta のパスワード:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Boot <span class="nb">test</span> - rpi3
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">         🦀 Running <span class="m">1</span> console I/O tests
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           1. Checking <span class="k">for</span> the string: <span class="s1">&#39;Stopping here&#39;</span>..................<span class="o">[</span>ok<span class="o">]</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">         Console log:
+</span></span><span class="line"><span class="cl">           Hello from Rust!
+</span></span><span class="line"><span class="cl">           Kernel panic!
+</span></span><span class="line"><span class="cl">           
+</span></span><span class="line"><span class="cl">           Panic location:
+</span></span><span class="line"><span class="cl">                 File <span class="s1">&#39;src/main.rs&#39;</span>, line 129, column <span class="m">5</span>
+</span></span><span class="line"><span class="cl">           
+</span></span><span class="line"><span class="cl">           Stopping here
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">         ✅ Success: Boot <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">         -------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ sudo make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl">Hello from Rust!
+</span></span><span class="line"><span class="cl">Kernel panic!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Panic location:
+</span></span><span class="line"><span class="cl">      File <span class="s1">&#39;src/main.rs&#39;</span>, line 129, column <span class="m">5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Stopping here.
+</span></span></code></pre></div>]]></content></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h1 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -998,119 +998,119 @@ Stopping here.
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h1>
-<pre tabindex="0"><code>$ make
-
-Compiling kernel ELF - rpi3
-   Compiling tock-registers v0.8.1
-   Compiling mingo v0.2.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/02_runtime_init)
-   Compiling aarch64-cpu v9.0.0
-    Finished release [optimized] target(s) in 5.86s
-
-Generating stripped binary
-        Name kernel8.img
-        Size 1 KiB
-$ sudo make qemu
-
-Launching QEMU
-----------------
-IN: 
-0x00000300:  d2801b05  mov      x5, #0xd8
-0x00000304:  d53800a6  mrs      x6, mpidr_el1
-0x00000308:  924004c6  and      x6, x6, #3
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00000300:  d2801b05  mov      x5, #0xd8
-0x00000304:  d53800a6  mrs      x6, mpidr_el1
-0x00000308:  924004c6  and      x6, x6, #3
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00000000:  580000c0  ldr      x0, #0x18
-0x00000004:  aa1f03e1  mov      x1, xzr
-0x00000008:  aa1f03e2  mov      x2, xzr
-0x0000000c:  aa1f03e3  mov      x3, xzr
-0x00000010:  58000084  ldr      x4, #0x20
-0x00000014:  d61f0080  br       x4
-
-----------------
-IN: 
-0x00000300:  d2801b05  mov      x5, #0xd8
-0x00000304:  d53800a6  mrs      x6, mpidr_el1
-0x00000308:  924004c6  and      x6, x6, #3
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00080000:  d53800a0  mrs      x0, mpidr_el1
-0x00080004:  92400400  and      x0, x0, #3
-0x00080008:  58000241  ldr      x1, #0x80050
-0x0008000c:  eb01001f  cmp      x0, x1
-0x00080010:  540001a1  b.ne     #0x80044
-
-----------------
-IN: 
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00080014:  d503201f  nop      
-0x00080018:  10000440  adr      x0, #0x800a0
-0x0008001c:  d503201f  nop      
-0x00080020:  10000401  adr      x1, #0x800a0
-0x00080024:  eb01001f  cmp      x0, x1
-0x00080028:  54000060  b.eq     #0x80034
-
-----------------
-IN: 
-0x00080034:  d503201f  nop      
-0x00080038:  10fffe40  adr      x0, #0x80000
-0x0008003c:  9100001f  mov      sp, x0
-0x00080040:  14000008  b        #0x80060
-
-----------------
-IN: 
-0x00080060:  94000004  bl       #0x80070
-
-----------------
-IN: 
-0x00080070:  94000004  bl       #0x80080
-
-----------------
-IN: 
-0x00080080:  97fffffe  bl       #0x80078
-
-----------------
-IN: 
-0x00080078:  94000006  bl       #0x80090
-
-----------------
-IN: 
-0x00080090:  d503205f  wfe      
-0x00080094:  17ffffff  b        #0x80090
-</code></pre><h1 id="感想">感想<a href="#%e6%84%9f%e6%83%b3" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Compiling kernel ELF - rpi3
+</span></span><span class="line"><span class="cl">   Compiling tock-registers v0.8.1
+</span></span><span class="line"><span class="cl">   Compiling mingo v0.2.0 <span class="o">(</span>/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/02_runtime_init<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Compiling aarch64-cpu v9.0.0
+</span></span><span class="line"><span class="cl">    Finished release <span class="o">[</span>optimized<span class="o">]</span> target<span class="o">(</span>s<span class="o">)</span> in 5.86s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Generating stripped binary
+</span></span><span class="line"><span class="cl">        Name kernel8.img
+</span></span><span class="line"><span class="cl">        Size <span class="m">1</span> KiB
+</span></span><span class="line"><span class="cl">$ sudo make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000300:  d2801b05  mov      x5, <span class="c1">#0xd8</span>
+</span></span><span class="line"><span class="cl">0x00000304:  d53800a6  mrs      x6, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00000308:  924004c6  and      x6, x6, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000300:  d2801b05  mov      x5, <span class="c1">#0xd8</span>
+</span></span><span class="line"><span class="cl">0x00000304:  d53800a6  mrs      x6, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00000308:  924004c6  and      x6, x6, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000000:  580000c0  ldr      x0, <span class="c1">#0x18</span>
+</span></span><span class="line"><span class="cl">0x00000004:  aa1f03e1  mov      x1, xzr
+</span></span><span class="line"><span class="cl">0x00000008:  aa1f03e2  mov      x2, xzr
+</span></span><span class="line"><span class="cl">0x0000000c:  aa1f03e3  mov      x3, xzr
+</span></span><span class="line"><span class="cl">0x00000010:  <span class="m">58000084</span>  ldr      x4, <span class="c1">#0x20</span>
+</span></span><span class="line"><span class="cl">0x00000014:  d61f0080  br       x4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000300:  d2801b05  mov      x5, <span class="c1">#0xd8</span>
+</span></span><span class="line"><span class="cl">0x00000304:  d53800a6  mrs      x6, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00000308:  924004c6  and      x6, x6, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080000:  d53800a0  mrs      x0, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00080004:  <span class="m">92400400</span>  and      x0, x0, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x00080008:  <span class="m">58000241</span>  ldr      x1, <span class="c1">#0x80050</span>
+</span></span><span class="line"><span class="cl">0x0008000c:  eb01001f  cmp      x0, x1
+</span></span><span class="line"><span class="cl">0x00080010:  540001a1  b.ne     <span class="c1">#0x80044</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080014:  d503201f  nop      
+</span></span><span class="line"><span class="cl">0x00080018:  <span class="m">10000440</span>  adr      x0, <span class="c1">#0x800a0</span>
+</span></span><span class="line"><span class="cl">0x0008001c:  d503201f  nop      
+</span></span><span class="line"><span class="cl">0x00080020:  <span class="m">10000401</span>  adr      x1, <span class="c1">#0x800a0</span>
+</span></span><span class="line"><span class="cl">0x00080024:  eb01001f  cmp      x0, x1
+</span></span><span class="line"><span class="cl">0x00080028:  <span class="m">54000060</span>  b.eq     <span class="c1">#0x80034</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080034:  d503201f  nop      
+</span></span><span class="line"><span class="cl">0x00080038:  10fffe40  adr      x0, <span class="c1">#0x80000</span>
+</span></span><span class="line"><span class="cl">0x0008003c:  9100001f  mov      sp, x0
+</span></span><span class="line"><span class="cl">0x00080040:  <span class="m">14000008</span>  b        <span class="c1">#0x80060</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080060:  <span class="m">94000004</span>  bl       <span class="c1">#0x80070</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080070:  <span class="m">94000004</span>  bl       <span class="c1">#0x80080</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080080:  97fffffe  bl       <span class="c1">#0x80078</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080078:  <span class="m">94000006</span>  bl       <span class="c1">#0x80090</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080090:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00080094:  17ffffff  b        <span class="c1">#0x80090</span>
+</span></span></code></pre></div><h1 id="感想">感想<a href="#%e6%84%9f%e6%83%b3" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -1171,16 +1171,16 @@ IN:
 </li>
 <li>qemu で OS を動かしてみよう</li>
 </ul>
-<pre tabindex="0"><code>$ make qemu
-
-Compiling kernel ELF - rpi3
-   Compiling mingo v0.1.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/01_wait_forever)
-    Finished release [optimized] target(s) in 0.32s
-
-Generating stripped binary
-make: rust-objcopy: そのようなファイルやディレクトリはありません
-make: *** [Makefile:130: kernel8.img] エラー 127
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Compiling kernel ELF - rpi3
+</span></span><span class="line"><span class="cl">   Compiling mingo v0.1.0 <span class="o">(</span>/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/01_wait_forever<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    Finished release <span class="o">[</span>optimized<span class="o">]</span> target<span class="o">(</span>s<span class="o">)</span> in 0.32s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Generating stripped binary
+</span></span><span class="line"><span class="cl">make: rust-objcopy: そのようなファイルやディレクトリはありません
+</span></span><span class="line"><span class="cl">make: *** <span class="o">[</span>Makefile:130: kernel8.img<span class="o">]</span> エラー <span class="m">127</span>
+</span></span></code></pre></div><ul>
 <li><code>rust-objcopy</code> が無いと言われた</li>
 <li><code>rust-objcopy</code> は <a href="https://github.com/rust-embedded/cargo-binutils">cargo-binutils</a> に含まれるコマンドのようだ
 <ul>
@@ -1189,104 +1189,104 @@ make: *** [Makefile:130: kernel8.img] エラー 127
 </li>
 <li>インストールして再度 OS を動かそう</li>
 </ul>
-<pre tabindex="0"><code>$ cargo install cargo-binutils
-（とても時間がかかる）
-$ make qemu
-
-Generating stripped binary
-        Name kernel8.img
-        Size 1 KiB
-
-Launching QEMU
-docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
-See &#39;docker run --help&#39;.
-make: *** [Makefile:155: qemu] エラー 125
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cargo install cargo-binutils
+</span></span><span class="line"><span class="cl">（とても時間がかかる）
+</span></span><span class="line"><span class="cl">$ make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Generating stripped binary
+</span></span><span class="line"><span class="cl">        Name kernel8.img
+</span></span><span class="line"><span class="cl">        Size <span class="m">1</span> KiB
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl">docker: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?.
+</span></span><span class="line"><span class="cl">See <span class="s1">&#39;docker run --help&#39;</span>.
+</span></span><span class="line"><span class="cl">make: *** <span class="o">[</span>Makefile:155: qemu<span class="o">]</span> エラー <span class="m">125</span>
+</span></span></code></pre></div><ul>
 <li>docker も動かさないといけないらしい</li>
 </ul>
-<pre tabindex="0"><code>$ sudo systemctl restart docker
-$ make qemu
-
-Launching QEMU
-docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;: dial unix /var/run/docker.sock: connect: permission denied.
-See &#39;docker run --help&#39;.
-make: *** [Makefile:155: qemu] エラー 126
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ sudo systemctl restart docker
+</span></span><span class="line"><span class="cl">$ make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl">docker: Got permission denied <span class="k">while</span> trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post <span class="s2">&#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&#34;</span>: dial unix /var/run/docker.sock: connect: permission denied.
+</span></span><span class="line"><span class="cl">See <span class="s1">&#39;docker run --help&#39;</span>.
+</span></span><span class="line"><span class="cl">make: *** <span class="o">[</span>Makefile:155: qemu<span class="o">]</span> エラー <span class="m">126</span>
+</span></span></code></pre></div><ul>
 <li>管理者権限まで必要なのか&hellip;（docker を使う以上当たり前だが）</li>
 </ul>
-<pre tabindex="0"><code>$ sudo make qemu
-
-Launching QEMU
-Unable to find image &#39;rustembedded/osdev-utils:2021.12&#39; locally
-2021.12: Pulling from rustembedded/osdev-utils
-7b1a6ab2e44d: Pull complete 
-292c6ce995b4: Pull complete 
-afb6c3c2887b: Pull complete 
-888e016a338b: Pull complete 
-59ca2d6f9c6f: Pull complete 
-1ac893ad5b73: Pull complete 
-008bb9e6650e: Pull complete 
-Digest: sha256:9883c96e0e827e35b8d716683f85c7a9b8ffed85422fe418ed080d61e8641e78
-Status: Downloaded newer image for rustembedded/osdev-utils:2021.12
-----------------
-IN: 
-0x00000000:  580000c0  ldr      x0, #0x18
-0x00000004:  aa1f03e1  mov      x1, xzr
-0x00000008:  aa1f03e2  mov      x2, xzr
-0x0000000c:  aa1f03e3  mov      x3, xzr
-0x00000010:  58000084  ldr      x4, #0x20
-0x00000014:  d61f0080  br       x4
-
-----------------
-IN: 
-0x00000300:  d2801b05  mov      x5, #0xd8
-0x00000304:  d53800a6  mrs      x6, mpidr_el1
-0x00000308:  924004c6  and      x6, x6, #3
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00000300:  d2801b05  mov      x5, #0xd8
-0x00000304:  d53800a6  mrs      x6, mpidr_el1
-0x00000308:  924004c6  and      x6, x6, #3
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00000300:  d2801b05  mov      x5, #0xd8
-0x00000304:  d53800a6  mrs      x6, mpidr_el1
-0x00000308:  924004c6  and      x6, x6, #3
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x00080000:  d503205f  wfe      
-0x00080004:  17ffffff  b        #0x80000
-
-----------------
-IN: 
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-
-----------------
-IN: 
-0x0000030c:  d503205f  wfe      
-0x00000310:  f86678a4  ldr      x4, [x5, x6, lsl #3]
-0x00000314:  b4ffffc4  cbz      x4, #0x30c
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ sudo make qemu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Launching QEMU
+</span></span><span class="line"><span class="cl">Unable to find image <span class="s1">&#39;rustembedded/osdev-utils:2021.12&#39;</span> locally
+</span></span><span class="line"><span class="cl">2021.12: Pulling from rustembedded/osdev-utils
+</span></span><span class="line"><span class="cl">7b1a6ab2e44d: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">292c6ce995b4: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">afb6c3c2887b: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">888e016a338b: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">59ca2d6f9c6f: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">1ac893ad5b73: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">008bb9e6650e: Pull <span class="nb">complete</span> 
+</span></span><span class="line"><span class="cl">Digest: sha256:9883c96e0e827e35b8d716683f85c7a9b8ffed85422fe418ed080d61e8641e78
+</span></span><span class="line"><span class="cl">Status: Downloaded newer image <span class="k">for</span> rustembedded/osdev-utils:2021.12
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000000:  580000c0  ldr      x0, <span class="c1">#0x18</span>
+</span></span><span class="line"><span class="cl">0x00000004:  aa1f03e1  mov      x1, xzr
+</span></span><span class="line"><span class="cl">0x00000008:  aa1f03e2  mov      x2, xzr
+</span></span><span class="line"><span class="cl">0x0000000c:  aa1f03e3  mov      x3, xzr
+</span></span><span class="line"><span class="cl">0x00000010:  <span class="m">58000084</span>  ldr      x4, <span class="c1">#0x20</span>
+</span></span><span class="line"><span class="cl">0x00000014:  d61f0080  br       x4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000300:  d2801b05  mov      x5, <span class="c1">#0xd8</span>
+</span></span><span class="line"><span class="cl">0x00000304:  d53800a6  mrs      x6, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00000308:  924004c6  and      x6, x6, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000300:  d2801b05  mov      x5, <span class="c1">#0xd8</span>
+</span></span><span class="line"><span class="cl">0x00000304:  d53800a6  mrs      x6, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00000308:  924004c6  and      x6, x6, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00000300:  d2801b05  mov      x5, <span class="c1">#0xd8</span>
+</span></span><span class="line"><span class="cl">0x00000304:  d53800a6  mrs      x6, mpidr_el1
+</span></span><span class="line"><span class="cl">0x00000308:  924004c6  and      x6, x6, <span class="c1">#3</span>
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x00080000:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00080004:  17ffffff  b        <span class="c1">#0x80000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">----------------
+</span></span><span class="line"><span class="cl">IN: 
+</span></span><span class="line"><span class="cl">0x0000030c:  d503205f  wfe      
+</span></span><span class="line"><span class="cl">0x00000310:  f86678a4  ldr      x4, <span class="o">[</span>x5, x6, lsl <span class="c1">#3]</span>
+</span></span><span class="line"><span class="cl">0x00000314:  b4ffffc4  cbz      x4, <span class="c1">#0x30c</span>
+</span></span></code></pre></div><ul>
 <li>
 <p>0x80000 番地で無限ループをしていることが分かる</p>
 </li>
@@ -1319,36 +1319,36 @@ IN:
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
 <p>まず Electron 将棋 の公式リポジトリからプロジェクト一式をダウンロードする．npm でビルドし，生成された実行バイナリを <code>~/.local/bin/</code> に配置する．npm 系のコマンドは既にインストールしていたので，環境によっては準備が必要かもしれない．</p>
-<pre tabindex="0"><code>$ gh repo clone https://github.com/sunfish-shogi/electron-shogi
-$ cd electron-shogi
-$ git checkout v1.3.0 # 安定版が v1.3.0 らしい
-$ npm install @vue/cli @vue/cli-service-global
-$ npm run electron:build
-$ find . -name &#39;ElectronShogi*&#39;
-./dist_electron/ElectronShogi-1.3.0.AppImage
-$ cp $(find . -name &#39;ElectronShogi*&#39;) ~/.local/bin/
-</code></pre><h2 id="2-エンジンyaneuraouをインストール">2. エンジン（YaneuraOu）をインストール<a href="#2-%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%b3yaneuraou%e3%82%92%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ gh repo clone https://github.com/sunfish-shogi/electron-shogi
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> electron-shogi
+</span></span><span class="line"><span class="cl">$ git checkout v1.3.0 <span class="c1"># 安定版が v1.3.0 らしい</span>
+</span></span><span class="line"><span class="cl">$ npm install @vue/cli @vue/cli-service-global
+</span></span><span class="line"><span class="cl">$ npm run electron:build
+</span></span><span class="line"><span class="cl">$ find . -name <span class="s1">&#39;ElectronShogi*&#39;</span>
+</span></span><span class="line"><span class="cl">./dist_electron/ElectronShogi-1.3.0.AppImage
+</span></span><span class="line"><span class="cl">$ cp <span class="k">$(</span>find . -name <span class="s1">&#39;ElectronShogi*&#39;</span><span class="k">)</span> ~/.local/bin/
+</span></span></code></pre></div><h2 id="2-エンジンyaneuraouをインストール">2. エンジン（YaneuraOu）をインストール<a href="#2-%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%b3yaneuraou%e3%82%92%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
 <p>こちらもまずは YaneuraOu の公式リポジトリからプロジェクト一式をダウンロードする．Makefile の設定を環境に合わせて編集し，コンパイルを実施する．
 Manjaro サーバの CPU は Ryzen 7 3700X なので，TARGET_CPU は ZEN2 とした．</p>
-<pre tabindex="0"><code>$ gh repo clone https://github.com/Kenta11/YaneuraOu
-$ cd YaneuraOu/source
-$ vim Makefile # 今回は TARGET_CPU を AVX2 から ZEN2 に変更
-$ make # 並列オプション -j を使うとコケたぞ
-$ find . -name YaneuraOu-by-gcc
-./YaneuraOu-by-gcc
-</code></pre><h2 id="3-評価関数水匠5をインストール">3. 評価関数（水匠5）をインストール<a href="#3-%e8%a9%95%e4%be%a1%e9%96%a2%e6%95%b0%e6%b0%b4%e5%8c%a05%e3%82%92%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ gh repo clone https://github.com/Kenta11/YaneuraOu
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> YaneuraOu/source
+</span></span><span class="line"><span class="cl">$ vim Makefile <span class="c1"># 今回は TARGET_CPU を AVX2 から ZEN2 に変更</span>
+</span></span><span class="line"><span class="cl">$ make <span class="c1"># 並列オプション -j を使うとコケたぞ</span>
+</span></span><span class="line"><span class="cl">$ find . -name YaneuraOu-by-gcc
+</span></span><span class="line"><span class="cl">./YaneuraOu-by-gcc
+</span></span></code></pre></div><h2 id="3-評価関数水匠5をインストール">3. 評価関数（水匠5）をインストール<a href="#3-%e8%a9%95%e4%be%a1%e9%96%a2%e6%95%b0%e6%b0%b4%e5%8c%a05%e3%82%92%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
    </svg></a></h2>
 <p>水匠5 の評価関数をダウンロードする．YaneuraOu の実行バイナリがあるディレクトリ下の <code>eval</code> ディレクトリに <code>nn.bin</code> を配置する．</p>
-<pre tabindex="0"><code>$ gh repo clone https://github.com/HiraokaTakuya/get_suisho5_nn
-$ cp get_suisho5_nn/nn.bin /path/to/YaneuraOu/source/eval/
-</code></pre><h2 id="4-ui-からエンジンを選択">4. UI からエンジンを選択<a href="#4-ui-%e3%81%8b%e3%82%89%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%b3%e3%82%92%e9%81%b8%e6%8a%9e" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ gh repo clone https://github.com/HiraokaTakuya/get_suisho5_nn
+</span></span><span class="line"><span class="cl">$ cp get_suisho5_nn/nn.bin /path/to/YaneuraOu/source/eval/
+</span></span></code></pre></div><h2 id="4-ui-からエンジンを選択">4. UI からエンジンを選択<a href="#4-ui-%e3%81%8b%e3%82%89%e3%82%a8%e3%83%b3%e3%82%b8%e3%83%b3%e3%82%92%e9%81%b8%e6%8a%9e" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -1460,116 +1460,116 @@ $ cp get_suisho5_nn/nn.bin /path/to/YaneuraOu/source/eval/
 アセンブラは<code>cargo install</code>でもインストールできますが，特にLinuxをお使いの方は<a href="https://github.com/Kenta11/rm1asm/releases/tag/v1.0.0">パッケージ</a>からのインストールが便利です．
 シミュレータはWindowsユーザなら公式（？）に配布されているものを使いましょう．
 それ以外の方は自前でビルドして下さい．</p>
-<pre tabindex="0"><code>$ git clone https://github.com/Kenta11/micro1
-$ cd micro1
-$ gcc m1sim.c -o m1sim
-</code></pre><p>　MICRO-1のマイクロプログラムをアセンブルします．</p>
-<pre tabindex="0"><code>$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d &#34;\32&#34; &gt; MICROONE
-$ rm1masm MICROONE -o MICROONE.o
-</code></pre><p>　続いて機械語プログラムをアセンブルします．</p>
-<pre tabindex="0"><code>$ cat sqrt
-; This program is distributed under MIT LICENSE.
-; Copyright (c) 2022 Kenta Arai
-; 平方根を求めるプログラム
-; アルゴリズムは&#34;バビロニア人の方法&#34;である
-
-TITLE SQRT
-         L   1, X0
-         L   3, ERROR
-; X(n+1)を計算
-HEAD:    LEA 2, (1)
-         LC  0, 0
-         L   1, S
-         BSR CALCXN1
-; |X(n+1) - X(n)| &lt; ERROR の場合は計算を終了する
-         SUB 2, (1)   ; X(n) - X(n+1)
-         BSR ABS      ; |X(n+1) - X(n)|
-         SUB 2, (3)   ; |X(n+1) - X(n)| - ERROR
-         BNM HEAD
-; 解を保存し，プログラムを終了
-         ST  1, XN
-         HLT
-
-S:       DC  487      ; 入力
-X0:      DC  20       ; 初期値X(0)
-ERROR:   DC  5        ; エラー
-XN:      DS  1        ; 解X(n)
-
-; X(n+1)を計算する関数
-; 入力: {r0: 0, r1: S, r2: X(n)}
-; 出力: {r1: X(n+1), r2: X(n)}
-CALCXN1: DIV 0, (2)   ; S/X(n)
-         ADD 1, (2)   ; S/X(n) + X(n)
-         SA  1, -1    ; (S/X(n) + X(n)) / 2 = X(n+1)
-         RET
-
-; 絶対値を計算する関数
-; 入力: {r2: 整数}
-; 出力: {r2: 絶対値}
-ABS:     CMP 2, 0
-         BNM ABS0
-         XOR 2, X&#34;FFFF
-         ADD 2, 1
-ABS0:    RET 
-END
-$ rm1asm sqrt -o sqrt.b
-</code></pre><p>　プログラムを実行してみましょう．</p>
-<pre tabindex="0"><code>$ ./m1sim
-
-   *** MICRO-1 SIMULATOR (C-Ver. 1.0d) [Sep 23 2022] ***
-
-&gt;&gt; load
-LOAD
-  FILE NAME=?MICROONE.o
-  LOADING &#39;MICROONE.o&#39;
- LOADED TO CM
-&gt;&gt; load       
-LOAD
-  FILE NAME=?sqrt.b
-  LOADING &#39;sqrt.b&#39;
- LOADED TO MM
-&gt;&gt; trace
-TRACE
-  T?device
-   TD?set
-   DEVICE ?pc
-   DEVICE ?ir
-   DEVICE ?flag
-   DEVICE ?r0
-   DEVICE ?r1
-   DEVICE ?r2
-   DEVICE ?r3
-   DEVICE ?lbus
-   DEVICE ?rbus
-   DEVICE ?abus
-   DEVICE ?sbus
-   DEVICE ?.
-   TD?.
-
-  T?go
- CMAR=?101
- MAX STEP=?300
-CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
-102  0000 0000 000010 0000 0000 0000 0000 0000 0040 0040 0040 
-～中略～
-CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
-0FD  000C EF00 000010 0007 0016 FFFD 0005 0000 0000 0000 0000 
- CPU HALTED !
-  259 STEPS USED
-  T?.
-&gt;&gt; dump
-DUMP
-  D?mm
-    START ADRS ?000C
-    END   ADRS ?000F
-000C:01E7
-000D:0014
-000E:0005
-000F:0016
-  D?.
-&gt;&gt; end
-&gt;&gt;   MICRO-1 TERMINATED
-</code></pre><p>　XN(アドレスが0x000Fの行)に487の大体の平方根22(0x0016)が格納されていますね．
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ git clone https://github.com/Kenta11/micro1
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> micro1
+</span></span><span class="line"><span class="cl">$ gcc m1sim.c -o m1sim
+</span></span></code></pre></div><p>　MICRO-1のマイクロプログラムをアセンブルします．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class="p">|</span> iconv -f sjis -t utf8 <span class="p">|</span> tr -d <span class="s2">&#34;\32&#34;</span> &gt; MICROONE
+</span></span><span class="line"><span class="cl">$ rm1masm MICROONE -o MICROONE.o
+</span></span></code></pre></div><p>　続いて機械語プログラムをアセンブルします．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cat sqrt
+</span></span><span class="line"><span class="cl"><span class="p">;</span> This program is distributed under MIT LICENSE.
+</span></span><span class="line"><span class="cl"><span class="p">;</span> Copyright <span class="o">(</span>c<span class="o">)</span> <span class="m">2022</span> Kenta Arai
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 平方根を求めるプログラム
+</span></span><span class="line"><span class="cl"><span class="p">;</span> アルゴリズムは<span class="s2">&#34;バビロニア人の方法&#34;</span>である
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">TITLE SQRT
+</span></span><span class="line"><span class="cl">         L   1, X0
+</span></span><span class="line"><span class="cl">         L   3, ERROR
+</span></span><span class="line"><span class="cl"><span class="p">;</span> X<span class="o">(</span>n+1<span class="o">)</span>を計算
+</span></span><span class="line"><span class="cl">HEAD:    LEA 2, <span class="o">(</span>1<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         LC  0, <span class="m">0</span>
+</span></span><span class="line"><span class="cl">         L   1, S
+</span></span><span class="line"><span class="cl">         BSR CALCXN1
+</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="p">|</span>X<span class="o">(</span>n+1<span class="o">)</span> - X<span class="o">(</span>n<span class="o">)</span><span class="p">|</span> &lt; ERROR の場合は計算を終了する
+</span></span><span class="line"><span class="cl">         SUB 2, <span class="o">(</span>1<span class="o">)</span>   <span class="p">;</span> X<span class="o">(</span>n<span class="o">)</span> - X<span class="o">(</span>n+1<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         BSR ABS      <span class="p">;</span> <span class="p">|</span>X<span class="o">(</span>n+1<span class="o">)</span> - X<span class="o">(</span>n<span class="o">)</span><span class="p">|</span>
+</span></span><span class="line"><span class="cl">         SUB 2, <span class="o">(</span>3<span class="o">)</span>   <span class="p">;</span> <span class="p">|</span>X<span class="o">(</span>n+1<span class="o">)</span> - X<span class="o">(</span>n<span class="o">)</span><span class="p">|</span> - ERROR
+</span></span><span class="line"><span class="cl">         BNM HEAD
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 解を保存し，プログラムを終了
+</span></span><span class="line"><span class="cl">         ST  1, XN
+</span></span><span class="line"><span class="cl">         HLT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">S:       DC  <span class="m">487</span>      <span class="p">;</span> 入力
+</span></span><span class="line"><span class="cl">X0:      DC  <span class="m">20</span>       <span class="p">;</span> 初期値X<span class="o">(</span>0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">ERROR:   DC  <span class="m">5</span>        <span class="p">;</span> エラー
+</span></span><span class="line"><span class="cl">XN:      DS  <span class="m">1</span>        <span class="p">;</span> 解X<span class="o">(</span>n<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> X<span class="o">(</span>n+1<span class="o">)</span>を計算する関数
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 入力: <span class="o">{</span>r0: 0, r1: S, r2: X<span class="o">(</span>n<span class="o">)}</span>
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 出力: <span class="o">{</span>r1: X<span class="o">(</span>n+1<span class="o">)</span>, r2: X<span class="o">(</span>n<span class="o">)}</span>
+</span></span><span class="line"><span class="cl">CALCXN1: DIV 0, <span class="o">(</span>2<span class="o">)</span>   <span class="p">;</span> S/X<span class="o">(</span>n<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         ADD 1, <span class="o">(</span>2<span class="o">)</span>   <span class="p">;</span> S/X<span class="o">(</span>n<span class="o">)</span> + X<span class="o">(</span>n<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         SA  1, -1    <span class="p">;</span> <span class="o">(</span>S/X<span class="o">(</span>n<span class="o">)</span> + X<span class="o">(</span>n<span class="o">))</span> / <span class="nv">2</span> <span class="o">=</span> X<span class="o">(</span>n+1<span class="o">)</span>
+</span></span><span class="line"><span class="cl">         RET
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 絶対値を計算する関数
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 入力: <span class="o">{</span>r2: 整数<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">;</span> 出力: <span class="o">{</span>r2: 絶対値<span class="o">}</span>
+</span></span><span class="line"><span class="cl">ABS:     CMP 2, <span class="m">0</span>
+</span></span><span class="line"><span class="cl">         BNM ABS0
+</span></span><span class="line"><span class="cl">         XOR 2, X<span class="s2">&#34;FFFF
+</span></span></span><span class="line"><span class="cl"><span class="s2">         ADD 2, 1
+</span></span></span><span class="line"><span class="cl"><span class="s2">ABS0:    RET 
+</span></span></span><span class="line"><span class="cl"><span class="s2">END
+</span></span></span><span class="line"><span class="cl"><span class="s2"></span>$<span class="s2"> rm1asm sqrt -o sqrt.b
+</span></span></span></code></pre></div><p>　プログラムを実行してみましょう．</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ./m1sim
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   *** MICRO-1 SIMULATOR <span class="o">(</span>C-Ver. 1.0d<span class="o">)</span> <span class="o">[</span>Sep <span class="m">23</span> 2022<span class="o">]</span> ***
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt;&gt; load
+</span></span><span class="line"><span class="cl">LOAD
+</span></span><span class="line"><span class="cl">  FILE <span class="nv">NAME</span><span class="o">=</span>?MICROONE.o
+</span></span><span class="line"><span class="cl">  LOADING <span class="s1">&#39;MICROONE.o&#39;</span>
+</span></span><span class="line"><span class="cl"> LOADED TO CM
+</span></span><span class="line"><span class="cl">&gt;&gt; load       
+</span></span><span class="line"><span class="cl">LOAD
+</span></span><span class="line"><span class="cl">  FILE <span class="nv">NAME</span><span class="o">=</span>?sqrt.b
+</span></span><span class="line"><span class="cl">  LOADING <span class="s1">&#39;sqrt.b&#39;</span>
+</span></span><span class="line"><span class="cl"> LOADED TO MM
+</span></span><span class="line"><span class="cl">&gt;&gt; trace
+</span></span><span class="line"><span class="cl">TRACE
+</span></span><span class="line"><span class="cl">  T?device
+</span></span><span class="line"><span class="cl">   TD?set
+</span></span><span class="line"><span class="cl">   DEVICE ?pc
+</span></span><span class="line"><span class="cl">   DEVICE ?ir
+</span></span><span class="line"><span class="cl">   DEVICE ?flag
+</span></span><span class="line"><span class="cl">   DEVICE ?r0
+</span></span><span class="line"><span class="cl">   DEVICE ?r1
+</span></span><span class="line"><span class="cl">   DEVICE ?r2
+</span></span><span class="line"><span class="cl">   DEVICE ?r3
+</span></span><span class="line"><span class="cl">   DEVICE ?lbus
+</span></span><span class="line"><span class="cl">   DEVICE ?rbus
+</span></span><span class="line"><span class="cl">   DEVICE ?abus
+</span></span><span class="line"><span class="cl">   DEVICE ?sbus
+</span></span><span class="line"><span class="cl">   DEVICE ?.
+</span></span><span class="line"><span class="cl">   TD?.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  T?go
+</span></span><span class="line"><span class="cl"> <span class="nv">CMAR</span><span class="o">=</span>?101
+</span></span><span class="line"><span class="cl"> MAX <span class="nv">STEP</span><span class="o">=</span>?300
+</span></span><span class="line"><span class="cl">CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
+</span></span><span class="line"><span class="cl"><span class="m">102</span>  <span class="m">0000</span> <span class="m">0000</span> <span class="m">000010</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0040</span> <span class="m">0040</span> <span class="m">0040</span> 
+</span></span><span class="line"><span class="cl">～中略～
+</span></span><span class="line"><span class="cl">CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
+</span></span><span class="line"><span class="cl">0FD  000C EF00 <span class="m">000010</span> <span class="m">0007</span> <span class="m">0016</span> FFFD <span class="m">0005</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> 
+</span></span><span class="line"><span class="cl"> CPU HALTED !
+</span></span><span class="line"><span class="cl">  <span class="m">259</span> STEPS USED
+</span></span><span class="line"><span class="cl">  T?.
+</span></span><span class="line"><span class="cl">&gt;&gt; dump
+</span></span><span class="line"><span class="cl">DUMP
+</span></span><span class="line"><span class="cl">  D?mm
+</span></span><span class="line"><span class="cl">    START ADRS ?000C
+</span></span><span class="line"><span class="cl">    END   ADRS ?000F
+</span></span><span class="line"><span class="cl">000C:01E7
+</span></span><span class="line"><span class="cl">000D:0014
+</span></span><span class="line"><span class="cl">000E:0005
+</span></span><span class="line"><span class="cl">000F:0016
+</span></span><span class="line"><span class="cl">  D?.
+</span></span><span class="line"><span class="cl">&gt;&gt; end
+</span></span><span class="line"><span class="cl">&gt;&gt;   MICRO-1 TERMINATED
+</span></span></code></pre></div><p>　XN(アドレスが0x000Fの行)に487の大体の平方根22(0x0016)が格納されていますね．
 大大大成功です．</p>
 <h2 id="おわりに">おわりに<a href="#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">

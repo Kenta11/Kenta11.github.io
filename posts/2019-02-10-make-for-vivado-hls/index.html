@@ -1,4 +1,4 @@
-<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=robots content="index, follow"><meta name=author content><meta name=description content><link rel=author type=text/plain href=/humans.txt><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon href=/favicon.ico type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta name=msapplication-TileImage content="/mstile-144x144.png"><meta name=theme-color content="#494f5c"><meta name=msapplication-TileColor content="#494f5c"><link rel=mask-icon href=/safari-pinned-tab.svg color=#494f5c><meta itemprop=name content="makeコマンドでVivado HLSを使う"><meta itemprop=description content="はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．"><meta itemprop=datePublished content="2019-02-12T07:00:00+09:00"><meta itemprop=dateModified content="2019-02-12T07:00:00+09:00"><meta itemprop=wordCount content="2357"><meta itemprop=keywords content="Vivado HLS,Make"><meta property="og:url" content="https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/"><meta property="og:site_name" content="Kenta Arai Webpage"><meta property="og:title" content="makeコマンドでVivado HLSを使う"><meta property="og:description" content="はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-02-12T07:00:00+09:00"><meta property="article:modified_time" content="2019-02-12T07:00:00+09:00"><meta property="article:tag" content="Vivado HLS"><meta property="article:tag" content="Make"><meta name=twitter:card content="summary"><meta name=twitter:title content="makeコマンドでVivado HLSを使う"><meta name=twitter:description content="はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"makeコマンドでVivado HLSを使う","name":"makeコマンドでVivado HLSを使う","description":"はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．\n","keywords":["Vivado HLS","make"],"articleBody":"はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．\nCUIでVivado HLSを使う tclでビルドする FPGA開発日記のmsyksphinzさんが，tclとmakeを使ってビルドする方法を記事にしていた．\n記事：コマンドラインからVivado HLSを使用するためのスクリプト\nなるほど！ Makefileで環境変数を定義しておいて，tclのスクリプトでそれらを参照すれば，汎用的なMakefileを作れるみたいだ．\nこのMakefileのターゲットは，allとcleanしかない． allはCのソースコードをIPに，cleanは生成物やログを削除する． しかし私はHDLの合成までやって，Cのコードにpragmaを追加してチューニングを行うことがある． なので場合によっては，HDLの合成までで止めたい．\nmakeコマンドでビルドする 私がVivado HLSを使うときのディレクトリ構成に合わせて，Makefileとtclスクリプトを作る． 作ったMakefileとサンプルプロジェクトはGithubに用意した． ディレクトリ構成を下に示す\nadder/ ├── Makefile ├── directives.tcl ├── include: 合成する関数のヘッダ │ └── adder.hpp ├── src: 合成する関数の定義 │ └── adder.cpp ├── test: 合成する関数のテストベンチ │ ├── include │ │ └── test_adder.hpp │ └── src │ └── test_adder.cpp └── script: 合成のためのtclスクリプト ├── csim.tcl ├── csynth.tcl ├── cosim.tcl └── export.tcl msyksphinzさんの記事を参考に作ったMakefileを下に示す．\n#### configuration ##### # project and solution name export HLS_TARGET = adder export HLS_SOLUTION = basys3 # source files export HLS_SOURCE = $(wildcard src/*) export HLS_TEST = $(wildcard test/src/*) # result BASE_DIR = $(HLS_TARGET)/$(HLS_SOLUTION) IP = $(BASE_DIR)/impl COSIM = $(BASE_DIR)/sim HDL = $(BASE_DIR)/syn CSIM = $(BASE_DIR)/csim ##### targets and commands ##### .PHONY: all all: $(IP) .PHONY: export export: $(IP) $(IP): $(HDL) vivado_hls script/export.tcl cosim: $(COSIM) $(COSIM): $(HDL) vivado_hls script/cosim.tcl .PHONY: csynth csynth: $(HDL) $(HDL): $(CSIM) $(HLS_SOURCE) vivado_hls script/csynth.tcl .PHONY: csim csim: $(CSIM) $(CSIM): vivado_hls script/csim.tcl .PHONY: clean clean: rm -rf $(HLS_TARGET) *.log これでmakeと打てばCのコードからIPが生成される． またHDLの合成だけやりたい場合は，make csynthと打てば良い． 協調シミュレーション(cosim)は使わない場合もあるので，ターゲットを指定して実行した場合のみ使えるようになっている．\nMakefileとtclスクリプトを自動生成する 新しくプロジェクトを作る場合，先程のMakefileとtclスクリプトをコピーすればよい． しかしプロジェクトによって変えたい部分がいくつかある．\nMakefile: プロジェクト名とソリューション名 csynth.tcl: チップ情報とクロック制約 これらの情報を入力として，Makefileとtclスクリプトを生成できるツールを作った↓\nvivado_hls_create_project\nvivado_hls_create_projectの設定 このツールを使うにあたって，設定が2つ必要となる． １つ目の設定は，Vivadoのパスである． ホームディレクトリに\".vivado_hls_create_project\"という名前でVivadoのパスを書いたJSONファイルを置く． 例えば\"/opt/Xilinx/Vivado/2018.3\"であれば，\".vivado_hls_create_project\"の内容を以下のようにする．\n{ \"path_to_vivado\": \"/opt/Xilinx/Vivado/2018.3\" } ２つ目の設定は，vivado_hls_create_projectを使う際にsettings.(sh|zsh)をsourceすることである．\nまたこれはオプションだが，Vivado HLSのボードファイルに普段使っているボードの情報を追記しておくと良い． ボードの情報は(Vivadoをインストールした場所が\"/opt/Xilinx/Vivado/2018.3\"であれば)，\"/opt/Xilinx/Vivado/2018.3/common/config/VivadoHls_boards.xml\"にある． ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．\nvivado_hls_create_projectで使えるボードの情報を見る vivado_hls_create_projectには，Makefileとtclスクリプトを作成できるボードの情報を表示する機能がある． “vivado_hls_create_project -l\"と入力してみると，以下の表示が得られる． Vivado HLSにデフォルトで登録されているボードだけでなく，追記したBasys3も見えている．\n$ vivado_hls_create_project -l Board Part ---------------------------- Alpha-Data xc7vx690tffg1157-2 KU_Alphadata xcku060-ffva1156-2-e Xilinx_ZedBoard xc7z020clg484-1 Xilinx_AC701 xc7a200tfbg676-2 Xilinx_KC705 xc7k325tffg900-2 Xilinx_KCU105 xcku040-ffva1156-2-e Xilinx_KCU116 xcku5p-ffvb676-2-e Xilinx_KCU1500 xcku115-flvb2104-2-e Xilinx_VC707 xc7vx485tffg1761-2 Xilinx_VC709 xc7vx690tffg1761-2 Xilinx_VCU108 xcvu095-ffva2104-2-e Xilinx_VCU110 xcvu190-flgc2104-2-e Xilinx_VCU118 xcvu9p-flga2104-2L-e Xilinx_VCU1525 xcvu9p-fsgd2104-2L-e Xilinx_ZC702 xc7z020clg484-1 Xilinx_ZC706 xc7z045ffg900-2 Xilinx_ZCU102 xczu9eg-ffvb1156-2-i Xilinx_ZCU106 xczu7ev-ffvc1156-2-i-es2 Xilinx_A-U200 xcu200-fsgd2104-2-e Xilinx_A-U250 xcu250-figd2104-2L-e Basys3 xc7a35t1cpg236-1 vivado_hls_create_projectでMakefileとtclスクリプトを生成する プロジェクト名とボード名を入力して，以下のようにコマンドを入力する． -pにはプロジェクト名，-bにはボード名(先程-lオプションで表示したもの)を指定する． するとMakefileとtclスクリプト，そしていくつかのディレクトリが生成される．\nincludeとsrcはハードウェア化する関数のためのディレクトリ，test以下はテスト用のディレクトリだ．\n$ vivado_hls_create_project -p adder -b Basys3 INFO: Found part INFO: Generate Makefile INFO: Generate directories INFO: Generate tcl scripts $ tree . . ├── Makefile ├── directives.tcl ├── include ├── script │ ├── cosim.tcl │ ├── csim.tcl │ ├── csynth.tcl │ └── export.tcl ├── src └── test ├── include └── src 6 directories, 6 files ハードウェア化するCコードをinclude, srcに，テストコードをtestに置けば，makeでIPの生成までやってくれる．\nおわりに これでGUI無しにVivado HLSのプロジェクトを作ったりIPの生成が出来るようになった． もしこのツールを使いたい人や使ってみた人がいれば，感想や質問等を是非聞かせてほしい．\n","wordCount":"2357","inLanguage":"en","datePublished":"2019-02-12T07:00:00+09:00","dateModified":"2019-02-12T07:00:00+09:00","author":{"@type":"Person","name":null},"mainEntityOfPage":{"@type":"WebPage","@id":"https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/"},"publisher":{"@type":"Organization","name":"Kenta Arai Webpage","description":"","logo":{"@type":"ImageObject","url":"https://Kenta11.github.io/favicon.ico"}}}</script><title>makeコマンドでVivado HLSを使う</title>
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=robots content="index, follow"><meta name=author content><meta name=description content><link rel=author type=text/plain href=/humans.txt><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon href=/favicon.ico type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta name=msapplication-TileImage content="/mstile-144x144.png"><meta name=theme-color content="#494f5c"><meta name=msapplication-TileColor content="#494f5c"><link rel=mask-icon href=/safari-pinned-tab.svg color=#494f5c><meta itemprop=name content="makeコマンドでVivado HLSを使う"><meta itemprop=description content="はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．"><meta itemprop=datePublished content="2019-02-12T07:00:00+09:00"><meta itemprop=dateModified content="2019-02-12T07:00:00+09:00"><meta itemprop=wordCount content="2357"><meta itemprop=keywords content="Vivado HLS,Make"><meta property="og:url" content="https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/"><meta property="og:site_name" content="Kenta Arai Webpage"><meta property="og:title" content="makeコマンドでVivado HLSを使う"><meta property="og:description" content="はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-02-12T07:00:00+09:00"><meta property="article:modified_time" content="2019-02-12T07:00:00+09:00"><meta property="article:tag" content="Vivado HLS"><meta property="article:tag" content="Make"><meta name=twitter:card content="summary"><meta name=twitter:title content="makeコマンドでVivado HLSを使う"><meta name=twitter:description content="はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"makeコマンドでVivado HLSを使う","name":"makeコマンドでVivado HLSを使う","description":"はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．\n","keywords":["Vivado HLS","make"],"articleBody":"はじめに 私がVivado HLSでIPを作っているときに使う機能はほとんど限られている． Cシミュレーション，HDLの合成，そしてIPの出力である． これにGUIを使う必要はほとんど感じられない． makeコマンドでそれらの一連の処理が出来れば楽チンである．\nCUIでVivado HLSを使う tclでビルドする FPGA開発日記のmsyksphinzさんが，tclとmakeを使ってビルドする方法を記事にしていた．\n記事：コマンドラインからVivado HLSを使用するためのスクリプト\nなるほど！ Makefileで環境変数を定義しておいて，tclのスクリプトでそれらを参照すれば，汎用的なMakefileを作れるみたいだ．\nこのMakefileのターゲットは，allとcleanしかない． allはCのソースコードをIPに，cleanは生成物やログを削除する． しかし私はHDLの合成までやって，Cのコードにpragmaを追加してチューニングを行うことがある． なので場合によっては，HDLの合成までで止めたい．\nmakeコマンドでビルドする 私がVivado HLSを使うときのディレクトリ構成に合わせて，Makefileとtclスクリプトを作る． 作ったMakefileとサンプルプロジェクトはGithubに用意した． ディレクトリ構成を下に示す\nadder/ ├── Makefile ├── directives.tcl ├── include: 合成する関数のヘッダ │ └── adder.hpp ├── src: 合成する関数の定義 │ └── adder.cpp ├── test: 合成する関数のテストベンチ │ ├── include │ │ └── test_adder.hpp │ └── src │ └── test_adder.cpp └── script: 合成のためのtclスクリプト ├── csim.tcl ├── csynth.tcl ├── cosim.tcl └── export.tcl msyksphinzさんの記事を参考に作ったMakefileを下に示す．\n#### configuration ##### # project and solution name export HLS_TARGET = adder export HLS_SOLUTION = basys3 # source files export HLS_SOURCE = $(wildcard src/*) export HLS_TEST = $(wildcard test/src/*) # result BASE_DIR = $(HLS_TARGET)/$(HLS_SOLUTION) IP = $(BASE_DIR)/impl COSIM = $(BASE_DIR)/sim HDL = $(BASE_DIR)/syn CSIM = $(BASE_DIR)/csim ##### targets and commands ##### .PHONY: all all: $(IP) .PHONY: export export: $(IP) $(IP): $(HDL) vivado_hls script/export.tcl cosim: $(COSIM) $(COSIM): $(HDL) vivado_hls script/cosim.tcl .PHONY: csynth csynth: $(HDL) $(HDL): $(CSIM) $(HLS_SOURCE) vivado_hls script/csynth.tcl .PHONY: csim csim: $(CSIM) $(CSIM): vivado_hls script/csim.tcl .PHONY: clean clean: rm -rf $(HLS_TARGET) *.log これでmakeと打てばCのコードからIPが生成される． またHDLの合成だけやりたい場合は，make csynthと打てば良い． 協調シミュレーション(cosim)は使わない場合もあるので，ターゲットを指定して実行した場合のみ使えるようになっている．\nMakefileとtclスクリプトを自動生成する 新しくプロジェクトを作る場合，先程のMakefileとtclスクリプトをコピーすればよい． しかしプロジェクトによって変えたい部分がいくつかある．\nMakefile: プロジェクト名とソリューション名 csynth.tcl: チップ情報とクロック制約 これらの情報を入力として，Makefileとtclスクリプトを生成できるツールを作った↓\nvivado_hls_create_project\nvivado_hls_create_projectの設定 このツールを使うにあたって，設定が2つ必要となる． １つ目の設定は，Vivadoのパスである． ホームディレクトリに\".vivado_hls_create_project\"という名前でVivadoのパスを書いたJSONファイルを置く． 例えば\"/opt/Xilinx/Vivado/2018.3\"であれば，\".vivado_hls_create_project\"の内容を以下のようにする．\n{ \"path_to_vivado\": \"/opt/Xilinx/Vivado/2018.3\" } ２つ目の設定は，vivado_hls_create_projectを使う際にsettings.(sh|zsh)をsourceすることである．\nまたこれはオプションだが，Vivado HLSのボードファイルに普段使っているボードの情報を追記しておくと良い． ボードの情報は(Vivadoをインストールした場所が\"/opt/Xilinx/Vivado/2018.3\"であれば)，\"/opt/Xilinx/Vivado/2018.3/common/config/VivadoHls_boards.xml\"にある． ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．\n","wordCount":"2357","inLanguage":"en","datePublished":"2019-02-12T07:00:00+09:00","dateModified":"2019-02-12T07:00:00+09:00","author":{"@type":"Person","name":null},"mainEntityOfPage":{"@type":"WebPage","@id":"https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/"},"publisher":{"@type":"Organization","name":"Kenta Arai Webpage","description":"","logo":{"@type":"ImageObject","url":"https://Kenta11.github.io/favicon.ico"}}}</script><title>makeコマンドでVivado HLSを使う</title>
 <link rel="stylesheet dns-prefetch preconnect preload prefetch" as=style href=https://Kenta11.github.io/css/style.min.d3facc2d5fe42af72ee5a80584900a45ffee6035df0ef582bd8696c2fe0c9da5.css integrity="sha256-0/rMLV/kKvcu5agFhJAKRf/uYDXfDvWCvYaWwv4MnaU=" crossorigin=anonymous></head><body id=page><header id=site-header class="animated slideInUp"><div class="hdr-wrapper section-inner"><div class=hdr-left><div class=site-branding><a href=https://Kenta11.github.io/>Kenta Arai Webpage</a></div><nav class="site-nav hide-in-mobile"><a href=https://Kenta11.github.io/posts/>Posts</a><a href=https://Kenta11.github.io/about/>About</a><a href=https://Kenta11.github.io/projects/>Projects</a></nav></div><div class="hdr-right hdr-icons"><button id=toc-btn class="hdr-btn desktop-only-ib" title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/isKenta14 target=_blank rel="noopener me" title=Twitter><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://github.com/Kenta11 target=_blank rel="noopener me" title=Github><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://gitlab.com/Kenta111 target=_blank rel="noopener me" title=Gitlab><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.65 14.39 12 22.13 1.35 14.39a.84.84.0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42.0 014.82 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42.0 0118.6 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.51L23 13.45a.84.84.0 01-.35.94z"/></svg></a><a href=https://qiita.com/Kenta11 target=_blank rel="noopener me" title=Qiita><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a><a href=https://speakerdeck.com/kenta11 target=_blank rel="noopener me" title=Speakerdeck><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a></span><button id=menu-btn class=hdr-btn title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div></header><div id=mobile-menu class="animated fast"><ul><li><a href=https://Kenta11.github.io/posts/>Posts</a></li><li><a href=https://Kenta11.github.io/about/>About</a></li><li><a href=https://Kenta11.github.io/projects/>Projects</a></li></ul></div><main class="site-main section-inner animated fadeIn faster"><article class=thin><header class=post-header><div class=post-date><span>Feb 12, 2019</span></div><h1>makeコマンドでVivado HLSを使う</h1></header><div class=post-description><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://Kenta11.github.io/tags/vivado-hls>Vivado HLS</a></span><span class=tag><a href=https://Kenta11.github.io/tags/make>make</a></span></p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>2357&nbspWords</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2019-02-11 22:00 +0000</p></div><hr class=post-end><div class=content><h2 id=はじめに>はじめに<a href=#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>私がVivado HLSでIPを作っているときに使う機能はほとんど限られている．
 Cシミュレーション，HDLの合成，そしてIPの出力である．
 これにGUIを使う必要はほとんど感じられない．
@@ -25,111 +25,111 @@ allはCのソースコードをIPに，cleanは生成物やログを削除する
      ├── csynth.tcl
      ├── cosim.tcl
      └── export.tcl
-</code></pre><p>msyksphinzさんの記事を参考に作ったMakefileを下に示す．</p><pre tabindex=0><code>#### configuration #####
-
-# project and solution name
-export HLS_TARGET   = adder
-export HLS_SOLUTION = basys3
-# source files
-export HLS_SOURCE   = $(wildcard src/*)
-export HLS_TEST     = $(wildcard test/src/*)
-
-# result
-BASE_DIR = $(HLS_TARGET)/$(HLS_SOLUTION)
-IP       = $(BASE_DIR)/impl
-COSIM    = $(BASE_DIR)/sim
-HDL      = $(BASE_DIR)/syn
-CSIM     = $(BASE_DIR)/csim
-
-##### targets and commands #####
-
-.PHONY: all
-all: $(IP)
-
-.PHONY: export
-export: $(IP)
-$(IP): $(HDL)
-        vivado_hls script/export.tcl
-
-cosim: $(COSIM)
-$(COSIM): $(HDL)
-        vivado_hls script/cosim.tcl
-
-.PHONY: csynth
-csynth: $(HDL)
-$(HDL): $(CSIM) $(HLS_SOURCE)
-        vivado_hls script/csynth.tcl
-
-.PHONY: csim
-csim: $(CSIM)
-$(CSIM):
-        vivado_hls script/csim.tcl
-
-.PHONY: clean
-clean:
-        rm -rf $(HLS_TARGET) *.log
-</code></pre><p>これでmakeと打てばCのコードからIPが生成される．
+</code></pre><p>msyksphinzさんの記事を参考に作ったMakefileを下に示す．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=c>#### configuration #####
+</span></span></span><span class=line><span class=cl><span class=c></span>
+</span></span><span class=line><span class=cl><span class=c># project and solution name
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=k>export </span><span class=nv>HLS_TARGET</span>   <span class=o>=</span> adder
+</span></span><span class=line><span class=cl><span class=k>export </span><span class=nv>HLS_SOLUTION</span> <span class=o>=</span> basys3
+</span></span><span class=line><span class=cl><span class=c># source files
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=k>export </span><span class=nv>HLS_SOURCE</span>   <span class=o>=</span> <span class=k>$(</span>wildcard src/*<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=k>export </span><span class=nv>HLS_TEST</span>     <span class=o>=</span> <span class=k>$(</span>wildcard test/src/*<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c># result
+</span></span></span><span class=line><span class=cl><span class=c></span><span class=nv>BASE_DIR</span> <span class=o>=</span> <span class=k>$(</span>HLS_TARGET<span class=k>)</span>/<span class=k>$(</span>HLS_SOLUTION<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>IP</span>       <span class=o>=</span> <span class=k>$(</span>BASE_DIR<span class=k>)</span>/impl
+</span></span><span class=line><span class=cl><span class=nv>COSIM</span>    <span class=o>=</span> <span class=k>$(</span>BASE_DIR<span class=k>)</span>/sim
+</span></span><span class=line><span class=cl><span class=nv>HDL</span>      <span class=o>=</span> <span class=k>$(</span>BASE_DIR<span class=k>)</span>/syn
+</span></span><span class=line><span class=cl><span class=nv>CSIM</span>     <span class=o>=</span> <span class=k>$(</span>BASE_DIR<span class=k>)</span>/csim
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c>##### targets and commands #####
+</span></span></span><span class=line><span class=cl><span class=c></span>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>all</span>
+</span></span><span class=line><span class=cl><span class=nf>all</span><span class=o>:</span> <span class=k>$(</span><span class=nv>IP</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>export</span>
+</span></span><span class=line><span class=cl><span class=nf>export</span><span class=o>:</span> <span class=k>$(</span><span class=nv>IP</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nf>$(IP)</span><span class=o>:</span> <span class=k>$(</span><span class=nv>HDL</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        vivado_hls script/export.tcl
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>cosim</span><span class=o>:</span> <span class=k>$(</span><span class=nv>COSIM</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nf>$(COSIM)</span><span class=o>:</span> <span class=k>$(</span><span class=nv>HDL</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        vivado_hls script/cosim.tcl
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>csynth</span>
+</span></span><span class=line><span class=cl><span class=nf>csynth</span><span class=o>:</span> <span class=k>$(</span><span class=nv>HDL</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nf>$(HDL)</span><span class=o>:</span> <span class=k>$(</span><span class=nv>CSIM</span><span class=k>)</span> <span class=k>$(</span><span class=nv>HLS_SOURCE</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        vivado_hls script/csynth.tcl
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>csim</span>
+</span></span><span class=line><span class=cl><span class=nf>csim</span><span class=o>:</span> <span class=k>$(</span><span class=nv>CSIM</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nf>$(CSIM)</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        vivado_hls script/csim.tcl
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nf>.PHONY</span><span class=o>:</span> <span class=n>clean</span>
+</span></span><span class=line><span class=cl><span class=nf>clean</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>        rm -rf <span class=k>$(</span>HLS_TARGET<span class=k>)</span> *.log
+</span></span></code></pre></div><p>これでmakeと打てばCのコードからIPが生成される．
 またHDLの合成だけやりたい場合は，make csynthと打てば良い．
 協調シミュレーション(cosim)は使わない場合もあるので，ターゲットを指定して実行した場合のみ使えるようになっている．</p><h2 id=makefileとtclスクリプトを自動生成する>Makefileとtclスクリプトを自動生成する<a href=#makefile%e3%81%a8tcl%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e3%82%92%e8%87%aa%e5%8b%95%e7%94%9f%e6%88%90%e3%81%99%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>新しくプロジェクトを作る場合，先程のMakefileとtclスクリプトをコピーすればよい．
 しかしプロジェクトによって変えたい部分がいくつかある．</p><ul><li>Makefile: プロジェクト名とソリューション名</li><li>csynth.tcl: チップ情報とクロック制約</li></ul><p>これらの情報を入力として，Makefileとtclスクリプトを生成できるツールを作った↓</p><p><a href=https://github.com/Kenta11/vivado_hls_create_project>vivado_hls_create_project</a></p><h3 id=vivado_hls_create_projectの設定>vivado_hls_create_projectの設定<a href=#vivado_hls_create_project%e3%81%ae%e8%a8%ad%e5%ae%9a class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>このツールを使うにあたって，設定が2つ必要となる．
 １つ目の設定は，Vivadoのパスである．
 ホームディレクトリに".vivado_hls_create_project"という名前でVivadoのパスを書いたJSONファイルを置く．
-例えば"/opt/Xilinx/Vivado/2018.3"であれば，".vivado_hls_create_project"の内容を以下のようにする．</p><pre tabindex=0><code>{
-    &#34;path_to_vivado&#34;: &#34;/opt/Xilinx/Vivado/2018.3&#34;
-}
-</code></pre><p>２つ目の設定は，vivado_hls_create_projectを使う際にsettings.(sh|zsh)をsourceすることである．</p><p>またこれはオプションだが，Vivado HLSのボードファイルに普段使っているボードの情報を追記しておくと良い．
+例えば"/opt/Xilinx/Vivado/2018.3"であれば，".vivado_hls_create_project"の内容を以下のようにする．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nt>&#34;path_to_vivado&#34;</span><span class=p>:</span> <span class=s2>&#34;/opt/Xilinx/Vivado/2018.3&#34;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>２つ目の設定は，vivado_hls_create_projectを使う際にsettings.(sh|zsh)をsourceすることである．</p><p>またこれはオプションだが，Vivado HLSのボードファイルに普段使っているボードの情報を追記しておくと良い．
 ボードの情報は(Vivadoをインストールした場所が"/opt/Xilinx/Vivado/2018.3"であれば)，"/opt/Xilinx/Vivado/2018.3/common/config/VivadoHls_boards.xml"にある．
-ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．</p><pre tabindex=0><code>&lt;board name=&#34;Basys3&#34; display_name=&#34;Basys3&#34; family=&#34;artix7&#34; part=&#34;xc7a35t1cpg236-1&#34;  device=&#34;xc7a35t&#34; package=&#34;cpg236&#34; speedgrade=&#34;-1&#34; vendor=&#34;digilentinc.com&#34; /&gt;
-</code></pre><h3 id=vivado_hls_create_projectで使えるボードの情報を見る>vivado_hls_create_projectで使えるボードの情報を見る<a href=#vivado_hls_create_project%e3%81%a7%e4%bd%bf%e3%81%88%e3%82%8b%e3%83%9c%e3%83%bc%e3%83%89%e3%81%ae%e6%83%85%e5%a0%b1%e3%82%92%e8%a6%8b%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>vivado_hls_create_projectには，Makefileとtclスクリプトを作成できるボードの情報を表示する機能がある．
+ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-xml data-lang=xml><span class=line><span class=cl><span class=nt>&lt;board</span> <span class=na>name=</span><span class=s>&#34;Basys3&#34;</span> <span class=na>display_name=</span><span class=s>&#34;Basys3&#34;</span> <span class=na>family=</span><span class=s>&#34;artix7&#34;</span> <span class=na>part=</span><span class=s>&#34;xc7a35t1cpg236-1&#34;</span>  <span class=na>device=</span><span class=s>&#34;xc7a35t&#34;</span> <span class=na>package=</span><span class=s>&#34;cpg236&#34;</span> <span class=na>speedgrade=</span><span class=s>&#34;-1&#34;</span> <span class=na>vendor=</span><span class=s>&#34;digilentinc.com&#34;</span> <span class=nt>/&gt;</span>
+</span></span></code></pre></div><h3 id=vivado_hls_create_projectで使えるボードの情報を見る>vivado_hls_create_projectで使えるボードの情報を見る<a href=#vivado_hls_create_project%e3%81%a7%e4%bd%bf%e3%81%88%e3%82%8b%e3%83%9c%e3%83%bc%e3%83%89%e3%81%ae%e6%83%85%e5%a0%b1%e3%82%92%e8%a6%8b%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>vivado_hls_create_projectには，Makefileとtclスクリプトを作成できるボードの情報を表示する機能がある．
 &ldquo;vivado_hls_create_project -l"と入力してみると，以下の表示が得られる．
-Vivado HLSにデフォルトで登録されているボードだけでなく，追記したBasys3も見えている．</p><pre tabindex=0><code>$ vivado_hls_create_project -l
-Board               Part
-----------------------------
-Alpha-Data          xc7vx690tffg1157-2
-KU_Alphadata        xcku060-ffva1156-2-e
-Xilinx_ZedBoard     xc7z020clg484-1
-Xilinx_AC701        xc7a200tfbg676-2
-Xilinx_KC705        xc7k325tffg900-2
-Xilinx_KCU105       xcku040-ffva1156-2-e
-Xilinx_KCU116       xcku5p-ffvb676-2-e
-Xilinx_KCU1500      xcku115-flvb2104-2-e
-Xilinx_VC707        xc7vx485tffg1761-2
-Xilinx_VC709        xc7vx690tffg1761-2
-Xilinx_VCU108       xcvu095-ffva2104-2-e
-Xilinx_VCU110       xcvu190-flgc2104-2-e
-Xilinx_VCU118       xcvu9p-flga2104-2L-e
-Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
-Xilinx_ZC702        xc7z020clg484-1
-Xilinx_ZC706        xc7z045ffg900-2
-Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
-Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
-Xilinx_A-U200       xcu200-fsgd2104-2-e
-Xilinx_A-U250       xcu250-figd2104-2L-e
-Basys3              xc7a35t1cpg236-1
-</code></pre><h3 id=vivado_hls_create_projectでmakefileとtclスクリプトを生成する>vivado_hls_create_projectでMakefileとtclスクリプトを生成する<a href=#vivado_hls_create_project%e3%81%a7makefile%e3%81%a8tcl%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e3%82%92%e7%94%9f%e6%88%90%e3%81%99%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>プロジェクト名とボード名を入力して，以下のようにコマンドを入力する．
+Vivado HLSにデフォルトで登録されているボードだけでなく，追記したBasys3も見えている．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ vivado_hls_create_project -l
+</span></span><span class=line><span class=cl>Board               Part
+</span></span><span class=line><span class=cl>----------------------------
+</span></span><span class=line><span class=cl>Alpha-Data          xc7vx690tffg1157-2
+</span></span><span class=line><span class=cl>KU_Alphadata        xcku060-ffva1156-2-e
+</span></span><span class=line><span class=cl>Xilinx_ZedBoard     xc7z020clg484-1
+</span></span><span class=line><span class=cl>Xilinx_AC701        xc7a200tfbg676-2
+</span></span><span class=line><span class=cl>Xilinx_KC705        xc7k325tffg900-2
+</span></span><span class=line><span class=cl>Xilinx_KCU105       xcku040-ffva1156-2-e
+</span></span><span class=line><span class=cl>Xilinx_KCU116       xcku5p-ffvb676-2-e
+</span></span><span class=line><span class=cl>Xilinx_KCU1500      xcku115-flvb2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_VC707        xc7vx485tffg1761-2
+</span></span><span class=line><span class=cl>Xilinx_VC709        xc7vx690tffg1761-2
+</span></span><span class=line><span class=cl>Xilinx_VCU108       xcvu095-ffva2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_VCU110       xcvu190-flgc2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_VCU118       xcvu9p-flga2104-2L-e
+</span></span><span class=line><span class=cl>Xilinx_VCU1525      xcvu9p-fsgd2104-2L-e
+</span></span><span class=line><span class=cl>Xilinx_ZC702        xc7z020clg484-1
+</span></span><span class=line><span class=cl>Xilinx_ZC706        xc7z045ffg900-2
+</span></span><span class=line><span class=cl>Xilinx_ZCU102       xczu9eg-ffvb1156-2-i
+</span></span><span class=line><span class=cl>Xilinx_ZCU106       xczu7ev-ffvc1156-2-i-es2
+</span></span><span class=line><span class=cl>Xilinx_A-U200       xcu200-fsgd2104-2-e
+</span></span><span class=line><span class=cl>Xilinx_A-U250       xcu250-figd2104-2L-e
+</span></span><span class=line><span class=cl>Basys3              xc7a35t1cpg236-1
+</span></span></code></pre></div><h3 id=vivado_hls_create_projectでmakefileとtclスクリプトを生成する>vivado_hls_create_projectでMakefileとtclスクリプトを生成する<a href=#vivado_hls_create_project%e3%81%a7makefile%e3%81%a8tcl%e3%82%b9%e3%82%af%e3%83%aa%e3%83%97%e3%83%88%e3%82%92%e7%94%9f%e6%88%90%e3%81%99%e3%82%8b class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>プロジェクト名とボード名を入力して，以下のようにコマンドを入力する．
 -pにはプロジェクト名，-bにはボード名(先程-lオプションで表示したもの)を指定する．
-するとMakefileとtclスクリプト，そしていくつかのディレクトリが生成される．</p><p>includeとsrcはハードウェア化する関数のためのディレクトリ，test以下はテスト用のディレクトリだ．</p><pre tabindex=0><code>$ vivado_hls_create_project -p adder -b Basys3
-INFO:  Found part
-INFO:  Generate Makefile
-INFO:  Generate directories
-INFO:  Generate tcl scripts
-$ tree .
-.
-├── Makefile
-├── directives.tcl
-├── include
-├── script
-│   ├── cosim.tcl
-│   ├── csim.tcl
-│   ├── csynth.tcl
-│   └── export.tcl
-├── src
-└── test
-    ├── include
-    └── src
-
-6 directories, 6 files
-</code></pre><p>ハードウェア化するCコードをinclude, srcに，テストコードをtestに置けば，makeでIPの生成までやってくれる．</p><h2 id=おわりに>おわりに<a href=#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>これでGUI無しにVivado HLSのプロジェクトを作ったりIPの生成が出来るようになった．
+するとMakefileとtclスクリプト，そしていくつかのディレクトリが生成される．</p><p>includeとsrcはハードウェア化する関数のためのディレクトリ，test以下はテスト用のディレクトリだ．</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ vivado_hls_create_project -p adder -b Basys3
+</span></span><span class=line><span class=cl>INFO:  Found part
+</span></span><span class=line><span class=cl>INFO:  Generate Makefile
+</span></span><span class=line><span class=cl>INFO:  Generate directories
+</span></span><span class=line><span class=cl>INFO:  Generate tcl scripts
+</span></span><span class=line><span class=cl>$ tree .
+</span></span><span class=line><span class=cl>.
+</span></span><span class=line><span class=cl>├── Makefile
+</span></span><span class=line><span class=cl>├── directives.tcl
+</span></span><span class=line><span class=cl>├── include
+</span></span><span class=line><span class=cl>├── script
+</span></span><span class=line><span class=cl>│   ├── cosim.tcl
+</span></span><span class=line><span class=cl>│   ├── csim.tcl
+</span></span><span class=line><span class=cl>│   ├── csynth.tcl
+</span></span><span class=line><span class=cl>│   └── export.tcl
+</span></span><span class=line><span class=cl>├── src
+</span></span><span class=line><span class=cl>└── <span class=nb>test</span>
+</span></span><span class=line><span class=cl>    ├── include
+</span></span><span class=line><span class=cl>    └── src
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=m>6</span> directories, <span class=m>6</span> files
+</span></span></code></pre></div><p>ハードウェア化するCコードをinclude, srcに，テストコードをtestに置けば，makeでIPの生成までやってくれる．</p><h2 id=おわりに>おわりに<a href=#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>これでGUI無しにVivado HLSのプロジェクトを作ったりIPの生成が出来るようになった．
 もしこのツールを使いたい人や使ってみた人がいれば，感想や質問等を是非聞かせてほしい．</p></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#はじめに>はじめに</a></li><li><a href=#cuiでvivado-hlsを使う>CUIでVivado HLSを使う</a><ul><li><a href=#tclでビルドする>tclでビルドする</a></li><li><a href=#makeコマンドでビルドする>makeコマンドでビルドする</a></li></ul></li><li><a href=#makefileとtclスクリプトを自動生成する>Makefileとtclスクリプトを自動生成する</a><ul><li><a href=#vivado_hls_create_projectの設定>vivado_hls_create_projectの設定</a></li><li><a href=#vivado_hls_create_projectで使えるボードの情報を見る>vivado_hls_create_projectで使えるボードの情報を見る</a></li><li><a href=#vivado_hls_create_projectでmakefileとtclスクリプトを生成する>vivado_hls_create_projectでMakefileとtclスクリプトを生成する</a></li></ul></li><li><a href=#おわりに>おわりに</a></li></ul></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2019-02-17-vivado-with-zsh/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>Vivadoを使用する際にのみVivadoへパスを通す(Zsh編)</span>
 </a><a class=prev-post href=https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/><span class=post-nav-label>Older&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>UbuntuにVim環境を用意する</span></a></div><div id=comments class=thin></div></main><footer id=site-footer class="section-inner thin animated fadeIn faster"><p>&copy; 2025 <a href=https://Kenta11.github.io/>Kenta Arai Webpage</a>
 &#183; &#183; Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>
