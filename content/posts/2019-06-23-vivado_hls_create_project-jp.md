@@ -16,7 +16,7 @@ vivado_hls_create_projectはコマンドラインでVivado HLSを使うための
 Zybo Z7-20向けに加算モジュールを作ってみましょう．
 vivado_hls_create_projectが扱えるFPGAは`list`コマンドで確認できます．
 
-```
+```shell
 $ vivado_hls_create_project list
 Board               Part
 --------------------------------------------------
@@ -52,7 +52,7 @@ Zybo_Z7_20          xc7z020clg400-1
 `create`コマンドでMakefileとtclスクリプトを生成できます．
 `-b`オプションはボード名を，最後の`adder`はプロジェクト名を指定します．
 
-```
+```shell
 $ vivado_hls_create_project create -b Zybo_Z7_20 adder
 [I 190623 20:21:41 generator:45] generate adder
 [I 190623 20:21:41 generator:45] generate adder/include
@@ -93,7 +93,7 @@ test/はテストコードを置くディレクトリです．
 
 - include/adder.hpp
 
-```
+```cpp
 #ifndef _ADDER_HPP_
 #define _ADDER_HPP_
 
@@ -104,7 +104,7 @@ void adder(int a, int b, int *sum);
 
 - src/adder.cpp
 
-```
+```cpp
 #include "adder.hpp"
 
 void adder(int a, int b, int *sum) {
@@ -116,7 +116,7 @@ void adder(int a, int b, int *sum) {
 
 - test/src/test_adder.cpp
 
-```
+```cpp
 #include "adder.hpp"
 
 #include <cassert>
@@ -148,7 +148,7 @@ Vivadoで確認してみましょう！
 プロジェクトには.gitignoreがあるはずです．
 生成物を無視するように設定されているので，gitでソースコードとMakefile，tclスクリプトを管理できます．
 
-```
+```shell
 $ git init
 Initialized empty Git repository in /xxx/xxx/adder/.git/
 $ git status

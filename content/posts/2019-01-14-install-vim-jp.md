@@ -13,13 +13,13 @@ toc: true
 
 GithubからVimをダウンロードする．
 
-```
+```shell
 $ git clone https://github.com/vim/vim
 ```
 
 ビルドの設定をしてからビルドする．
 
-```
+```shell
 $ make distclean # すでにビルドをしたことがある場合は実行しておく
 $ ./configure --with-features=huge \
             --disable-darwin \
@@ -40,7 +40,7 @@ $ make -j8 # マシンのスペックによって値は変える
 Ubuntuの場合，checkinstallを使うことでVimをaptで管理できる．
 make installせずにこちらを使う．
 
-```
+```shell
 $ apt install checkinstall
 $ checkinstall
 # インストールするパッケージが更新されないように，holdをかけておく
@@ -54,7 +54,7 @@ $ echo "vim-tiny hold"    | dpkg --set-selections
 
 Vimのプラグインを準備する．私のVim用設定ファイルはGithub上に置いてあるので，これを使う．
 
-```
+```shell
 $ git clone https://github.com/Kenta11/dotfiles ; cd dotfiles
 $ bash install.sh
 ```
@@ -65,7 +65,7 @@ $ bash install.sh
 
 以下のコマンドを実行する．
 
-```
+```shell
 $ echo "vim install"         | dpkg --set-selections
 $ echo "vim-common install"  | dpkg --set-selections
 $ echo "vim-runtime install" | dpkg --set-selections

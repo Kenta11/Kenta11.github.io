@@ -27,7 +27,7 @@ LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そう
 
 Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。
 
-```bash
+```shell
 # Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する
 $ sudo pacman -S clang llvm # clangだけでは今回のPythonプログラムが動かなかった...
 ```
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 作成したPythonプログラムを使用して、関数呼び出しを探してみる。
 今回はvimのソースコードをターゲットに、`vim_snprintf`を探す。
 
-```
+```shell
 $ git clone https://github.com/vim/vim
 $ python3 sample.py vim_snprintf vim/src/main.c
 vim_snprintf main 106

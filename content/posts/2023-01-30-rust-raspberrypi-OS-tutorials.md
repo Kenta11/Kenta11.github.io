@@ -26,7 +26,7 @@ Rust で Raspberry Pi 向けのオペレーティングシステムを開発す�
   - OS は qemu で実行できるようだ
 - qemu で OS を動かしてみよう
 
-```
+```shell
 $ make qemu
 
 Compiling kernel ELF - rpi3
@@ -43,7 +43,7 @@ make: *** [Makefile:130: kernel8.img] エラー 127
   - LLVM のツールチェインを呼び出すコマンドっぽい？
 - インストールして再度 OS を動かそう
 
-```
+```shell
 $ cargo install cargo-binutils
 （とても時間がかかる）
 $ make qemu
@@ -60,7 +60,7 @@ make: *** [Makefile:155: qemu] エラー 125
 
 - docker も動かさないといけないらしい
 
-```
+```shell
 $ sudo systemctl restart docker
 $ make qemu
 
@@ -72,7 +72,7 @@ make: *** [Makefile:155: qemu] エラー 126
 
 - 管理者権限まで必要なのか...（docker を使う以上当たり前だが）
 
-```
+```shell
 $ sudo make qemu
 
 Launching QEMU

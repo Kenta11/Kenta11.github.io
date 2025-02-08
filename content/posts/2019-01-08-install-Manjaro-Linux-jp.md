@@ -68,7 +68,7 @@ USBメモリのManajro Linuxが起動したら，OSのインストーラを実�
 
 参考：[Japanese input with i3 and Arch/Manjaro](https://confluence.jaytaala.com/pages/viewpage.action?pageId=18579517)
 
-```
+```shell
 sudo pacman -S fcitx-im fcitx-configtool fcitx-mozc yay
 yay -S ttf-vlgothic\
 
@@ -85,7 +85,7 @@ echo "exec --no-startup-id fcitx -d" >> ~/.config/i3/config
 OSをインストールした際にリージョンをJapanとしたところ，ホームにあるディレクトリ名が日本語になってしまった．
 以下のコマンドで英語に書き換える．
 
-```
+```shell
 LANG=C xdg-user-dirs-update --force
 ```
 
@@ -105,7 +105,7 @@ ntpdを有効にして，ハードウェアクロックをUTCで同期する．
 - [VAIO Z で Arch LinuxとWindows 10をデュアルブートする](https://qiita.com/mopp/items/f1912433abbed69f5f99#%E6%99%82%E5%88%BB%E3%81%AE%E8%A8%AD%E5%AE%9A)
 - [ArchWiki 時刻](https://wiki.archlinux.jp/index.php/%E6%99%82%E5%88%BB#Windows_.E3.81.A7_UTC_.E3.82.92.E4.BD.BF.E3.81.86)
 
-```
+```shell
 pacman -S ntp
 timedatectl set-local-rtc false
 ntpd -gq

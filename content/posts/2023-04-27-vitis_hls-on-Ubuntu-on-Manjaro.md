@@ -22,7 +22,7 @@ Manjaro で Vitis HLS の[サンプルプログラム](https://github.com/Kenta1
 これらのパッケージは CSIM で必要になる．
 また，環境変数`LIBRARY_PATH`を定義しているが，これも CSIM で必要になる．
 
-```
+```Dockerfile
 FROM ubuntu:22.04
 LABEL maintainer "Kenta Arai <>"
 
@@ -36,7 +36,7 @@ RUN apt update -y \
 次に Docker イメージを作成し，コンテナを生成する．
 `/opt` 下に Vitis をインストールしたディレクトリをマウントする．
 
-```
+```shell
 $ ls
 Dockerfile
 $ sudo docker buildx build -t ubuntu_22.04_for_vitis .
@@ -49,7 +49,7 @@ ubuntu_22.04_for_vitis /bin/bash
 
 Vitis HLS のサンプルプログラムをダウンロードし，`vitis_hls`で論理合成，CSIM，COSIM を開始する．
 
-```
+```shell
 # cd ~
 # git clone https://github.com/Kenta11/Vitis-HLS-Introductory-Examples
 # cd Vitis-HLS-Introductory-Examples/Modeling/using_vectors/

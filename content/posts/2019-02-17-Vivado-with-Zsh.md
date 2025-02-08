@@ -15,7 +15,7 @@ Zshであっても同じように，Vivadoを使用する際にのみVivadoへ�
 
 .zshrcに以下の記述をする．
 
-```
+```zsh
 # vivado
 function vivado(){
     source /path/to/Xilinx/Vivado/201x.x/settings64.sh

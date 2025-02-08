@@ -13,7 +13,7 @@ toc: true
 
 `create`コマンドのヘルプを見ると，以下の内容が表示されます．
 
-```
+```shell
 $ vivado_hls_create_project create --help
 usage: vivado_hls_create_project create [-h] [-s SOLUTION] [-c CLOCK] [--template] [--compiler_arg COMPILER_ARG] [--linker_arg LINKER_ARG] -b BOARD project_name
 
@@ -47,7 +47,7 @@ Cシミュレーションに外部のライブラリを使う際は`--compiler_a
 
 ZedBoard用にsampleというプロジェクトを作る場合は，以下のようにコマンドを実行して下さい．
 
-```
+```shell
 $ vivado_hls_create_project create sample -b Xilinx_ZedBoard
 INFO: Generating directory sample
 INFO: Generating directory sample/include
@@ -82,7 +82,7 @@ sample
 `-b`はボード名を指定します．
 使用可能なボード名は`list`コマンドで確認して下さい．
 
-```
+```shell
 $ vivado_hls_create_project list
 Board               Part
 --------------------------------------------------

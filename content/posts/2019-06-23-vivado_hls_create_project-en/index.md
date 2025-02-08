@@ -16,7 +16,7 @@ Let's use it to create a simple IP!
 Let's create an adder module for Zybo Z7-20.
 Command `list` shows FPGAs to which vivado_hls_create_project deals with.
 
-```
+```shell
 $ vivado_hls_create_project list
 Board               Part
 --------------------------------------------------
@@ -52,7 +52,7 @@ If you can't find FPGAs you want to use, add a board name and etc. to `/path/to/
 Command `create` creates Makefile and tcl scripts.
 Option `-b` specifies board name, and last string `adder` specifies project name.
 
-```
+```shell
 $ vivado_hls_create_project create -b Zybo_Z7_20 adder
 [I 190623 20:21:41 generator:45] generate adder
 [I 190623 20:21:41 generator:45] generate adder/include
@@ -93,7 +93,7 @@ Write source code of adder module.
 
 - include/adder.hpp
 
-```
+```cpp
 #ifndef _ADDER_HPP_
 #define _ADDER_HPP_
 
@@ -104,7 +104,7 @@ void adder(int a, int b, int *sum);
 
 - src/adder.cpp
 
-```
+```cpp
 #include "adder.hpp"
 
 void adder(int a, int b, int *sum) {
@@ -116,7 +116,7 @@ Also write test bench .
 
 - test/src/test_adder.cpp
 
-```
+```cpp
 #include "adder.hpp"
 
 #include <cassert>
@@ -149,7 +149,7 @@ There is a .gitignore in the project.
 It ignores a product.
 So you can manage source codes, Makefile and tcl scripts with git. 
 
-```
+```shell
 $ git init
 Initialized empty Git repository in /xxx/xxx/adder/.git/
 $ git status

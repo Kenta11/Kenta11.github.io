@@ -49,7 +49,7 @@ tags: [Rust, Raspberry Pi, Operating System]
 
 ## 実行結果
 
-```
+```shell
 $ make
 
 Compiling kernel ELF - rpi3

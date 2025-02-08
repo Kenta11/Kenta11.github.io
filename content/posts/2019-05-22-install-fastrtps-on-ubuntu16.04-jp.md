@@ -15,7 +15,7 @@ fastrtpsgenも一緒にインストールしたいので，自分の環境にイ
 [Fast RTPS Installation](https://dev.px4.io/en/setup/fast-rtps-installation.html)によると，cmakeとmakeでFast-RTPSとfastrtpsgenをビルドするようだ．
 cmakeを実行すると，以下のログが表示された．
 
-```
+```shell
 $ git clone https://github.com/eProsima/Fast-RTPS
 $ cd Fast-RTPS
 $ mkdir build; cd build
@@ -42,7 +42,7 @@ See also "/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log".
 Javaが無いと言われた．
 ドキュメントには`Java is required to use our built-in code generation tool - fastrtpsgen. Java JDK 8 is recommended.`とあるので，openjdkのバージョン8をインストールする．
 
-```
+```shell
 $ sudo apt install openjdk-8-jdk
 $ rm -rf *
 $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON ..
@@ -69,7 +69,7 @@ See also "/home/kenta/git/Fast-RTPS/build/CMakeFiles/CMakeError.log".
 
 今度はgradleが必要だと言われた．インストールし，再度ビルドする．
 
-```
+```shell
 $ sudo apt install gradle
 $ rm -rf *
 $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. # エラーなく終了！
@@ -77,7 +77,7 @@ $ cmake -DTHIRDPARTY=ON -DBUILD_JAVA=ON .. # エラーなく終了！
 
 ## ビルドしてインストールする
 
-```
+```shell
 $ make -j8 # エラーなく終了！
 $ sudo checkinstall
 
@@ -174,7 +174,7 @@ Bye.
 
 そこでrootにgradleのプロキシ設定を反映させて，インストールをする．
 
-```
+```shell
 $ sudo cp ~/.gradle/gradle.properties /root/.gradle/ # 自分のgradleの設定をrootにも反映
 $ sudo checkinstall
 
@@ -619,7 +619,7 @@ $ which fastrtpsgen
 fastrtpsgenを使ってサンプルプログラムを作成する．
 プログラムの作成は[FASTRTPSGEN v1.0.4 USER MANUAL](https://eprosima.com/docs/fast-rtps/1.0.4/pdf/FASTRTPSGEN_User_Manual.pdf)の`4 HelloWorld example`を参考にした．
 
-```
+```shell
 $ mkdir fastrtps-HelloWorld; cd fastrtps-HelloWorld
 $ vim HelloWorld.idl # メッセージを定義
 $ cat HelloWorld.idl
@@ -643,7 +643,7 @@ Exception in thread "main" java.lang.NullPointerException
 idは定義済みだそうだ．
 別の名前を付けて再度挑戦してみる．
 
-```
+```shell
 $ vim HelloWorld.idl 
 $ cat HelloWorld.idl 
 struct HelloWorld {
@@ -673,7 +673,7 @@ HelloWorld.idl  HelloWorldPublisher.cxx
 
 ファイルが生成された．これをビルドする．
 
-```
+```shell
 $ mkdir build; cd build
 $ cmake ../
 -- The C compiler identification is GNU 5.4.0
@@ -719,7 +719,7 @@ Usage:
 
 ターミナルを二つ用意し，それぞれで`./HelloWorld publisher`と`./HelloWorld subscriber`を実行する．
 
-```
+```shell
 $ ./HelloWorld publisher
 Starting 
 Publisher created, waiting for Subscribers.
@@ -728,7 +728,7 @@ Sending sample, count=1, send another sample?(y-yes,n-stop): n
 Stopping execution
 ```
 
-```
+```shell
 $ ./HelloWorld subscriber
 Starting 
 Waiting for Data, press Enter to stop the Subscriber. 

@@ -20,7 +20,7 @@ vivado_hls_create_projectを大改修しました．変更点は以下の通り�
 
 vivado_hls_create_projectはpipでインストールできるようになりました．
 
-```
+```shell
 $ git clone https://github.com/Kenta11/vivado_hls_create_project
 $ sudo pip install vivado_hls_create_project
 $ vivado_hls_create_project -h

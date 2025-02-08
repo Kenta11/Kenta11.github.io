@@ -23,7 +23,7 @@ nmcliを使って簡単に設定をすることができる．
 
 以下の例では，インターフェースensに静的IPアドレスを設定する例を示す．
 
-```
+```shell
 $ sudo nmcli c down ens # インターフェースを無効化
 $ sudo nmcli c modify ens ipv4.addresses XXX.XXX.XXX.XXX/XX # IPアドレスXXX.XXX.XXX.XXX，サブネットマスクXXを設定
 $ sudo nmcli c modify ens ipv4.gateway XXX.XXX.XXX.XXX # デフォルトゲートウェイのIPアドレスを設定

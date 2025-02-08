@@ -18,7 +18,7 @@ toc: true
 
 まず Electron 将棋 の公式リポジトリからプロジェクト一式をダウンロードする．npm でビルドし，生成された実行バイナリを `~/.local/bin/` に配置する．npm 系のコマンドは既にインストールしていたので，環境によっては準備が必要かもしれない．
 
-```
+```shell
 $ gh repo clone https://github.com/sunfish-shogi/electron-shogi
 $ cd electron-shogi
 $ git checkout v1.3.0 # 安定版が v1.3.0 らしい
@@ -34,7 +34,7 @@ $ cp $(find . -name 'ElectronShogi*') ~/.local/bin/
 こちらもまずは YaneuraOu の公式リポジトリからプロジェクト一式をダウンロードする．Makefile の設定を環境に合わせて編集し，コンパイルを実施する．
 Manjaro サーバの CPU は Ryzen 7 3700X なので，TARGET\_CPU は ZEN2 とした．
 
-```
+```shell
 $ gh repo clone https://github.com/Kenta11/YaneuraOu
 $ cd YaneuraOu/source
 $ vim Makefile # 今回は TARGET_CPU を AVX2 から ZEN2 に変更
@@ -47,7 +47,7 @@ $ find . -name YaneuraOu-by-gcc
 
 水匠5 の評価関数をダウンロードする．YaneuraOu の実行バイナリがあるディレクトリ下の `eval` ディレクトリに `nn.bin` を配置する．
 
-```
+```shell
 $ gh repo clone https://github.com/HiraokaTakuya/get_suisho5_nn
 $ cp get_suisho5_nn/nn.bin /path/to/YaneuraOu/source/eval/
 ```

@@ -42,7 +42,7 @@ MICRO-alpha は MICRO-1 で実行できる制御命令を全てサポートし�
 [以前の記事](../2022-09-23-micro1)で紹介したツールをインストールしたマシンで回路合成します．
 [MICRO-alpha](https://github.com/Kenta11/micro-alpha)のリポジトリをクローンして，そのディレクトリ内にて[リリースのページ](https://github.com/Kenta11/micro-alpha/releases/tag/v1.0.0)で公開している Vivado プロジェクト (micro-alpha-arty-a7-100.tar.gz) を解凍します．
 
-```
+```shell
 $ git clone https://github.com/Kenta11/micro-alpha
 $ cd micro-alpha
 $ wget https://github.com/Kenta11/micro-alpha/releases/download/v1.0.0/micro-alpha-arty-a7-100.tar.gz
@@ -62,7 +62,7 @@ $ tree -L 1
 
 マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．
 
-```
+```shell
 $ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d "\32" > MICROONE
 $ rm1masm MICROONE -o MICROONE.o
 $ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/control_memory/control_program.coe
@@ -70,7 +70,7 @@ $ python script/obj2coe.py MICROONE.o micro-alpha/micro-alpha.srcs/sources_1/ip/
 
 続いて機械語プログラムを制御記憶に書き込むための COE ファイルを作成します．
 
-```
+```shell
 $ cat calculator 
 ; This program is distributed under MIT LICENSE.
 ; Copyright (c) 2023 Kenta Arai
@@ -286,7 +286,7 @@ $ python script/obj2coe.py calculator.b micro-alpha/micro-alpha.srcs/sources_1/i
 [以前の記事](../2022-09-23-micro1)で紹介したツールをインストールしたマシンで回路合成します．
 [MICRO-alpha](https://github.com/Kenta11/micro-alpha)のリポジトリをクローンしてください．
 
-```
+```shell
 $ git clone https://github.com/Kenta11/micro-alpha
 $ cd micro-alpha
 $ tree -L 1
@@ -304,7 +304,7 @@ $ tree -L 1
 
 マイクロプログラムを制御記憶に書き込むための COE ファイルを作成します．
 
-```
+```shell
 $ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE | iconv -f sjis -t utf8 | tr -d "\32" > MICROONE
 $ rm1masm MICROONE -o MICROONE.o
 $ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_program.coe
@@ -312,7 +312,7 @@ $ python script/obj2coe.py arty-a7-100 MICROONE.o fpga/arty-a7-100/control_progr
 
 続いて，機械語プログラムを主記憶に書き込むための COE ファイルを作成します．
 
-```
+```shell
 $ cat calculator 
 ; This program is distributed under MIT LICENSE.
 ; Copyright (c) 2023 Kenta Arai
@@ -521,7 +521,7 @@ $ python script/obj2coe.py arty-a7-100 calculator.b fpga/arty-a7-100/machine_pro
 
 make コマンドを実行すると，Vivado のプロジェクトが作成されます．
 
-```
+```shell
 $ make all
 $ tree -L 2 vivado
 vivado
@@ -541,7 +541,7 @@ vivado
 Vivado で回路を合成し，Arty A7-100 に書き込みましょう．
 シリアル通信で Arty A7-100 にキーボード入力をしましょう．
 
-```
+```shell
 $ sudo screen /dev/ttyUSB1 115200
 (calc)>> 3 4 + 4 2 - *
 0x000E

@@ -9,7 +9,7 @@ toc: true
 
 pacmanでパッケージを更新しようとしたところ，以下のメッセージが表示された．
 
-```
+```shell
 :: パッケージデータベースの同期中...
 エラー: ファイル 'core.db' を ftp.tsukuba.wide.ad.jp から取得するのに失敗しました : The requested URL returned error: 403
 エラー: core の更新に失敗しました (予期しないエラー)
@@ -33,7 +33,7 @@ archlinuxのミラーサーバをチェックしにいくと，5月16日から�
 
 [Pacman-mirrorsコマンドによるミラーサーバーリストの更新](https://wiki.manjaro.org/index.php?title=Pacman-mirrors%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AB%E3%82%88%E3%82%8B%E3%83%9F%E3%83%A9%E3%83%BC%E3%82%B5%E3%83%BC%E3%83%90%E3%83%BC%E3%83%AA%E3%82%B9%E3%83%88%E3%81%AE%E6%9B%B4%E6%96%B0)．
 
-```
+```shell
 $ sudo pacman-mirrors --fasttrack && sudo pacman -Syy
 [sudo] kenta のパスワード:
 ::INFO Downloading mirrors from repo.manjaro.org

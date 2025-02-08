@@ -56,7 +56,7 @@ adder/
 
 msyksphinzさんの記事を参考に作ったMakefileを下に示す．
 
-```
+```makefile
 #### configuration #####
 
 # project and solution name
@@ -125,7 +125,7 @@ clean:
 ホームディレクトリに".vivado_hls_create_project"という名前でVivadoのパスを書いたJSONファイルを置く．
 例えば"/opt/Xilinx/Vivado/2018.3"であれば，".vivado_hls_create_project"の内容を以下のようにする．
 
-```
+```json
 {
     "path_to_vivado": "/opt/Xilinx/Vivado/2018.3"
 }
@@ -137,7 +137,7 @@ clean:
 ボードの情報は(Vivadoをインストールした場所が"/opt/Xilinx/Vivado/2018.3"であれば)，"/opt/Xilinx/Vivado/2018.3/common/config/VivadoHls_boards.xml"にある．
 ボード情報を追記する例として，Digilent社のBasys3を追記する場合を以下に示す．
 
-```
+```xml
 <board name="Basys3" display_name="Basys3" family="artix7" part="xc7a35t1cpg236-1"  device="xc7a35t" package="cpg236" speedgrade="-1" vendor="digilentinc.com" />
 ```
 
@@ -147,7 +147,7 @@ vivado_hls_create_projectには，Makefileとtclスクリプトを作成でき�
 "vivado_hls_create_project -l"と入力してみると，以下の表示が得られる．
 Vivado HLSにデフォルトで登録されているボードだけでなく，追記したBasys3も見えている．
 
-```
+```shell
 $ vivado_hls_create_project -l
 Board               Part
 ----------------------------
@@ -182,7 +182,7 @@ Basys3              xc7a35t1cpg236-1
 
 includeとsrcはハードウェア化する関数のためのディレクトリ，test以下はテスト用のディレクトリだ．
 
-```
+```shell
 $ vivado_hls_create_project -p adder -b Basys3
 INFO:  Found part
 INFO:  Generate Makefile
