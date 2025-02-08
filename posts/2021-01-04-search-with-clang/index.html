@@ -1,115 +1,37 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="ie=edge">
-<meta name=theme-color content="#494f5c">
-<meta name=msapplication-TileColor content="#494f5c">
-<meta itemprop=name content="Pythonでlibclangを使って関数呼び出しを探す">
-<meta itemprop=description content="はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 まして"><meta itemprop=datePublished content="2021-01-22T00:00:00+09:00">
-<meta itemprop=dateModified content="2021-01-22T00:00:00+09:00">
-<meta itemprop=wordCount content="1148">
-<meta itemprop=keywords content="Python,Clang,"><meta property="og:title" content="Pythonでlibclangを使って関数呼び出しを探す">
-<meta property="og:description" content="はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 まして">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://Kenta11.github.io/posts/2021-01-04-search-with-clang/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2021-01-22T00:00:00+09:00">
-<meta property="article:modified_time" content="2021-01-22T00:00:00+09:00">
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="Pythonでlibclangを使って関数呼び出しを探す">
-<meta name=twitter:description content="はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 まして">
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
-<link rel=mask-icon href=/safari-pinned-tab.svg color>
-<link rel="shortcut icon" href=/favicon.ico>
-<title>Pythonでlibclangを使って関数呼び出しを探す</title>
-<link rel=stylesheet href=https://Kenta11.github.io/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin=anonymous>
-</head>
-<body id=page>
-<header id=site-header class="animated slideInUp">
-<div class="hdr-wrapper section-inner">
-<div class=hdr-left>
-<div class=site-branding>
-<a href=https://Kenta11.github.io>Kenta Arai Webpage</a>
-</div>
-<nav class="site-nav hide-in-mobile">
-<a href=https://Kenta11.github.io/posts/>Posts</a>
-<a href=https://Kenta11.github.io/about/>About</a>
-<a href=https://Kenta11.github.io/projects/>Projects</a>
-</nav>
-</div>
-<div class="hdr-right hdr-icons">
-<button id=toc-btn class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/isKenta14 target=_blank rel="noopener me" title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://github.com/Kenta11 target=_blank rel="noopener me" title=Github><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://gitlab.com/Kenta111 target=_blank rel="noopener me" title=Gitlab><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.65 14.39 12 22.13 1.35 14.39a.84.84.0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42.0 014.82 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42.0 0118.6 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.51L23 13.45a.84.84.0 01-.35.94z"/></svg></a><a href=https://qiita.com/Kenta11 target=_blank rel="noopener me" title=Qiita><svg xmlns="http://www.w3.org/2000/svg" class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a><a href=https://speakerdeck.com/kenta11 target=_blank rel="noopener me" title=Speakerdeck><svg xmlns="http://www.w3.org/2000/svg" class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a></span><button id=menu-btn class=hdr-btn title=Menu><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-</div>
-</div>
-</header>
-<div id=mobile-menu class="animated fast">
-<ul>
-<li><a href=https://Kenta11.github.io/posts/>Posts</a></li>
-<li><a href=https://Kenta11.github.io/about/>About</a></li>
-<li><a href=https://Kenta11.github.io/projects/>Projects</a></li>
-</ul>
-</div>
-<main class="site-main section-inner animated fadeIn faster">
-<article class=thin>
-<header class=post-header>
-<div class=post-meta><span>Jan 22, 2021</span></div>
-<h1>Pythonでlibclangを使って関数呼び出しを探す</h1>
-</header>
-<div class=content>
-<h2 id=はじめに>はじめに<a href=#はじめに class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=robots content="index, follow"><meta name=author content><meta name=description content><link rel=author type=text/plain href=/humans.txt><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon href=/favicon.ico type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta name=msapplication-TileImage content="/mstile-144x144.png"><meta name=theme-color content="#494f5c"><meta name=msapplication-TileColor content="#494f5c"><link rel=mask-icon href=/safari-pinned-tab.svg color=#494f5c><meta itemprop=name content="Pythonでlibclangを使って関数呼び出しを探す"><meta itemprop=description content="はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。"><meta itemprop=datePublished content="2021-01-22T00:00:00+09:00"><meta itemprop=dateModified content="2021-01-22T00:00:00+09:00"><meta itemprop=wordCount content="1148"><meta itemprop=keywords content="Python,Clang"><meta property="og:url" content="https://Kenta11.github.io/posts/2021-01-04-search-with-clang/"><meta property="og:site_name" content="Kenta Arai Webpage"><meta property="og:title" content="Pythonでlibclangを使って関数呼び出しを探す"><meta property="og:description" content="はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-01-22T00:00:00+09:00"><meta property="article:modified_time" content="2021-01-22T00:00:00+09:00"><meta property="article:tag" content="Python"><meta property="article:tag" content="Clang"><meta name=twitter:card content="summary"><meta name=twitter:title content="Pythonでlibclangを使って関数呼び出しを探す"><meta name=twitter:description content="はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Pythonでlibclangを使って関数呼び出しを探す","name":"Pythonでlibclangを使って関数呼び出しを探す","description":"はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。\n","keywords":["Python","Clang"],"articleBody":"はじめに ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。 しかし巨大なプロジェクト相手には骨が折れる。 ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。\nそこでプリプロセス済みのソースコードを一旦ASTにし、関数呼び出しをしている箇所を取り出せばいいと気付いた。 調べてみると、LLVMのASTをイジったり中身を見る方法があるようだ。\n本稿ではPythonを使ってCソースコードの関数呼び出しを見つける。 LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そうなので、PythonのClangインターフェースを使うことにする。\n開発環境 CPU: x64 OS: Manjaro XFCE Pythonを使って関数呼び出しを探す 準備 Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。\n# Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する $ sudo pacman -S clang llvm # clangだけでは今回のPythonプログラムが動かなかった... clangモジュールが/usr/lib/python3.9/site-packages/clang/にあれば、準備完了だ。\n関数呼び出しの箇所を探す parse()を呼び出すと、よしなにASTにしてくれる。 どうやらプリプロセスまでしてくれるようだ。\n# -*- coding: utf-8 -*- import sys import clang.cindex def visitNode(node, search_function_name, declared_function_name=None): if node.kind.name == 'FUNCTION_DECL': declared_function_name = node.spelling elif node.kind.name == 'CALL_EXPR': print(search_function_name, declared_function_name, node.location.line) for c in node.get_children(): visitNode(c, search_function_name, declared_function_name) if __name__ == '__main__': if len(sys.argv) != 3: print(f\"Usage: {sys.argv[0]} FUNCTION_NAME FILE\", file=sys.stderr) exit(1) index = clang.cindex.Index.create() tree = index.parse(sys.argv[2]) visitNode(tree.cursor, sys.argv[1]) もしも特定の名前の型や変数名を検索したい場合は、visitNode()を改造すればできる。 なおASTのノードの種類については、clangモジュールに書かれていたコメントを参考に記述した。 （FUNCTION_DECLは関数宣言な気もするが、どうも関数定義も含んでいるようだ。）\nvim_snprintf()を探す 作成したPythonプログラムを使用して、関数呼び出しを探してみる。 今回はvimのソースコードをターゲットに、vim_snprintfを探す。\n$ git clone https://github.com/vim/vim $ python3 sample.py vim_snprintf vim/src/main.c vim_snprintf main 106 vim_snprintf main 119 vim_snprintf main 153 vim_snprintf main 164 vim_snprintf main 185 vim_snprintf main 191 vim_snprintf main 230 # 長いので割愛 1列目に検索した関数名（もちろんvim_snprintf）、2列目にvim_snprintfを呼び出している関数名、3列目に行番号が標準出力されている。 無事にvim_snprintfを呼び出している場所を見つけられた。\n読者プレゼント お使いの環境で作業を試せるDockerfileを置いておきます。 リンクはこちら。\nFROM ubuntu:20.04 LABEL maintainer \"Kenta Arai \u003c\u003e\" COPY sample.py /sample.py RUN apt update -y; apt dist-upgrade -y; apt autoremove -y \u0026\u0026 \\ apt install git python3 python-clang -y \u0026\u0026 \\ git clone https://github.com/vim/vim \u0026\u0026 \\ python3 sample.py vim_snprintf vim/src/main.c 参考文献 Clang の構文解析インターフェースを Python から叩いてみようという話 Clangのpython bindingsを使う llvm-mirror/clang clang/bindings/python/clang/cindex.py ","wordCount":"1148","inLanguage":"en","datePublished":"2021-01-22T00:00:00+09:00","dateModified":"2021-01-22T00:00:00+09:00","author":{"@type":"Person","name":null},"mainEntityOfPage":{"@type":"WebPage","@id":"https://Kenta11.github.io/posts/2021-01-04-search-with-clang/"},"publisher":{"@type":"Organization","name":"Kenta Arai Webpage","description":"","logo":{"@type":"ImageObject","url":"https://Kenta11.github.io/favicon.ico"}}}</script><title>Pythonでlibclangを使って関数呼び出しを探す</title>
+<link rel="stylesheet dns-prefetch preconnect preload prefetch" as=style href=https://Kenta11.github.io/css/style.min.d3facc2d5fe42af72ee5a80584900a45ffee6035df0ef582bd8696c2fe0c9da5.css integrity="sha256-0/rMLV/kKvcu5agFhJAKRf/uYDXfDvWCvYaWwv4MnaU=" crossorigin=anonymous></head><body id=page><header id=site-header class="animated slideInUp"><div class="hdr-wrapper section-inner"><div class=hdr-left><div class=site-branding><a href=https://Kenta11.github.io/>Kenta Arai Webpage</a></div><nav class="site-nav hide-in-mobile"><a href=https://Kenta11.github.io/posts/>Posts</a><a href=https://Kenta11.github.io/about/>About</a><a href=https://Kenta11.github.io/projects/>Projects</a></nav></div><div class="hdr-right hdr-icons"><button id=toc-btn class="hdr-btn desktop-only-ib" title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/isKenta14 target=_blank rel="noopener me" title=Twitter><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://github.com/Kenta11 target=_blank rel="noopener me" title=Github><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://gitlab.com/Kenta111 target=_blank rel="noopener me" title=Gitlab><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.65 14.39 12 22.13 1.35 14.39a.84.84.0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42.0 014.82 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42.0 0118.6 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.51L23 13.45a.84.84.0 01-.35.94z"/></svg></a><a href=https://qiita.com/Kenta11 target=_blank rel="noopener me" title=Qiita><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a><a href=https://speakerdeck.com/kenta11 target=_blank rel="noopener me" title=Speakerdeck><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a></span><button id=menu-btn class=hdr-btn title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div></header><div id=mobile-menu class="animated fast"><ul><li><a href=https://Kenta11.github.io/posts/>Posts</a></li><li><a href=https://Kenta11.github.io/about/>About</a></li><li><a href=https://Kenta11.github.io/projects/>Projects</a></li></ul></div><main class="site-main section-inner animated fadeIn faster"><article class=thin><header class=post-header><div class=post-date><span>Jan 22, 2021</span></div><h1>Pythonでlibclangを使って関数呼び出しを探す</h1></header><div class=post-description><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://Kenta11.github.io/tags/python>Python</a></span><span class=tag><a href=https://Kenta11.github.io/tags/clang>Clang</a></span></p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>1148&nbspWords</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2021-01-21 15:00 +0000</p></div><hr class=post-end><div class=content><h2 id=はじめに>はじめに<a href=#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>ひょんなことからCプログラム中のある関数を呼び出している箇所を見つけようと思った。
 しかし巨大なプロジェクト相手には骨が折れる。
-ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。</p>
-<p>そこでプリプロセス済みのソースコードを一旦ASTにし、関数呼び出しをしている箇所を取り出せばいいと気付いた。
-調べてみると、LLVMのASTをイジったり中身を見る方法があるようだ。</p>
-<p>本稿ではPythonを使ってCソースコードの関数呼び出しを見つける。
-LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そうなので、PythonのClangインターフェースを使うことにする。</p>
-<h2 id=開発環境>開発環境<a href=#開発環境 class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<ul>
-<li>CPU: x64</li>
-<li>OS: Manjaro XFCE</li>
-</ul>
-<h2 id=pythonを使って関数呼び出しを探す>Pythonを使って関数呼び出しを探す<a href=#pythonを使って関数呼び出しを探す class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<h3 id=準備>準備<a href=#準備 class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3>
-<p>Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。</p>
-<pre tabindex=0><code class=language-{bash} data-lang={bash}># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する
-$ sudo pacman -S clang llvm # clangだけでは今回のPythonプログラムが動かなかった...
-</code></pre><p>clangモジュールが<code>/usr/lib/python3.9/site-packages/clang/</code>にあれば、準備完了だ。</p>
-<h3 id=関数呼び出しの箇所を探す>関数呼び出しの箇所を探す<a href=#関数呼び出しの箇所を探す class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3>
-<p><code>parse()</code>を呼び出すと、よしなにASTにしてくれる。
-どうやらプリプロセスまでしてくれるようだ。</p>
-<pre tabindex=0><code class=language-{python} data-lang={python}># -*- coding: utf-8 -*-
-
-import sys
-import clang.cindex
-
-def visitNode(node, search_function_name, declared_function_name=None):
-    if node.kind.name == 'FUNCTION_DECL':
-        declared_function_name = node.spelling
-    elif node.kind.name == 'CALL_EXPR':
-        print(search_function_name, declared_function_name, node.location.line)
-
-    for c in node.get_children():
-        visitNode(c, search_function_name, declared_function_name)
-
-if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print(f&quot;Usage: {sys.argv[0]} FUNCTION_NAME FILE&quot;, file=sys.stderr)
-        exit(1)
-
-    index = clang.cindex.Index.create()
-    tree = index.parse(sys.argv[2])
-    visitNode(tree.cursor, sys.argv[1])
-</code></pre><p>もしも特定の名前の型や変数名を検索したい場合は、<code>visitNode()</code>を改造すればできる。
+ましてやマクロを介して関数を呼び出されていた場合には、手のつけようがない。</p><p>そこでプリプロセス済みのソースコードを一旦ASTにし、関数呼び出しをしている箇所を取り出せばいいと気付いた。
+調べてみると、LLVMのASTをイジったり中身を見る方法があるようだ。</p><p>本稿ではPythonを使ってCソースコードの関数呼び出しを見つける。
+LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そうなので、PythonのClangインターフェースを使うことにする。</p><h2 id=開発環境>開発環境<a href=#%e9%96%8b%e7%99%ba%e7%92%b0%e5%a2%83 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><ul><li>CPU: x64</li><li>OS: Manjaro XFCE</li></ul><h2 id=pythonを使って関数呼び出しを探す>Pythonを使って関数呼び出しを探す<a href=#python%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e9%96%a2%e6%95%b0%e5%91%bc%e3%81%b3%e5%87%ba%e3%81%97%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><h3 id=準備>準備<a href=#%e6%ba%96%e5%82%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する</span>
+</span></span><span class=line><span class=cl>$ sudo pacman -S clang llvm <span class=c1># clangだけでは今回のPythonプログラムが動かなかった...</span>
+</span></span></code></pre></div><p>clangモジュールが<code>/usr/lib/python3.9/site-packages/clang/</code>にあれば、準備完了だ。</p><h3 id=関数呼び出しの箇所を探す>関数呼び出しの箇所を探す<a href=#%e9%96%a2%e6%95%b0%e5%91%bc%e3%81%b3%e5%87%ba%e3%81%97%e3%81%ae%e7%ae%87%e6%89%80%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p><code>parse()</code>を呼び出すと、よしなにASTにしてくれる。
+どうやらプリプロセスまでしてくれるようだ。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># -*- coding: utf-8 -*-</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>sys</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>clang.cindex</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>visitNode</span><span class=p>(</span><span class=n>node</span><span class=p>,</span> <span class=n>search_function_name</span><span class=p>,</span> <span class=n>declared_function_name</span><span class=o>=</span><span class=kc>None</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>node</span><span class=o>.</span><span class=n>kind</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;FUNCTION_DECL&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>declared_function_name</span> <span class=o>=</span> <span class=n>node</span><span class=o>.</span><span class=n>spelling</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=n>node</span><span class=o>.</span><span class=n>kind</span><span class=o>.</span><span class=n>name</span> <span class=o>==</span> <span class=s1>&#39;CALL_EXPR&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=n>search_function_name</span><span class=p>,</span> <span class=n>declared_function_name</span><span class=p>,</span> <span class=n>node</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>line</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>c</span> <span class=ow>in</span> <span class=n>node</span><span class=o>.</span><span class=n>get_children</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>        <span class=n>visitNode</span><span class=p>(</span><span class=n>c</span><span class=p>,</span> <span class=n>search_function_name</span><span class=p>,</span> <span class=n>declared_function_name</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=nb>len</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>)</span> <span class=o>!=</span> <span class=mi>3</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Usage: </span><span class=si>{</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=si>}</span><span class=s2> FUNCTION_NAME FILE&#34;</span><span class=p>,</span> <span class=n>file</span><span class=o>=</span><span class=n>sys</span><span class=o>.</span><span class=n>stderr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>index</span> <span class=o>=</span> <span class=n>clang</span><span class=o>.</span><span class=n>cindex</span><span class=o>.</span><span class=n>Index</span><span class=o>.</span><span class=n>create</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>tree</span> <span class=o>=</span> <span class=n>index</span><span class=o>.</span><span class=n>parse</span><span class=p>(</span><span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>2</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=n>visitNode</span><span class=p>(</span><span class=n>tree</span><span class=o>.</span><span class=n>cursor</span><span class=p>,</span> <span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>])</span>
+</span></span></code></pre></div><p>もしも特定の名前の型や変数名を検索したい場合は、<code>visitNode()</code>を改造すればできる。
 なおASTのノードの種類については、clangモジュールに書かれていたコメントを参考に記述した。
-（FUNCTION_DECLは関数宣言な気もするが、どうも関数定義も含んでいるようだ。）</p>
-<h3 id=vim_snprintfを探す>vim_snprintf()を探す<a href=#vim_snprintfを探す class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3>
-<p>作成したPythonプログラムを使用して、関数呼び出しを探してみる。
-今回はvimのソースコードをターゲットに、<code>vim_snprintf</code>を探す。</p>
-<pre tabindex=0><code>$ git clone https://github.com/vim/vim
+（FUNCTION_DECLは関数宣言な気もするが、どうも関数定義も含んでいるようだ。）</p><h3 id=vim_snprintfを探す>vim_snprintf()を探す<a href=#vim_snprintf%e3%82%92%e6%8e%a2%e3%81%99 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3><p>作成したPythonプログラムを使用して、関数呼び出しを探してみる。
+今回はvimのソースコードをターゲットに、<code>vim_snprintf</code>を探す。</p><pre tabindex=0><code>$ git clone https://github.com/vim/vim
 $ python3 sample.py vim_snprintf vim/src/main.c
 vim_snprintf main 106
 vim_snprintf main 119
@@ -120,70 +42,17 @@ vim_snprintf main 191
 vim_snprintf main 230
 # 長いので割愛
 </code></pre><p>1列目に検索した関数名（もちろん<code>vim_snprintf</code>）、2列目に<code>vim_snprintf</code>を呼び出している関数名、3列目に行番号が標準出力されている。
-無事に<code>vim_snprintf</code>を呼び出している場所を見つけられた。</p>
-<h2 id=読者プレゼント>読者プレゼント<a href=#読者プレゼント class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>お使いの環境で作業を試せる<code>Dockerfile</code>を置いておきます。
-リンクは<a href=Dockerfile>こちら</a>。</p>
-<pre tabindex=0><code class=language-{Dockerfile} data-lang={Dockerfile}>FROM ubuntu:20.04
-LABEL maintainer &quot;Kenta Arai &lt;&gt;&quot;
-
-COPY sample.py /sample.py
-
-RUN apt update -y; apt dist-upgrade -y; apt autoremove -y &amp;&amp; \
-    apt install git python3 python-clang -y &amp;&amp; \
-    git clone https://github.com/vim/vim &amp;&amp; \
-    python3 sample.py vim_snprintf vim/src/main.c
-</code></pre><h2 id=参考文献>参考文献<a href=#参考文献 class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<ul>
-<li><a href=https://blog.fenrir-inc.com/jp/2011/07/clang_syntax_analysis_interface_with_python.html>Clang の構文解析インターフェースを Python から叩いてみようという話</a></li>
-<li><a href=http://asdm.hatenablog.com/entry/2015/01/08/170707>Clangのpython bindingsを使う</a></li>
-<li><a href=https://github.com/llvm-mirror/clang/blob/master/bindings/python/clang/cindex.py>llvm-mirror/clang clang/bindings/python/clang/cindex.py</a></li>
-</ul>
-</div>
-<hr class=post-end>
-<footer class=post-info>
-<p>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://Kenta11.github.io/tags/python>Python</a></span><span class=tag><a href=https://Kenta11.github.io/tags/clang>Clang</a></span>
-</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>1148 Words</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2021-01-21 15:00 +0000</p>
-</footer>
-</article>
-<aside id=toc>
-<div class=toc-title>Table of Contents</div>
-<nav id=TableOfContents>
-<ul>
-<li><a href=#はじめに>はじめに</a></li>
-<li><a href=#開発環境>開発環境</a></li>
-<li><a href=#pythonを使って関数呼び出しを探す>Pythonを使って関数呼び出しを探す</a>
-<ul>
-<li><a href=#準備>準備</a></li>
-<li><a href=#関数呼び出しの箇所を探す>関数呼び出しの箇所を探す</a></li>
-<li><a href=#vim_snprintfを探す>vim_snprintf()を探す</a></li>
-</ul>
-</li>
-<li><a href=#読者プレゼント>読者プレゼント</a></li>
-<li><a href=#参考文献>参考文献</a></li>
-</ul>
-</nav>
-</aside>
-<div class="post-nav thin">
-<a class=next-post href=https://Kenta11.github.io/posts/2022-08-19-set-static-ip-jp/>
-<span class=post-nav-label><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>Manjaroで静的IPアドレスを設定</span>
-</a>
-<a class=prev-post href=https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/>
-<span class=post-nav-label>Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>UNIXという考え方 を読んだ</span>
-</a>
-</div>
-<div id=comments class=thin>
-</div>
-</main>
-<footer id=site-footer class="section-inner thin animated fadeIn faster">
-<p>&copy; 2024 <a href=https://Kenta11.github.io>Kenta Arai</a></p>
-<p>
-Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> &#183; Theme <a href=https://github.com/Track3/hermit target=_blank rel=noopener>Hermit</a> &#183; <a href=https://Kenta11.github.io/posts/index.xml target=_blank title=rss><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a>
-</p>
-</footer>
-<script src=https://Kenta11.github.io/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin=anonymous></script>
-</body>
-</html>
+無事に<code>vim_snprintf</code>を呼び出している場所を見つけられた。</p><h2 id=読者プレゼント>読者プレゼント<a href=#%e8%aa%ad%e8%80%85%e3%83%97%e3%83%ac%e3%82%bc%e3%83%b3%e3%83%88 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>お使いの環境で作業を試せる<code>Dockerfile</code>を置いておきます。
+リンクは<a href=Dockerfile>こちら</a>。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Dockerfile data-lang=Dockerfile><span class=line><span class=cl><span class=k>FROM</span><span class=s> ubuntu:20.04</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span><span class=k>LABEL</span> maintainer <span class=s2>&#34;Kenta Arai &lt;&gt;&#34;</span><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span><span class=k>COPY</span> sample.py /sample.py<span class=err>
+</span></span></span><span class=line><span class=cl><span class=err>
+</span></span></span><span class=line><span class=cl><span class=err></span><span class=k>RUN</span> apt update -y<span class=p>;</span> apt dist-upgrade -y<span class=p>;</span> apt autoremove -y <span class=o>&amp;&amp;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    apt install git python3 python-clang -y <span class=o>&amp;&amp;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    git clone https://github.com/vim/vim <span class=o>&amp;&amp;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    python3 sample.py vim_snprintf vim/src/main.c<span class=err>
+</span></span></span></code></pre></div><h2 id=参考文献>参考文献<a href=#%e5%8f%82%e8%80%83%e6%96%87%e7%8c%ae class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><ul><li><a href=https://blog.fenrir-inc.com/jp/2011/07/clang_syntax_analysis_interface_with_python.html>Clang の構文解析インターフェースを Python から叩いてみようという話</a></li><li><a href=http://asdm.hatenablog.com/entry/2015/01/08/170707>Clangのpython bindingsを使う</a></li><li><a href=https://github.com/llvm-mirror/clang/blob/master/bindings/python/clang/cindex.py>llvm-mirror/clang clang/bindings/python/clang/cindex.py</a></li></ul></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#はじめに>はじめに</a></li><li><a href=#開発環境>開発環境</a></li><li><a href=#pythonを使って関数呼び出しを探す>Pythonを使って関数呼び出しを探す</a><ul><li><a href=#準備>準備</a></li><li><a href=#関数呼び出しの箇所を探す>関数呼び出しの箇所を探す</a></li><li><a href=#vim_snprintfを探す>vim_snprintf()を探す</a></li></ul></li><li><a href=#読者プレゼント>読者プレゼント</a></li><li><a href=#参考文献>参考文献</a></li></ul></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2022-08-19-set-static-ip-jp/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>Manjaroで静的IPアドレスを設定</span>
+</a><a class=prev-post href=https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/><span class=post-nav-label>Older&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>UNIXという考え方 を読んだ</span></a></div><div id=comments class=thin></div></main><footer id=site-footer class="section-inner thin animated fadeIn faster"><p>&copy; 2025 <a href=https://Kenta11.github.io/>Kenta Arai Webpage</a>
+&#183; &#183; Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>
+&#183; Theme <a href=https://github.com/1bl4z3r/hermit-V2 target=_blank rel=noopener>Hermit-V2</a></p></footer><script async src=https://Kenta11.github.io/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin=anonymous></script></body></html>

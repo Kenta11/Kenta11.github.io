@@ -1,1 +1,29 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技術書 on Kenta Arai Webpage</title><link>https://Kenta11.github.io/tags/%E6%8A%80%E8%A1%93%E6%9B%B8/</link><description>Recent content in 技術書 on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 30 Jul 2020 23:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/tags/%E6%8A%80%E8%A1%93%E6%9B%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>UNIXという考え方 を読んだ</title><link>https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/</link><pubDate>Thu, 30 Jul 2020 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/</guid><description>書籍情報 著者: Mike Gancarz 訳者: 芳尾 桂 書籍名: UNIXという考え方 出版社: オーム社 はじめに UNIX哲学を解説した、歴史的に最も有名な書籍であるところ</description></item><item><title>ソフトウェア・ファーストを読んだ</title><link>https://Kenta11.github.io/posts/2020-07-26-software-first-jp/</link><pubDate>Mon, 27 Jul 2020 22:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-07-26-software-first-jp/</guid><description>書籍情報 著者: 及川 卓也 書籍名: ソフトウェア・ファースト あらゆるビジネスを一変させる最強戦略 出版社: 日経BP 日経BPブックナビリンク: https://www.nikkeibp.co.jp/atclpubmkt/book/19/P89910/ Ama</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技術書 on Kenta Arai Webpage</title><link>https://Kenta11.github.io/tags/%E6%8A%80%E8%A1%93%E6%9B%B8/</link><description>Recent content in 技術書 on Kenta Arai Webpage</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 30 Jul 2020 23:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/tags/%E6%8A%80%E8%A1%93%E6%9B%B8/index.xml" rel="self" type="application/rss+xml"/><item><title>UNIXという考え方 を読んだ</title><link>https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/</link><pubDate>Thu, 30 Jul 2020 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-07-30-unix-philosophy/</guid><description>&lt;h2 id="書籍情報">書籍情報&lt;a href="#%e6%9b%b8%e7%b1%8d%e6%83%85%e5%a0%b1" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>著者: Mike Gancarz&lt;/li>
+&lt;li>訳者: 芳尾 桂&lt;/li>
+&lt;li>書籍名: UNIXという考え方&lt;/li>
+&lt;li>出版社: オーム社&lt;/li>
+&lt;/ul>
+&lt;h2 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;p>　UNIX哲学を解説した、歴史的に最も有名な書籍であるところの&lt;strong>UNIXという考え方&lt;/strong>だが、恥ずかしながら一度も読んだことが無かった。
+Amazonで別の書籍を注文するついでに購入した。
+長らくLinux環境で開発をしていたのでUNIX的な考え方を理解したつもりであったが、先人達の言葉でこの思想を再認識したかった。&lt;/p></description></item><item><title>ソフトウェア・ファーストを読んだ</title><link>https://Kenta11.github.io/posts/2020-07-26-software-first-jp/</link><pubDate>Mon, 27 Jul 2020 22:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2020-07-26-software-first-jp/</guid><description>&lt;h2 id="書籍情報">書籍情報&lt;a href="#%e6%9b%b8%e7%b1%8d%e6%83%85%e5%a0%b1" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>著者: 及川 卓也&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>書籍名: ソフトウェア・ファースト あらゆるビジネスを一変させる最強戦略&lt;/p></description></item></channel></rss>

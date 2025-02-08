@@ -1,1 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vim on Kenta Arai Webpage</title><link>https://Kenta11.github.io/tags/vim/</link><description>Recent content in Vim on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 14 Jan 2019 20:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/tags/vim/index.xml" rel="self" type="application/rss+xml"/><item><title>UbuntuにVim環境を用意する</title><link>https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/</link><pubDate>Mon, 14 Jan 2019 20:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/</guid><description>まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ． Vimをビルド GithubからVimをダウンロードする． $ git clone https://github.com/vim/vim ビ</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vim on Kenta Arai Webpage</title><link>https://Kenta11.github.io/tags/vim/</link><description>Recent content in Vim on Kenta Arai Webpage</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 14 Jan 2019 20:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/tags/vim/index.xml" rel="self" type="application/rss+xml"/><item><title>UbuntuにVim環境を用意する</title><link>https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/</link><pubDate>Mon, 14 Jan 2019 20:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/</guid><description>&lt;h2 id="まえがき">まえがき&lt;a href="#%e3%81%be%e3%81%88%e3%81%8c%e3%81%8d" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;p>いろんなマシンでVimをビルドすることがあるので，その手順をメモ．&lt;/p>
+&lt;h2 id="vimをビルド">Vimをビルド&lt;a href="#vim%e3%82%92%e3%83%93%e3%83%ab%e3%83%89" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;p>GithubからVimをダウンロードする．&lt;/p></description></item></channel></rss>

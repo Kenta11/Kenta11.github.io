@@ -1,1 +1,167 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Rust on Kenta Arai Webpage</title><link>https://Kenta11.github.io/tags/rust/</link><description>Recent content in Rust on Kenta Arai Webpage</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 13 Feb 2023 23:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #5</title><link>https://Kenta11.github.io/posts/2023-02-13-rust-raspberrypi-os-tutorials/</link><pubDate>Mon, 13 Feb 2023 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-13-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 05_drivers_gpio_uart 概要 UART と GPIO のコントローラ用ドライバを追加する これまでに作成した QEMU コンソールを捨てて， ドライバマネージャ を導入する ド</description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 04_safe_globals 概要 疑似ロックを導入する話 global data structure に対して安全にアクセスするための OS 同期プリミティブの showcase（ショーケース</description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 03_hacky_hello_world QEMU がエミュレートする UART を介して，println! マクロで文字列を表示できるようにする console::console 関数は core::fmt::Write トレイトを実装した構</description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>はじめに 前回の続きから． 02_runtime_init _start で主記憶の初期化を行う 初期化後に _start_rust（src/_arch/aarch64/cpu/boot.r</description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #1</title><link>https://Kenta11.github.io/posts/2023-01-30-rust-raspberrypi-os-tutorials/</link><pubDate>Mon, 30 Jan 2023 22:30:15 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-30-rust-raspberrypi-os-tutorials/</guid><description>はじめに Rust で Raspberry Pi 向けのオペレーティングシステムを開発するチュートリアルが公開されている． 早速やってみよう． 00_before_we_start プロセッサ・アーキテクチャ固有の</description></item><item><title>情報工学実験II（再履修）</title><link>https://Kenta11.github.io/posts/2022-09-23-micro1/</link><pubDate>Fri, 23 Sep 2022 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-09-23-micro1/</guid><description>はじめに 出身学科も出身専攻も，完全に名称が無くなってしまいましたね． 過ごした時間に思いを馳せながら，マイクロプログラミングをしましょう（急展</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Rust on Kenta Arai Webpage</title><link>https://Kenta11.github.io/tags/rust/</link><description>Recent content in Rust on Kenta Arai Webpage</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 13 Feb 2023 23:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml"/><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #5</title><link>https://Kenta11.github.io/posts/2023-02-13-rust-raspberrypi-os-tutorials/</link><pubDate>Mon, 13 Feb 2023 23:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-13-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;p>&lt;a href="../2023-02-02-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
+&lt;h1 id="05_drivers_gpio_uarthttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster05_drivers_gpio_uart">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/05_drivers_gpio_uart">05_drivers_gpio_uart&lt;/a>&lt;a href="#05_drivers_gpio_uarthttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster05_drivers_gpio_uart" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;h2 id="概要">概要&lt;a href="#%e6%a6%82%e8%a6%81" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>UART と GPIO のコントローラ用ドライバを追加する
+&lt;ul>
+&lt;li>これまでに作成した QEMU コンソールを捨てて， &lt;code>ドライバマネージャ&lt;/code> を導入する&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="ドライバマネージャ">ドライバマネージャ&lt;a href="#%e3%83%89%e3%83%a9%e3%82%a4%e3%83%90%e3%83%9e%e3%83%8d%e3%83%bc%e3%82%b8%e3%83%a3" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;code>ドライバサブシステム&lt;/code> をカーネルに追加&lt;/p></description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #4</title><link>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</link><pubDate>Thu, 02 Feb 2023 21:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-02-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;p>&lt;a href="../2023-02-01-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
+&lt;h1 id="04_safe_globalshttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster04_safe_globals">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/04_safe_globals">04_safe_globals&lt;/a>&lt;a href="#04_safe_globalshttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster04_safe_globals" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;h2 id="概要">概要&lt;a href="#%e6%a6%82%e8%a6%81" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>疑似ロックを導入する話&lt;/p></description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #3</title><link>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</link><pubDate>Wed, 01 Feb 2023 22:52:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-02-01-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;p>&lt;a href="../2023-01-31-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
+&lt;h1 id="03_hacky_hello_worldhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster03_hacky_hello_world">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/03_hacky_hello_world">03_hacky_hello_world&lt;/a>&lt;a href="#03_hacky_hello_worldhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster03_hacky_hello_world" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;ul>
+&lt;li>QEMU がエミュレートする UART を介して，&lt;code>println!&lt;/code> マクロで文字列を表示できるようにする
+&lt;ul>
+&lt;li>&lt;code>console::console&lt;/code> 関数は &lt;code>core::fmt::Write&lt;/code> トレイトを実装した構造体を返す (&lt;code>src/bsp/raspberrypi.rs&lt;/code>)
+&lt;ul>
+&lt;li>このトレイトは &lt;code>write_str&lt;/code>, &lt;code>write_char&lt;/code>, &lt;code>write_fmt&lt;/code> 関数をもつ&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>write_str&lt;/code> 関数は UART（アドレスが0x3F201000）に一文字ずつ書き込む (&lt;code>src/console.rs&lt;/code>)&lt;/li>
+&lt;li>&lt;code>print!&lt;/code> と &lt;code>println!&lt;/code> はそれぞれ &lt;code>write_fmt&lt;/code> 関数を呼び出す（&lt;code>src/print.rs&lt;/code>）
+&lt;ul>
+&lt;li>&lt;code>write_str&lt;/code> を実装すると &lt;code>write_fmt&lt;/code> も自動的に実装されるのか？&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="実行結果">実行結果&lt;a href="#%e5%ae%9f%e8%a1%8c%e7%b5%90%e6%9e%9c" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;pre tabindex="0">&lt;code>$ make
+
+Compiling kernel ELF - rpi3
+ Compiling tock-registers v0.8.1
+ Compiling mingo v0.3.0 (/home/kenta/Git/Kenta11/rust-raspberrypi-OS-tutorials/03_hacky_hello_world)
+ Compiling aarch64-cpu v9.0.0
+ Finished release [optimized] target(s) in 3.88s
+
+Generating stripped binary
+ Name kernel8.img
+ Size 6 KiB
+$ make test
+
+Boot test - rpi3
+docker: Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post &amp;#34;http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/create&amp;#34;: dial unix /var/run/docker.sock: connect: permission denied.
+See &amp;#39;docker run --help&amp;#39;.
+make: *** [Makefile:216: test_boot] エラー 126
+$ sudo make test
+[sudo] kenta のパスワード:
+
+Boot test - rpi3
+ -------------------------------------------------------------------
+ 🦀 Running 1 console I/O tests
+ -------------------------------------------------------------------
+
+ 1. Checking for the string: &amp;#39;Stopping here&amp;#39;..................[ok]
+ 
+ Console log:
+ Hello from Rust!
+ Kernel panic!
+ 
+ Panic location:
+ File &amp;#39;src/main.rs&amp;#39;, line 129, column 5
+ 
+ Stopping here
+
+ -------------------------------------------------------------------
+ ✅ Success: Boot test
+ -------------------------------------------------------------------
+
+
+$ sudo make qemu
+
+Launching QEMU
+Hello from Rust!
+Kernel panic!
+
+Panic location:
+ File &amp;#39;src/main.rs&amp;#39;, line 129, column 5
+
+Stopping here.
+&lt;/code>&lt;/pre></description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #2</title><link>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</link><pubDate>Tue, 31 Jan 2023 22:17:41 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-31-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;p>&lt;a href="../2023-01-30-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
+&lt;h1 id="02_runtime_inithttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster02_runtime_init">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/02_runtime_init">02_runtime_init&lt;/a>&lt;a href="#02_runtime_inithttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster02_runtime_init" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;ul>
+&lt;li>&lt;code>_start&lt;/code> で主記憶の初期化を行う&lt;/li>
+&lt;li>初期化後に &lt;code>_start_rust&lt;/code>（&lt;code>src/_arch/aarch64/cpu/boot.rs&lt;/code>）にエントリし，&lt;code>kernel_init&lt;/code>（&lt;code>src/main.rs&lt;/code>）を実行する&lt;/li>
+&lt;/ul>
+&lt;h2 id="セクションの構成">セクションの構成&lt;a href="#%e3%82%bb%e3%82%af%e3%82%b7%e3%83%a7%e3%83%b3%e3%81%ae%e6%a7%8b%e6%88%90" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;ul>
+&lt;li>
+&lt;p>DRAM の先頭アドレスは 0x80000&lt;/p></description></item><item><title>Operating System development tutorials in Rust on the Raspberry Pi をする #1</title><link>https://Kenta11.github.io/posts/2023-01-30-rust-raspberrypi-os-tutorials/</link><pubDate>Mon, 30 Jan 2023 22:30:15 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-01-30-rust-raspberrypi-os-tutorials/</guid><description>&lt;h1 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h1>
+&lt;p>Rust で Raspberry Pi 向けのオペレーティングシステムを開発する&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials">チュートリアル&lt;/a>が公開されている．
+早速やってみよう．&lt;/p></description></item><item><title>情報工学実験II（再履修）</title><link>https://Kenta11.github.io/posts/2022-09-23-micro1/</link><pubDate>Fri, 23 Sep 2022 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-09-23-micro1/</guid><description>&lt;h2 id="はじめに">はじめに&lt;a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
+ &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
+ &lt;/svg>&lt;/a>&lt;/h2>
+&lt;p>　出身学科も出身専攻も，完全に名称が無くなってしまいましたね．
+過ごした時間に思いを馳せながら，マイクロプログラミングをしましょう（急展開）．&lt;/p></description></item></channel></rss>

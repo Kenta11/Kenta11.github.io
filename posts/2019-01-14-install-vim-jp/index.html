@@ -1,71 +1,9 @@
-<!doctype html><html lang=en-us>
-<head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<meta http-equiv=x-ua-compatible content="ie=edge">
-<meta name=theme-color content="#494f5c">
-<meta name=msapplication-TileColor content="#494f5c">
-<meta itemprop=name content="UbuntuにVim環境を用意する">
-<meta itemprop=description content="まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ． Vimをビルド GithubからVimをダウンロードする． $ git clone https://github.com/vim/vim ビ"><meta itemprop=datePublished content="2019-01-14T20:00:00+09:00">
-<meta itemprop=dateModified content="2019-01-14T20:00:00+09:00">
-<meta itemprop=wordCount content="475">
-<meta itemprop=keywords content="Vim,"><meta property="og:title" content="UbuntuにVim環境を用意する">
-<meta property="og:description" content="まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ． Vimをビルド GithubからVimをダウンロードする． $ git clone https://github.com/vim/vim ビ">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/"><meta property="article:section" content="posts">
-<meta property="article:published_time" content="2019-01-14T20:00:00+09:00">
-<meta property="article:modified_time" content="2019-01-14T20:00:00+09:00">
-<meta name=twitter:card content="summary">
-<meta name=twitter:title content="UbuntuにVim環境を用意する">
-<meta name=twitter:description content="まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ． Vimをビルド GithubからVimをダウンロードする． $ git clone https://github.com/vim/vim ビ">
-<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
-<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
-<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
-<link rel=manifest href=/site.webmanifest>
-<link rel=mask-icon href=/safari-pinned-tab.svg color>
-<link rel="shortcut icon" href=/favicon.ico>
-<title>UbuntuにVim環境を用意する</title>
-<link rel=stylesheet href=https://Kenta11.github.io/css/style.min.037b6ee8f8c1baab6a3d0a9da11c3ff18a7552471f16c59fd98538d5ce99208b.css integrity="sha256-A3tu6PjBuqtqPQqdoRw/8Yp1UkcfFsWf2YU41c6ZIIs=" crossorigin=anonymous>
-</head>
-<body id=page>
-<header id=site-header class="animated slideInUp">
-<div class="hdr-wrapper section-inner">
-<div class=hdr-left>
-<div class=site-branding>
-<a href=https://Kenta11.github.io>Kenta Arai Webpage</a>
-</div>
-<nav class="site-nav hide-in-mobile">
-<a href=https://Kenta11.github.io/posts/>Posts</a>
-<a href=https://Kenta11.github.io/about/>About</a>
-<a href=https://Kenta11.github.io/projects/>Projects</a>
-</nav>
-</div>
-<div class="hdr-right hdr-icons">
-<button id=toc-btn class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/isKenta14 target=_blank rel="noopener me" title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://github.com/Kenta11 target=_blank rel="noopener me" title=Github><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://gitlab.com/Kenta111 target=_blank rel="noopener me" title=Gitlab><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.65 14.39 12 22.13 1.35 14.39a.84.84.0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42.0 014.82 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42.0 0118.6 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.51L23 13.45a.84.84.0 01-.35.94z"/></svg></a><a href=https://qiita.com/Kenta11 target=_blank rel="noopener me" title=Qiita><svg xmlns="http://www.w3.org/2000/svg" class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a><a href=https://speakerdeck.com/kenta11 target=_blank rel="noopener me" title=Speakerdeck><svg xmlns="http://www.w3.org/2000/svg" class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a></span><button id=menu-btn class=hdr-btn title=Menu><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-</div>
-</div>
-</header>
-<div id=mobile-menu class="animated fast">
-<ul>
-<li><a href=https://Kenta11.github.io/posts/>Posts</a></li>
-<li><a href=https://Kenta11.github.io/about/>About</a></li>
-<li><a href=https://Kenta11.github.io/projects/>Projects</a></li>
-</ul>
-</div>
-<main class="site-main section-inner animated fadeIn faster">
-<article class=thin>
-<header class=post-header>
-<div class=post-meta><span>Jan 14, 2019</span></div>
-<h1>UbuntuにVim環境を用意する</h1>
-</header>
-<div class=content>
-<h2 id=まえがき>まえがき<a href=#まえがき class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>いろんなマシンでVimをビルドすることがあるので，その手順をメモ．</p>
-<h2 id=vimをビルド>Vimをビルド<a href=#vimをビルド class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>GithubからVimをダウンロードする．</p>
-<pre tabindex=0><code>$ git clone https://github.com/vim/vim
-</code></pre><p>ビルドの設定をしてからビルドする．</p>
-<pre tabindex=0><code>$ make distclean # すでにビルドをしたことがある場合は実行しておく
+<!doctype html><html lang=en-us><head><meta charset=UTF-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><meta name=robots content="index, follow"><meta name=author content><meta name=description content><link rel=author type=text/plain href=/humans.txt><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon href=/favicon.ico type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta name=msapplication-TileImage content="/mstile-144x144.png"><meta name=theme-color content="#494f5c"><meta name=msapplication-TileColor content="#494f5c"><link rel=mask-icon href=/safari-pinned-tab.svg color=#494f5c><meta itemprop=name content="UbuntuにVim環境を用意する"><meta itemprop=description content="まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ．
+Vimをビルド GithubからVimをダウンロードする．"><meta itemprop=datePublished content="2019-01-14T20:00:00+09:00"><meta itemprop=dateModified content="2019-01-14T20:00:00+09:00"><meta itemprop=wordCount content="475"><meta itemprop=keywords content="Vim"><meta property="og:url" content="https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/"><meta property="og:site_name" content="Kenta Arai Webpage"><meta property="og:title" content="UbuntuにVim環境を用意する"><meta property="og:description" content="まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ．
+Vimをビルド GithubからVimをダウンロードする．"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2019-01-14T20:00:00+09:00"><meta property="article:modified_time" content="2019-01-14T20:00:00+09:00"><meta property="article:tag" content="Vim"><meta name=twitter:card content="summary"><meta name=twitter:title content="UbuntuにVim環境を用意する"><meta name=twitter:description content="まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ．
+Vimをビルド GithubからVimをダウンロードする．"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"UbuntuにVim環境を用意する","name":"UbuntuにVim環境を用意する","description":"まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ．\nVimをビルド GithubからVimをダウンロードする．\n","keywords":["Vim"],"articleBody":"まえがき いろんなマシンでVimをビルドすることがあるので，その手順をメモ．\nVimをビルド GithubからVimをダウンロードする．\n$ git clone https://github.com/vim/vim ビルドの設定をしてからビルドする．\n$ make distclean # すでにビルドをしたことがある場合は実行しておく $ ./configure --with-features=huge \\ --disable-darwin \\ --disable-selinux \\ --enable-fail-if-missing \\ --enable-python3interp=dynamic \\ --enable-cscope \\ --enable-fontset \\ --with-compiledby=kenta \\ --enable-gui=no \\ --prefix=/usr/local $ make -j8 # マシンのスペックによって値は変える Vimをインストール Ubuntuの場合，checkinstallを使うことでVimをaptで管理できる． make installせずにこちらを使う．\n$ apt install checkinstall $ checkinstall # インストールするパッケージが更新されないように，holdをかけておく $ echo \"vim hold\" | dpkg --set-selections $ echo \"vim-common hold\" | dpkg --set-selections $ echo \"vim-runtime hold\" | dpkg --set-selections $ echo \"vim-tiny hold\" | dpkg --set-selections Plugin Vimのプラグインを準備する．私のVim用設定ファイルはGithub上に置いてあるので，これを使う．\n$ git clone https://github.com/Kenta11/dotfiles ; cd dotfiles $ bash install.sh これでホームに.vimと.vimrcのシンボリックリンクができる．vimを実行すればプラグインがインストールされる．\nもしuninstallする場合は 以下のコマンドを実行する．\n$ echo \"vim install\" | dpkg --set-selections $ echo \"vim-common install\" | dpkg --set-selections $ echo \"vim-runtime install\" | dpkg --set-selections $ echo \"vim-tiny install\" | dpkg --set-selections $ apt remove --purge vim ","wordCount":"475","inLanguage":"en","datePublished":"2019-01-14T20:00:00+09:00","dateModified":"2019-01-14T20:00:00+09:00","author":{"@type":"Person","name":null},"mainEntityOfPage":{"@type":"WebPage","@id":"https://Kenta11.github.io/posts/2019-01-14-install-vim-jp/"},"publisher":{"@type":"Organization","name":"Kenta Arai Webpage","description":"","logo":{"@type":"ImageObject","url":"https://Kenta11.github.io/favicon.ico"}}}</script><title>UbuntuにVim環境を用意する</title>
+<link rel="stylesheet dns-prefetch preconnect preload prefetch" as=style href=https://Kenta11.github.io/css/style.min.d3facc2d5fe42af72ee5a80584900a45ffee6035df0ef582bd8696c2fe0c9da5.css integrity="sha256-0/rMLV/kKvcu5agFhJAKRf/uYDXfDvWCvYaWwv4MnaU=" crossorigin=anonymous></head><body id=page><header id=site-header class="animated slideInUp"><div class="hdr-wrapper section-inner"><div class=hdr-left><div class=site-branding><a href=https://Kenta11.github.io/>Kenta Arai Webpage</a></div><nav class="site-nav hide-in-mobile"><a href=https://Kenta11.github.io/posts/>Posts</a><a href=https://Kenta11.github.io/about/>About</a><a href=https://Kenta11.github.io/projects/>Projects</a></nav></div><div class="hdr-right hdr-icons"><button id=toc-btn class="hdr-btn desktop-only-ib" title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/isKenta14 target=_blank rel="noopener me" title=Twitter><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://github.com/Kenta11 target=_blank rel="noopener me" title=Github><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a><a href=https://gitlab.com/Kenta111 target=_blank rel="noopener me" title=Gitlab><svg class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.65 14.39 12 22.13 1.35 14.39a.84.84.0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42.0 014.82 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42.0 0118.6 2a.43.43.0 01.58.0.42.42.0 01.11.18l2.44 7.51L23 13.45a.84.84.0 01-.35.94z"/></svg></a><a href=https://qiita.com/Kenta11 target=_blank rel="noopener me" title=Qiita><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a><a href=https://speakerdeck.com/kenta11 target=_blank rel="noopener me" title=Speakerdeck><svg class="feather feather-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></a></span><button id=menu-btn class=hdr-btn title><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></div></header><div id=mobile-menu class="animated fast"><ul><li><a href=https://Kenta11.github.io/posts/>Posts</a></li><li><a href=https://Kenta11.github.io/about/>About</a></li><li><a href=https://Kenta11.github.io/projects/>Projects</a></li></ul></div><main class="site-main section-inner animated fadeIn faster"><article class=thin><header class=post-header><div class=post-date><span>Jan 14, 2019</span></div><h1>UbuntuにVim環境を用意する</h1></header><div class=post-description><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://Kenta11.github.io/tags/vim>Vim</a></span></p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>475&nbspWords</p><p><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2019-01-14 11:00 +0000</p></div><hr class=post-end><div class=content><h2 id=まえがき>まえがき<a href=#%e3%81%be%e3%81%88%e3%81%8c%e3%81%8d class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>いろんなマシンでVimをビルドすることがあるので，その手順をメモ．</p><h2 id=vimをビルド>Vimをビルド<a href=#vim%e3%82%92%e3%83%93%e3%83%ab%e3%83%89 class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>GithubからVimをダウンロードする．</p><pre tabindex=0><code>$ git clone https://github.com/vim/vim
+</code></pre><p>ビルドの設定をしてからビルドする．</p><pre tabindex=0><code>$ make distclean # すでにビルドをしたことがある場合は実行しておく
 $ ./configure --with-features=huge \
             --disable-darwin \
             --disable-selinux \
@@ -78,69 +16,23 @@ $ ./configure --with-features=huge \
             --prefix=/usr/local
 
 $ make -j8 # マシンのスペックによって値は変える
-</code></pre><h2 id=vimをインストール>Vimをインストール<a href=#vimをインストール class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>Ubuntuの場合，checkinstallを使うことでVimをaptで管理できる．
-make installせずにこちらを使う．</p>
-<pre tabindex=0><code>$ apt install checkinstall
+</code></pre><h2 id=vimをインストール>Vimをインストール<a href=#vim%e3%82%92%e3%82%a4%e3%83%b3%e3%82%b9%e3%83%88%e3%83%bc%e3%83%ab class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>Ubuntuの場合，checkinstallを使うことでVimをaptで管理できる．
+make installせずにこちらを使う．</p><pre tabindex=0><code>$ apt install checkinstall
 $ checkinstall
 # インストールするパッケージが更新されないように，holdをかけておく
-$ echo &quot;vim hold&quot;         | dpkg --set-selections
-$ echo &quot;vim-common hold&quot;  | dpkg --set-selections
-$ echo &quot;vim-runtime hold&quot; | dpkg --set-selections
-$ echo &quot;vim-tiny hold&quot;    | dpkg --set-selections
-</code></pre><h2 id=plugin>Plugin<a href=#plugin class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>Vimのプラグインを準備する．私のVim用設定ファイルはGithub上に置いてあるので，これを使う．</p>
-<pre tabindex=0><code>$ git clone https://github.com/Kenta11/dotfiles ; cd dotfiles
+$ echo &#34;vim hold&#34;         | dpkg --set-selections
+$ echo &#34;vim-common hold&#34;  | dpkg --set-selections
+$ echo &#34;vim-runtime hold&#34; | dpkg --set-selections
+$ echo &#34;vim-tiny hold&#34;    | dpkg --set-selections
+</code></pre><h2 id=plugin>Plugin<a href=#plugin class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>Vimのプラグインを準備する．私のVim用設定ファイルはGithub上に置いてあるので，これを使う．</p><pre tabindex=0><code>$ git clone https://github.com/Kenta11/dotfiles ; cd dotfiles
 $ bash install.sh
-</code></pre><p>これでホームに.vimと.vimrcのシンボリックリンクができる．vimを実行すればプラグインがインストールされる．</p>
-<h2 id=もしuninstallする場合は>もしuninstallする場合は<a href=#もしuninstallする場合は class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
-<p>以下のコマンドを実行する．</p>
-<pre tabindex=0><code>$ echo &quot;vim install&quot;         | dpkg --set-selections
-$ echo &quot;vim-common install&quot;  | dpkg --set-selections
-$ echo &quot;vim-runtime install&quot; | dpkg --set-selections
-$ echo &quot;vim-tiny install&quot;    | dpkg --set-selections
+</code></pre><p>これでホームに.vimと.vimrcのシンボリックリンクができる．vimを実行すればプラグインがインストールされる．</p><h2 id=もしuninstallする場合は>もしuninstallする場合は<a href=#%e3%82%82%e3%81%97uninstall%e3%81%99%e3%82%8b%e5%a0%b4%e5%90%88%e3%81%af class=anchor aria-hidden=true><svg viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2><p>以下のコマンドを実行する．</p><pre tabindex=0><code>$ echo &#34;vim install&#34;         | dpkg --set-selections
+$ echo &#34;vim-common install&#34;  | dpkg --set-selections
+$ echo &#34;vim-runtime install&#34; | dpkg --set-selections
+$ echo &#34;vim-tiny install&#34;    | dpkg --set-selections
 
 $ apt remove --purge vim
-</code></pre>
-</div>
-<hr class=post-end>
-<footer class=post-info>
-<p>
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://Kenta11.github.io/tags/vim>Vim</a></span>
-</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>475 Words</p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2019-01-14 11:00 +0000</p>
-</footer>
-</article>
-<aside id=toc>
-<div class=toc-title>Table of Contents</div>
-<nav id=TableOfContents>
-<ul>
-<li><a href=#まえがき>まえがき</a></li>
-<li><a href=#vimをビルド>Vimをビルド</a></li>
-<li><a href=#vimをインストール>Vimをインストール</a></li>
-<li><a href=#plugin>Plugin</a></li>
-<li><a href=#もしuninstallする場合は>もしuninstallする場合は</a></li>
-</ul>
-</nav>
-</aside>
-<div class="post-nav thin">
-<a class=next-post href=https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/>
-<span class=post-nav-label><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>makeコマンドでVivado HLSを使う</span>
-</a>
-<a class=prev-post href=https://Kenta11.github.io/posts/2019-01-08-install-manjaro-linux-jp/>
-<span class=post-nav-label>Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Windows PCにManajaro Linuxをデュアルブートする</span>
-</a>
-</div>
-<div id=comments class=thin>
-</div>
-</main>
-<footer id=site-footer class="section-inner thin animated fadeIn faster">
-<p>&copy; 2024 <a href=https://Kenta11.github.io>Kenta Arai</a></p>
-<p>
-Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> &#183; Theme <a href=https://github.com/Track3/hermit target=_blank rel=noopener>Hermit</a> &#183; <a href=https://Kenta11.github.io/posts/index.xml target=_blank title=rss><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a>
-</p>
-</footer>
-<script src=https://Kenta11.github.io/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin=anonymous></script>
-</body>
-</html>
+</code></pre></div></article><aside id=toc><div class=toc-title>Table of Contents</div><nav id=TableOfContents><ul><li><a href=#まえがき>まえがき</a></li><li><a href=#vimをビルド>Vimをビルド</a></li><li><a href=#vimをインストール>Vimをインストール</a></li><li><a href=#plugin>Plugin</a></li><li><a href=#もしuninstallする場合は>もしuninstallする場合は</a></li></ul></nav></aside><div class="post-nav thin"><a class=next-post href=https://Kenta11.github.io/posts/2019-02-10-make-for-vivado-hls/><span class=post-nav-label><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>makeコマンドでVivado HLSを使う</span>
+</a><a class=prev-post href=https://Kenta11.github.io/posts/2019-01-08-install-manjaro-linux-jp/><span class=post-nav-label>Older&nbsp;<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Windows PCにManajaro Linuxをデュアルブートする</span></a></div><div id=comments class=thin></div></main><footer id=site-footer class="section-inner thin animated fadeIn faster"><p>&copy; 2025 <a href=https://Kenta11.github.io/>Kenta Arai Webpage</a>
+&#183; &#183; Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a>
+&#183; Theme <a href=https://github.com/1bl4z3r/hermit-V2 target=_blank rel=noopener>Hermit-V2</a></p></footer><script async src=https://Kenta11.github.io/js/bundle.min.c7c384e4d29d192bbac6811ae4660bb01767194a5bea56baca77e8260f93ea16.js integrity="sha256-x8OE5NKdGSu6xoEa5GYLsBdnGUpb6la6ynfoJg+T6hY=" crossorigin=anonymous></script></body></html>
