@@ -27,7 +27,7 @@ LLVMをゴリゴリ使うLigToolingなるものもあるようだが大変そう
 
 Pythonを使ってソースコードを解析するにあたり、PythonとClangの準備をする。
 
-```{bash}
+```bash
 # Manjaroでは初めからPython3がインストール済みなので、Clangだけ準備する
 $ sudo pacman -S clang llvm # clangだけでは今回のPythonプログラムが動かなかった...
 ```
@@ -39,7 +39,7 @@ clangモジュールが`/usr/lib/python3.9/site-packages/clang/`にあれば、�
 `parse()`を呼び出すと、よしなにASTにしてくれる。
 どうやらプリプロセスまでしてくれるようだ。
 
-```{python}
+```python
 # -*- coding: utf-8 -*-
 
 import sys
@@ -94,7 +94,7 @@ vim_snprintf main 230
 お使いの環境で作業を試せる`Dockerfile`を置いておきます。
 リンクは[こちら](Dockerfile)。
 
-```{Dockerfile}
+```Dockerfile
 FROM ubuntu:20.04
 LABEL maintainer "Kenta Arai <>"
 
