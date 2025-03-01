@@ -4,7 +4,7 @@
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
  &lt;/svg>&lt;/a>&lt;/h1>
 &lt;p>&lt;a href="../2023-02-02-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
-&lt;h1 id="05_drivers_gpio_uarthttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster05_drivers_gpio_uart">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/05_drivers_gpio_uart">05_drivers_gpio_uart&lt;/a>&lt;a href="#05_drivers_gpio_uarthttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster05_drivers_gpio_uart" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+&lt;h1 id="05_">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/05_drivers_gpio_uart">05_drivers_gpio_uart&lt;/a>&lt;a href="#05_" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
  stroke-linecap="round" stroke-linejoin="round">
  &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
@@ -34,7 +34,7 @@
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
  &lt;/svg>&lt;/a>&lt;/h1>
 &lt;p>&lt;a href="../2023-02-01-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
-&lt;h1 id="04_safe_globalshttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster04_safe_globals">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/04_safe_globals">04_safe_globals&lt;/a>&lt;a href="#04_safe_globalshttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster04_safe_globals" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+&lt;h1 id="04_">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/04_safe_globals">04_safe_globals&lt;/a>&lt;a href="#04_" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
  stroke-linecap="round" stroke-linejoin="round">
  &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
@@ -52,7 +52,7 @@
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
  &lt;/svg>&lt;/a>&lt;/h1>
 &lt;p>&lt;a href="../2023-01-31-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
-&lt;h1 id="03_hacky_hello_worldhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster03_hacky_hello_world">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/03_hacky_hello_world">03_hacky_hello_world&lt;/a>&lt;a href="#03_hacky_hello_worldhttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster03_hacky_hello_world" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+&lt;h1 id="03_">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/03_hacky_hello_world">03_hacky_hello_world&lt;/a>&lt;a href="#03_" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
  stroke-linecap="round" stroke-linejoin="round">
  &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
@@ -136,7 +136,7 @@
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
  &lt;/svg>&lt;/a>&lt;/h1>
 &lt;p>&lt;a href="../2023-01-30-rust-raspberrypi-os-tutorials">前回&lt;/a>の続きから．&lt;/p>
-&lt;h1 id="02_runtime_inithttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster02_runtime_init">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/02_runtime_init">02_runtime_init&lt;/a>&lt;a href="#02_runtime_inithttpsgithubcomrust-embeddedrust-raspberrypi-os-tutorialstreemaster02_runtime_init" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+&lt;h1 id="02_">&lt;a href="https://github.com/rust-embedded/rust-raspberrypi-OS-tutorials/tree/master/02_runtime_init">02_runtime_init&lt;/a>&lt;a href="#02_" class="anchor" aria-hidden="true">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
  stroke-linecap="round" stroke-linejoin="round">
  &lt;path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3">&lt;/path>
  &lt;line x1="8" y1="12" x2="16" y2="12">&lt;/line>
