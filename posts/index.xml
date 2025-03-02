@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- 0.145.0</generator><language>en-us</language><lastBuildDate>Fri, 28 Apr 2023 21:30:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Vitis HLS on Ubuntu on Manjaro</title><link>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</link><pubDate>Fri, 28 Apr 2023 21:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h2 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- 0.145.0</generator><language>en-us</language><lastBuildDate>Sat, 01 Mar 2025 13:25:52 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>「ソフトウェア・テストの技法 第2版」を読んだ</title><link>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</link><pubDate>Sat, 01 Mar 2025 13:25:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<p>「ソフトウェア・テストの技法 第2版」はその名前の通りソフトウェア・テストについて書かれた書籍だ。第1版は1980年、第2版は2006年の出版と、ソフトウェア業界的には非常に古い本であるが、未だに読まれているらしい。いわゆる古典的名著か。</p>
+<!-- raw HTML omitted -->
+<p>私は大学で情報工学を学んで、就職後はソフトウェア開発に関わってきた。そんな中、ソフトウェア・テストのみを取り上げた書籍を読んだことがあまりなかった<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。テストフレームワークや CI/CD は頻繁に関する話題はよく目にするが、ソフトウェア・テストを詳説する専門書はあまり見かけない気がする。本著が名著故に競合が現れないのか、それともソフトウェア・テストが比較的興味を持たれにくい領域だからだろうか。</p>
+<p>本著は9章構成であるが、4章まで読んで中断した。そこまで読むだけでも有益だったし、もう一度読み直したいと思った。今の段階でも十分に良い書籍だと思ったので、読んだところまで紹介する。</p>
+<p>2章「プログラム・テストの心理学と経済学」はとても教訓に満ちた内容だ。ソフトウェア・テストでは得てして可能な限りの入出力を検証しがちだが、限られた時間的、人員的、資金的リソースの中で可能なテストは限られている。そうした制約の中で、最小のコストで最大の効果を得るためのテストをする意義が述べられている。もうちょっと若い時に読みたかった。</p>
+<p>4章「テスト・ケースの設計」はどんなことをどんな風にテストするかを解説している。テスト対象を分析する基本的な手法（原因-結果グラフ、限界値分析等）を、具体的な事例を交えながら説明している。この章は個人的に難しく感じており、躓いてしまった。せっかく具体例を挙げているので、読み直して分析をなぞりながら理解したいと思っている。これは宿題だ。</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>「テスト駆動開発による組み込みプログラミング」くらいだろうか&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+]]></content></item><item><title>Vitis HLS on Ubuntu on Manjaro</title><link>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</link><pubDate>Fri, 28 Apr 2023 21:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2023-04-27-vitis_hls-on-ubuntu-on-manjaro/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h2 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
       <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -1420,166 +1434,4 @@ Manjaro サーバの CPU は Ryzen 7 3700X なので，TARGET_CPU は ZEN2 と�
 </ul>
 <p>これまでたくさん聴いたなあと思っていたけれど，題目を起こしてみると思いの外少ない．
 来年は少しずつ増やしていこう．</p>
-]]></content></item><item><title>情報工学実験II（再履修）</title><link>https://Kenta11.github.io/posts/2022-09-23-micro1/</link><pubDate>Fri, 23 Sep 2022 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-09-23-micro1/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<h2 id="はじめに">はじめに<a href="#%e3%81%af%e3%81%98%e3%82%81%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<p>　出身学科も出身専攻も，完全に名称が無くなってしまいましたね．
-過ごした時間に思いを馳せながら，マイクロプログラミングをしましょう（急展開）．</p>
-<h2 id="アセンブラ">アセンブラ<a href="#%e3%82%a2%e3%82%bb%e3%83%b3%e3%83%96%e3%83%a9" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<h3 id="一覧">一覧<a href="#%e4%b8%80%e8%a6%a7" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h3>
-<ul>
-<li>機械語アセンブラ: <a href="https://github.com/Kenta11/rm1asm">rm1asm</a></li>
-<li>マイクロアセンブラ: <a href="https://github.com/Kenta11/rm1masm">rm1masm</a></li>
-</ul>
-<h3 id="特徴">特徴<a href="#%e7%89%b9%e5%be%b4" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h3>
-<ul>
-<li>Unicode対応</li>
-<li>マルチプラットフォームで動作（Windows，Linux，MacOS）</li>
-<li>エラー表示機能付き（期待に添える程のクオリティ<strong>ではない</strong>）</li>
-</ul>
-<h2 id="遊び方">遊び方<a href="#%e9%81%8a%e3%81%b3%e6%96%b9" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<p>　まずはアセンブラとシミュレータをインストールして下さい．
-アセンブラは<code>cargo install</code>でもインストールできますが，特にLinuxをお使いの方は<a href="https://github.com/Kenta11/rm1asm/releases/tag/v1.0.0">パッケージ</a>からのインストールが便利です．
-シミュレータはWindowsユーザなら公式（？）に配布されているものを使いましょう．
-それ以外の方は自前でビルドして下さい．</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ git clone https://github.com/Kenta11/micro1
-</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> micro1
-</span></span><span class="line"><span class="cl">$ gcc m1sim.c -o m1sim
-</span></span></code></pre></div><p>　MICRO-1のマイクロプログラムをアセンブルします．</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ curl -s http://www.ced.is.utsunomiya-u.ac.jp/lecture/2022/jikkenb/micro/chap5/MICROONE <span class="p">|</span> iconv -f sjis -t utf8 <span class="p">|</span> tr -d <span class="s2">&#34;\32&#34;</span> &gt; MICROONE
-</span></span><span class="line"><span class="cl">$ rm1masm MICROONE -o MICROONE.o
-</span></span></code></pre></div><p>　続いて機械語プログラムをアセンブルします．</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ cat sqrt
-</span></span><span class="line"><span class="cl"><span class="p">;</span> This program is distributed under MIT LICENSE.
-</span></span><span class="line"><span class="cl"><span class="p">;</span> Copyright <span class="o">(</span>c<span class="o">)</span> <span class="m">2022</span> Kenta Arai
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 平方根を求めるプログラム
-</span></span><span class="line"><span class="cl"><span class="p">;</span> アルゴリズムは<span class="s2">&#34;バビロニア人の方法&#34;</span>である
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">TITLE SQRT
-</span></span><span class="line"><span class="cl">         L   1, X0
-</span></span><span class="line"><span class="cl">         L   3, ERROR
-</span></span><span class="line"><span class="cl"><span class="p">;</span> X<span class="o">(</span>n+1<span class="o">)</span>を計算
-</span></span><span class="line"><span class="cl">HEAD:    LEA 2, <span class="o">(</span>1<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         LC  0, <span class="m">0</span>
-</span></span><span class="line"><span class="cl">         L   1, S
-</span></span><span class="line"><span class="cl">         BSR CALCXN1
-</span></span><span class="line"><span class="cl"><span class="p">;</span> <span class="p">|</span>X<span class="o">(</span>n+1<span class="o">)</span> - X<span class="o">(</span>n<span class="o">)</span><span class="p">|</span> &lt; ERROR の場合は計算を終了する
-</span></span><span class="line"><span class="cl">         SUB 2, <span class="o">(</span>1<span class="o">)</span>   <span class="p">;</span> X<span class="o">(</span>n<span class="o">)</span> - X<span class="o">(</span>n+1<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         BSR ABS      <span class="p">;</span> <span class="p">|</span>X<span class="o">(</span>n+1<span class="o">)</span> - X<span class="o">(</span>n<span class="o">)</span><span class="p">|</span>
-</span></span><span class="line"><span class="cl">         SUB 2, <span class="o">(</span>3<span class="o">)</span>   <span class="p">;</span> <span class="p">|</span>X<span class="o">(</span>n+1<span class="o">)</span> - X<span class="o">(</span>n<span class="o">)</span><span class="p">|</span> - ERROR
-</span></span><span class="line"><span class="cl">         BNM HEAD
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 解を保存し，プログラムを終了
-</span></span><span class="line"><span class="cl">         ST  1, XN
-</span></span><span class="line"><span class="cl">         HLT
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">S:       DC  <span class="m">487</span>      <span class="p">;</span> 入力
-</span></span><span class="line"><span class="cl">X0:      DC  <span class="m">20</span>       <span class="p">;</span> 初期値X<span class="o">(</span>0<span class="o">)</span>
-</span></span><span class="line"><span class="cl">ERROR:   DC  <span class="m">5</span>        <span class="p">;</span> エラー
-</span></span><span class="line"><span class="cl">XN:      DS  <span class="m">1</span>        <span class="p">;</span> 解X<span class="o">(</span>n<span class="o">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">;</span> X<span class="o">(</span>n+1<span class="o">)</span>を計算する関数
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 入力: <span class="o">{</span>r0: 0, r1: S, r2: X<span class="o">(</span>n<span class="o">)}</span>
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 出力: <span class="o">{</span>r1: X<span class="o">(</span>n+1<span class="o">)</span>, r2: X<span class="o">(</span>n<span class="o">)}</span>
-</span></span><span class="line"><span class="cl">CALCXN1: DIV 0, <span class="o">(</span>2<span class="o">)</span>   <span class="p">;</span> S/X<span class="o">(</span>n<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         ADD 1, <span class="o">(</span>2<span class="o">)</span>   <span class="p">;</span> S/X<span class="o">(</span>n<span class="o">)</span> + X<span class="o">(</span>n<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         SA  1, -1    <span class="p">;</span> <span class="o">(</span>S/X<span class="o">(</span>n<span class="o">)</span> + X<span class="o">(</span>n<span class="o">))</span> / <span class="nv">2</span> <span class="o">=</span> X<span class="o">(</span>n+1<span class="o">)</span>
-</span></span><span class="line"><span class="cl">         RET
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 絶対値を計算する関数
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 入力: <span class="o">{</span>r2: 整数<span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">;</span> 出力: <span class="o">{</span>r2: 絶対値<span class="o">}</span>
-</span></span><span class="line"><span class="cl">ABS:     CMP 2, <span class="m">0</span>
-</span></span><span class="line"><span class="cl">         BNM ABS0
-</span></span><span class="line"><span class="cl">         XOR 2, X<span class="s2">&#34;FFFF
-</span></span></span><span class="line"><span class="cl"><span class="s2">         ADD 2, 1
-</span></span></span><span class="line"><span class="cl"><span class="s2">ABS0:    RET 
-</span></span></span><span class="line"><span class="cl"><span class="s2">END
-</span></span></span><span class="line"><span class="cl"><span class="s2"></span>$<span class="s2"> rm1asm sqrt -o sqrt.b
-</span></span></span></code></pre></div><p>　プログラムを実行してみましょう．</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ./m1sim
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">   *** MICRO-1 SIMULATOR <span class="o">(</span>C-Ver. 1.0d<span class="o">)</span> <span class="o">[</span>Sep <span class="m">23</span> 2022<span class="o">]</span> ***
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt; load
-</span></span><span class="line"><span class="cl">LOAD
-</span></span><span class="line"><span class="cl">  FILE <span class="nv">NAME</span><span class="o">=</span>?MICROONE.o
-</span></span><span class="line"><span class="cl">  LOADING <span class="s1">&#39;MICROONE.o&#39;</span>
-</span></span><span class="line"><span class="cl"> LOADED TO CM
-</span></span><span class="line"><span class="cl">&gt;&gt; load       
-</span></span><span class="line"><span class="cl">LOAD
-</span></span><span class="line"><span class="cl">  FILE <span class="nv">NAME</span><span class="o">=</span>?sqrt.b
-</span></span><span class="line"><span class="cl">  LOADING <span class="s1">&#39;sqrt.b&#39;</span>
-</span></span><span class="line"><span class="cl"> LOADED TO MM
-</span></span><span class="line"><span class="cl">&gt;&gt; trace
-</span></span><span class="line"><span class="cl">TRACE
-</span></span><span class="line"><span class="cl">  T?device
-</span></span><span class="line"><span class="cl">   TD?set
-</span></span><span class="line"><span class="cl">   DEVICE ?pc
-</span></span><span class="line"><span class="cl">   DEVICE ?ir
-</span></span><span class="line"><span class="cl">   DEVICE ?flag
-</span></span><span class="line"><span class="cl">   DEVICE ?r0
-</span></span><span class="line"><span class="cl">   DEVICE ?r1
-</span></span><span class="line"><span class="cl">   DEVICE ?r2
-</span></span><span class="line"><span class="cl">   DEVICE ?r3
-</span></span><span class="line"><span class="cl">   DEVICE ?lbus
-</span></span><span class="line"><span class="cl">   DEVICE ?rbus
-</span></span><span class="line"><span class="cl">   DEVICE ?abus
-</span></span><span class="line"><span class="cl">   DEVICE ?sbus
-</span></span><span class="line"><span class="cl">   DEVICE ?.
-</span></span><span class="line"><span class="cl">   TD?.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  T?go
-</span></span><span class="line"><span class="cl"> <span class="nv">CMAR</span><span class="o">=</span>?101
-</span></span><span class="line"><span class="cl"> MAX <span class="nv">STEP</span><span class="o">=</span>?300
-</span></span><span class="line"><span class="cl">CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
-</span></span><span class="line"><span class="cl"><span class="m">102</span>  <span class="m">0000</span> <span class="m">0000</span> <span class="m">000010</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0040</span> <span class="m">0040</span> <span class="m">0040</span> 
-</span></span><span class="line"><span class="cl">～中略～
-</span></span><span class="line"><span class="cl">CMAR  PC   IR  ZNCOCT  R0   R1   R2   R3  LBUS RBUS ABUS SBUS 
-</span></span><span class="line"><span class="cl">0FD  000C EF00 <span class="m">000010</span> <span class="m">0007</span> <span class="m">0016</span> FFFD <span class="m">0005</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> 
-</span></span><span class="line"><span class="cl"> CPU HALTED !
-</span></span><span class="line"><span class="cl">  <span class="m">259</span> STEPS USED
-</span></span><span class="line"><span class="cl">  T?.
-</span></span><span class="line"><span class="cl">&gt;&gt; dump
-</span></span><span class="line"><span class="cl">DUMP
-</span></span><span class="line"><span class="cl">  D?mm
-</span></span><span class="line"><span class="cl">    START ADRS ?000C
-</span></span><span class="line"><span class="cl">    END   ADRS ?000F
-</span></span><span class="line"><span class="cl">000C:01E7
-</span></span><span class="line"><span class="cl">000D:0014
-</span></span><span class="line"><span class="cl">000E:0005
-</span></span><span class="line"><span class="cl">000F:0016
-</span></span><span class="line"><span class="cl">  D?.
-</span></span><span class="line"><span class="cl">&gt;&gt; end
-</span></span><span class="line"><span class="cl">&gt;&gt;   MICRO-1 TERMINATED
-</span></span></code></pre></div><p>　XN(アドレスが0x000Fの行)に487の大体の平方根22(0x0016)が格納されていますね．
-大大大成功です．</p>
-<h2 id="おわりに">おわりに<a href="#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
-      <line x1="8" y1="12" x2="16" y2="12"></line>
-   </svg></a></h2>
-<p>　Rust製の言語処理系ライブラリ（logosとchumsky）で遊んでいたら，いつの間にかアセンブラを書いていた．
-何を言っているのか わからねーと思うが（以下略）</p>
-<p>　MICRO-1が書かれた書籍は絶版だし，このまま授業も無くなってしまったら悲しいですね．
-アセンブラはGitHubに置いておけばしばらくは残ると思うので，歴史的なアレコレとして誰か活用して下さい．</p>
-<p>　P.S. サンプルプログラムのライセンスが不明なので，本家からダウンロードできなくなったらどうしよう&hellip;</p>
-<p>おしまい</p>
 ]]></content></item></channel></rss>
