@@ -14,7 +14,7 @@
 <p>OO の定義は、何か標準があるわけではないが、歴史的に醸成されてきたものらしい。
 Simula67 で生まれた OO の概念（現代ほど成熟してはいない？）が、アラン・ケイらによって洗練されて、Smalltalk で導入されたようだ。
 ここでの成功が現代の OOPL に繋がっているのだろう。</p>
-<p>現代の OOPL で共通する要素は、クラス、ポリモーフィズム、継承の3つだ[^1]。</p>
+<p>現代の OOPL で共通する要素は、クラス、ポリモーフィズム、継承の3つだ<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
 <p>クラスはデータ型とそのデータ型に関する演算を定義するものである。
 OO 以前の言語でありがちな、意図しないデータの更新を防ぐことで、安全性や保守性を改善できる。</p>
 <p>ということが分かるような本書は、OO 初学者にとっては OO を俯瞰できる良書だと思う。
@@ -22,7 +22,14 @@ OO 以前の言語でありがちな、意図しないデータの更新を防�
 <p>個人的な一番の収穫は GoF のデザインパターンを知れたことだった。
 個々のパターンはなんとなく知っていたが、ルーツがあるとは恥ずかしながら知らなかった。
 早速デザインパターンの本を購入したので、機会があれば紹介したい。</p>
-<p>[^1]個人的にはカプセル化、多態性、継承って言う。本書だけを読む分にはどちらで考えても差し支えなさそう。</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>個人的にはカプセル化、多態性、継承って言う。本書だけを読む分にはどちらで考えても差し支えなさそう。&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
 ]]></content></item><item><title>「ソフトウェア・テストの技法 第2版」を読んだ</title><link>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</link><pubDate>Sat, 01 Mar 2025 13:25:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<p>「ソフトウェア・テストの技法 第2版」はその名前の通りソフトウェア・テストについて書かれた書籍だ。第1版は1980年、第2版は2006年の出版と、ソフトウェア業界的には非常に古い本であるが、未だに読まれているらしい。いわゆる古典的名著か。</p>
 <div class="amazlet-box" style="margin-bottom:0px;">
     <div class="amazlet-image" style="float:left;margin:0px 12px 1px 0px;">
