@@ -8,6 +8,7 @@ tags: [技読録]
 第2版までは Java を主な題材としていたが、最新版では Python や Ruby が扱われているらしい。
 
 [オブジェクト指向でなぜつくるのか 第2版](https://bookplus.nikkei.com/atcl/catalog/11/P84650/)
+
 [オブジェクト指向でなぜつくるのか 第3版](https://bookplus.nikkei.com/atcl/catalog/21/S00180/)
 
 これまで C++ や Python などのオブジェクト指向プログラミング言語（以下、OOPL）に触れてきたが、そもそもこれらに共通する OO を、私は自分の言葉で説明できないなと気が付いた。
