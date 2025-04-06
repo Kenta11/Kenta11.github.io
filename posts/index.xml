@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- 0.145.0</generator><language>en-us</language><lastBuildDate>Sun, 06 Apr 2025 12:00:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>「ソフトウェア・テストの技法 第2版」を読んだ</title><link>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</link><pubDate>Sat, 01 Mar 2025 13:25:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<p>「ソフトウェア・テストの技法 第2版」はその名前の通りソフトウェア・テストについて書かれた書籍だ。第1版は1980年、第2版は2006年の出版と、ソフトウェア業界的には非常に古い本であるが、未だに読まれているらしい。いわゆる古典的名著か。</p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Posts on Kenta Arai Webpage</title><link>https://Kenta11.github.io/posts/</link><description>Recent content in Posts on Kenta Arai Webpage</description><generator>Hugo -- 0.145.0</generator><language>en-us</language><lastBuildDate>Sun, 06 Apr 2025 10:30:00 +0900</lastBuildDate><atom:link href="https://Kenta11.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>「オブジェクト指向でなぜつくるのか 第2版」を読んだ</title><link>https://Kenta11.github.io/posts/2025-04-06-read-why-oop/</link><pubDate>Sun, 06 Apr 2025 10:30:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2025-04-06-read-why-oop/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<p>オブジェクト指向（以下、OO）って結局なんやねん、という疑問がふと湧いて購入。
+後で気が付いたのだが、第3版が4年前に出版されていた。
+第2版までは Java を主な題材としていたが、最新版では Python や Ruby が扱われているらしい。</p>
+<p><a href="https://bookplus.nikkei.com/atcl/catalog/11/P84650/">オブジェクト指向でなぜつくるのか 第2版</a>
+<a href="https://bookplus.nikkei.com/atcl/catalog/21/S00180/">オブジェクト指向でなぜつくるのか 第3版</a></p>
+<p>これまで C++ や Python などのオブジェクト指向プログラミング言語（以下、OOPL）に触れてきたが、そもそもこれらに共通する OO を、私は自分の言葉で説明できないなと気が付いた。</p>
+<ul>
+<li>OO の定義って誰が決めてるの？</li>
+<li>OOPL に必要な機能ってなに？</li>
+<li>数あるプログラミングパラダイムの中で、なぜ OO なの？</li>
+</ul>
+<p>などなど、色々と分かってないことがあったので、OO を再学習する取っ掛かりとして読んでみた。</p>
+<p>読んでみて上記の疑問はある程度解決されたと思う。</p>
+<p>OO の定義は、何か標準があるわけではないが、歴史的に醸成されてきたものらしい。
+Simula67 で生まれた OO の概念が、アラン・ケイらの Smalltalk で導入されたようだ。</p>
+<p>現代の OOPL で共通する要素は、クラス、ポリモーフィズム、継承の3つだ^1。</p>
+<p>クラスはデータ型とそのデータ型に関する演算を定義するものである。
+OO 以前の言語でありがちな、意図しないデータの更新を防ぐことで、安全性や保守性を改善できる。</p>
+<p>ということが分かるような本書は、OO 初学者にとっては OO を俯瞰できる良書だと思う。
+より厳密に、具体的に、詳細に OO を知りたい、という人向けに、各章の末尾に参考文献が記載されているのも嬉しい。</p>
+<p>個人的な一番の収穫は GoF のデザインパターンを知れたことだった。
+個々のパターンはなんとなく知っていたが、ルーツがあるとは恥ずかしながら知らなかった。
+早速デザインパターンの本を購入したので、機会があれば紹介したい。</p>
+<p>[1]個人的にはカプセル化、多態性、継承って言う。本書だけを読む分にはどちらで考えても差し支えなさそう。</p>
+]]></content></item><item><title>「ソフトウェア・テストの技法 第2版」を読んだ</title><link>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</link><pubDate>Sat, 01 Mar 2025 13:25:52 +0900</pubDate><guid>https://Kenta11.github.io/posts/2025-03-01-reading-books-the-art-of-software-testing/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<p>「ソフトウェア・テストの技法 第2版」はその名前の通りソフトウェア・テストについて書かれた書籍だ。第1版は1980年、第2版は2006年の出版と、ソフトウェア業界的には非常に古い本であるが、未だに読まれているらしい。いわゆる古典的名著か。</p>
 <div class="amazlet-box" style="margin-bottom:0px;">
     <div class="amazlet-image" style="float:left;margin:0px 12px 1px 0px;">
         <a href="https://tatsu-zine.com/books/the-art-of-software-testing" name="amazletlink" target="_blank">
@@ -1397,59 +1421,4 @@ Manjaro サーバの CPU は Ryzen 7 3700X なので，TARGET_CPU は ZEN2 と�
    </svg></a></h2>
 <p>将棋の局面の解析が自宅マシンでできるようになった．
 以上の方法で構築した環境がベストなのかは分からないが，少なくともプロ棋士が使うような解析環境は必要ないので，これで満足だ．</p>
-]]></content></item><item><title>これまでに観た古典芸能の演目</title><link>https://Kenta11.github.io/posts/2022-12-19-classic-engei/</link><pubDate>Mon, 19 Dec 2022 22:00:00 +0900</pubDate><guid>https://Kenta11.github.io/posts/2022-12-19-classic-engei/</guid><description>&amp;lt;no value&amp;gt;</description><content type="text/html" mode="escaped"><![CDATA[<p>これまでに何度か古典芸能を観る機会があって，面白いなと思うことが増えてきた．
-そこで，これまでに観た演目を記録しておく．
-実際に劇場等で観たものは少ないので，テレビ や YouTube で観たものも含めて記載する．</p>
-<ul>
-<li>落語
-<ul>
-<li>一文笛</li>
-<li>蝦蟇の油</li>
-<li>紙入れ</li>
-<li>紺屋高尾</li>
-<li>黄金餅</li>
-<li>三方一両損</li>
-<li>死神</li>
-<li>芝浜</li>
-<li>寿限無</li>
-<li>粗忽長屋</li>
-<li>大工調べ</li>
-<li>幇間腹</li>
-<li>短命</li>
-<li>時そば</li>
-<li>猫の皿</li>
-<li>鼠穴</li>
-<li>引越しの夢</li>
-<li>船徳</li>
-<li>饅頭こわい</li>
-<li>らくだ</li>
-</ul>
-</li>
-<li>講談
-<ul>
-<li>連続物
-<ul>
-<li>赤垣源蔵 徳利の別れ</li>
-<li>赤穂義士銘々伝 大高源吾</li>
-<li>畔倉重四郎</li>
-<li>寛永宮本武蔵伝 吉岡治太夫</li>
-<li>笹野名槍伝 海賊退治</li>
-<li>天保六花撰 玉子の強請</li>
-<li>源平盛衰記 扇の的</li>
-</ul>
-</li>
-<li>端物
-<ul>
-<li>鮫講釈</li>
-<li>鹿政談</li>
-<li>青龍刀権次</li>
-<li>東玉と伯圓</li>
-<li>中村仲蔵</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>これまでたくさん聴いたなあと思っていたけれど，題目を起こしてみると思いの外少ない．
-来年は少しずつ増やしていこう．</p>
 ]]></content></item></channel></rss>
